@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
-<link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="/omer/manifest.json">
 <meta name="theme-color" content="#1a1a1a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="O.M.E.R">
@@ -24,6 +24,8 @@
     --rupture-light: #fdf0ee;
     --stock-bas: #d4780a;
     --stock-bas-light: #fff4e0;
+    --sur-stock: #1a6b8a;
+    --sur-stock-light: #edf6fa;
     --shadow: 0 2px 12px rgba(0,0,0,0.07);
     --radius: 14px;
   }
@@ -36,6 +38,7 @@
     --accent-light: #1a3d1a;
     --rupture-light: #3d1a1a;
     --stock-bas-light: #3d2a00;
+    --sur-stock-light: #0a2030;
     --shadow: 0 2px 12px rgba(0,0,0,0.3);
   }
 
@@ -84,11 +87,7 @@
     font-weight: 600;
   }
 
-  .header-actions {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
+  .header-actions { display: flex; gap: 6px; align-items: center; }
 
   .mode-btn {
     width: 34px; height: 34px;
@@ -108,10 +107,8 @@
   .mode-btn.active-dark { background: rgba(255,255,255,0.2); color: white; }
   .mode-btn.active-stats { background: #4a90d9; color: white; }
 
-  /* ── BARRE DE RECHERCHE ── */
-  .search-bar {
-    position: relative;
-  }
+  /* ── RECHERCHE ── */
+  .search-bar { position: relative; }
 
   .search-bar input {
     width: 100%;
@@ -164,7 +161,6 @@
     gap: 10px;
     font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.5px;
     cursor: pointer;
     transition: background 0.2s;
   }
@@ -179,12 +175,7 @@
     flex-shrink: 0;
   }
 
-  .counter-bar .arrow {
-    margin-left: auto;
-    font-size: 16px;
-    transition: transform 0.3s;
-  }
-
+  .counter-bar .arrow { margin-left: auto; font-size: 16px; transition: transform 0.3s; }
   .counter-bar.empty { background: #555; cursor: default; }
   .counter-bar.empty:hover { filter: none; }
 
@@ -211,13 +202,9 @@
   .page { display: none; }
   .page.active { display: block; }
 
-  .main {
-    padding: 14px;
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  .main { padding: 14px; max-width: 600px; margin: 0 auto; }
 
-  /* ── PANNEAU RÉSERVE (slide du bas) ── */
+  /* ── PANNEAU RÉSERVE ── */
   .reserve-panel {
     position: fixed;
     left: 0; right: 0; bottom: 0;
@@ -291,12 +278,14 @@
     border-radius: var(--radius);
     margin-bottom: 8px;
     border-left: 4px solid var(--accent-border);
+    gap: 10px;
   }
 
   .reserve-item-name {
     font-size: 15px;
     font-weight: 700;
     color: var(--accent);
+    flex: 1;
   }
 
   .reserve-item-qty {
@@ -310,6 +299,23 @@
     text-align: center;
   }
 
+  .reserve-taken-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+  }
+
+  .reserve-taken-btn:hover { opacity: 0.85; }
+
   .reserve-empty {
     text-align: center;
     color: var(--muted);
@@ -318,7 +324,6 @@
     padding: 30px 0;
   }
 
-  /* Overlay sombre derrière le panneau */
   .reserve-overlay {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.4);
@@ -351,11 +356,7 @@
     color: var(--muted);
   }
 
-  .editor-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
+  .editor-row { display: flex; gap: 8px; align-items: center; }
 
   .editor-row input, .editor-row select {
     flex: 1;
@@ -387,7 +388,7 @@
   }
 
   /* ── SECTIONS ── */
-  .section { margin-bottom: 24px; }
+  .section { margin-bottom: 20px; }
 
   .section-header {
     display: flex;
@@ -408,9 +409,26 @@
   body.dark .section-line { background: #444; }
   .section-count { font-size: 11px; color: var(--muted); font-weight: 700; }
 
+  /* Couleurs sections */
   .section[data-cat="fruits"] .section-label { color: #c0392b; }
   .section[data-cat="sec"] .section-label { color: #b8860b; }
   .section[data-cat="legumes"] .section-label { color: #1a6b8a; }
+  .section[data-cat="coupe_fruits"] .section-label { color: #8e44ad; }
+  .section[data-cat="coupe_legumes"] .section-label { color: #6d4c41; }
+
+  /* Titre parent Coupe */
+  .coupe-parent-title {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #8e44ad;
+    padding: 6px 4px 2px;
+    margin-bottom: 4px;
+    border-bottom: 2px solid #8e44ad;
+    margin-top: 8px;
+    opacity: 0.7;
+  }
 
   /* ── PRODUIT ── */
   .product {
@@ -440,9 +458,11 @@
   .product.stock-bas-item { border-color: var(--stock-bas); background: var(--stock-bas-light); }
   .product.stock-bas-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--stock-bas); }
 
-  .stock-bas-badge {
+  .product.sur-stock-item { border-color: var(--sur-stock); background: var(--sur-stock-light); }
+  .product.sur-stock-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--sur-stock); }
+
+  .badge {
     font-size: 11px;
-    background: var(--stock-bas);
     color: white;
     border-radius: 6px;
     padding: 2px 7px;
@@ -450,6 +470,9 @@
     white-space: nowrap;
     flex-shrink: 0;
   }
+
+  .badge-stock-bas { background: var(--stock-bas); }
+  .badge-sur-stock { background: var(--sur-stock); }
 
   .product-name { flex: 1; font-size: 14px; font-weight: 700; min-width: 0; }
   .product.active .product-name { font-weight: 800; }
@@ -513,30 +536,15 @@
 
   .product.active .qty-display { color: var(--accent); }
 
-  .taken-btn {
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 5px 9px;
-    font-size: 12px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.15s;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .taken-btn:hover { opacity: 0.85; }
+  /* Pas de bouton "Pris" dans la liste principale */
+  .taken-btn { display: none; }
 
   .rupture-actions { display: none; gap: 4px; flex-shrink: 0; }
   body.rupture .rupture-actions { display: flex; }
   body.rupture .qty-controls { display: none; }
   body.rupture .check-wrap { display: none; }
-  body.rupture .taken-btn { display: none; }
 
-  .rupture-toggle-btn, .stock-bas-toggle-btn {
+  .rupture-toggle-btn, .stock-bas-toggle-btn, .sur-stock-toggle-btn {
     width: 30px; height: 30px;
     border-radius: 6px;
     border: 1.5px solid;
@@ -555,11 +563,15 @@
   .product.stock-bas-item .stock-bas-toggle-btn { background: var(--stock-bas); color: white; border-color: var(--stock-bas); }
   .product.rupture-item .stock-bas-toggle-btn { pointer-events: none; opacity: 0.3; }
 
+  .sur-stock-toggle-btn { border-color: #a8d8ea; background: var(--sur-stock-light); color: var(--sur-stock); }
+  .sur-stock-toggle-btn:hover { background: var(--sur-stock); color: white; }
+  .product.sur-stock-item .sur-stock-toggle-btn { background: var(--sur-stock); color: white; border-color: var(--sur-stock); }
+  .product.rupture-item .sur-stock-toggle-btn { pointer-events: none; opacity: 0.3; }
+
   body.editing .qty-controls { display: none; }
   body.editing .check-wrap { display: none; }
-  body.editing .taken-btn { display: none; }
   body.editing .rupture-actions { display: none; }
-  body.editing .stock-bas-badge { display: none; }
+  body.editing .badge { display: none; }
 
   .drag-handle {
     display: none;
@@ -575,16 +587,8 @@
   body.editing .drag-handle { display: flex; }
   .drag-handle:active { cursor: grabbing; }
 
-  .product.sortable-ghost {
-    opacity: 0.3;
-    background: var(--accent-light) !important;
-    border: 2px dashed var(--accent-border) !important;
-  }
-
-  .product.sortable-chosen {
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
-    transform: scale(1.02);
-  }
+  .product.sortable-ghost { opacity: 0.3; background: var(--accent-light) !important; border: 2px dashed var(--accent-border) !important; }
+  .product.sortable-chosen { box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important; transform: scale(1.02); }
 
   .delete-btn {
     width: 28px; height: 28px;
@@ -602,11 +606,7 @@
   body.editing .delete-btn { display: flex; }
 
   /* ── STATS ── */
-  .stats-main {
-    padding: 14px;
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  .stats-main { padding: 14px; max-width: 600px; margin: 0 auto; }
 
   .stats-title {
     font-size: 12px;
@@ -626,52 +626,19 @@
     box-shadow: var(--shadow);
   }
 
-  .day-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
+  .day-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
   .day-label { font-size: 14px; font-weight: 800; }
   .day-label.today { color: var(--accent); }
   .day-count { font-size: 12px; color: var(--muted); font-weight: 600; }
 
-  .day-bar-wrap {
-    background: #eee;
-    border-radius: 6px;
-    height: 7px;
-    overflow: hidden;
-    margin-bottom: 10px;
-  }
-
+  .day-bar-wrap { background: #eee; border-radius: 6px; height: 7px; overflow: hidden; margin-bottom: 10px; }
   body.dark .day-bar-wrap { background: #444; }
-
-  .day-bar {
-    height: 100%;
-    border-radius: 6px;
-    background: var(--accent);
-    transition: width 0.5s ease;
-  }
+  .day-bar { height: 100%; border-radius: 6px; background: var(--accent); transition: width 0.5s ease; }
 
   .day-products { display: flex; flex-wrap: wrap; gap: 5px; }
+  .day-product-tag { font-size: 11px; background: var(--accent-light); color: var(--accent); border-radius: 6px; padding: 3px 8px; font-weight: 700; }
 
-  .day-product-tag {
-    font-size: 11px;
-    background: var(--accent-light);
-    color: var(--accent);
-    border-radius: 6px;
-    padding: 3px 8px;
-    font-weight: 700;
-  }
-
-  .stats-empty, .stats-loading {
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 600;
-    padding: 40px 20px;
-  }
+  .stats-empty, .stats-loading { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 40px 20px; }
 
   /* ── TOAST ── */
   #toast {
@@ -703,15 +670,7 @@
     color: var(--accent);
   }
 
-  /* Résultat vide de recherche */
-  .search-empty {
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 600;
-    padding: 30px 0;
-    display: none;
-  }
+  .search-empty { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 30px 0; display: none; }
 </style>
 </head>
 <body>
@@ -738,7 +697,7 @@
   </div>
 </header>
 
-<div class="rupture-bar">⚠️ MODE RUPTURE — 🚫 Rupture &nbsp;|&nbsp; 🟠 Stock bas</div>
+<div class="rupture-bar">⚠️ MODE RUPTURE — 🚫 Rupture &nbsp;|&nbsp; 🟠 Stock bas &nbsp;|&nbsp; 🔵 Sur stock</div>
 
 <div class="counter-bar empty" id="counterBar" onclick="toggleReservePanel()">
   <div class="dot"></div>
@@ -768,6 +727,8 @@
           <option value="fruits">🍎 Fruits</option>
           <option value="sec">🥔 Sec</option>
           <option value="legumes">🥦 Légumes</option>
+          <option value="coupe_fruits">🍓 Coupe fruits</option>
+          <option value="coupe_legumes">🥗 Coupe légumes</option>
         </select>
         <button onclick="addProduct()">+ Ajouter</button>
       </div>
@@ -801,6 +762,27 @@
       </div>
       <div id="list-legumes"></div>
     </div>
+
+    <!-- COUPE avec titre parent -->
+    <div class="coupe-parent-title">✂️ Coupe</div>
+
+    <div class="section" data-cat="coupe_fruits">
+      <div class="section-header">
+        <span class="section-label">🍓 Coupe fruits</span>
+        <div class="section-line"></div>
+        <span class="section-count" id="count-coupe_fruits"></span>
+      </div>
+      <div id="list-coupe_fruits"></div>
+    </div>
+
+    <div class="section" data-cat="coupe_legumes">
+      <div class="section-header">
+        <span class="section-label">🥗 Coupe légumes</span>
+        <div class="section-line"></div>
+        <span class="section-count" id="count-coupe_legumes"></span>
+      </div>
+      <div id="list-coupe_legumes"></div>
+    </div>
   </div>
 </div>
 
@@ -823,26 +805,23 @@ let products = [];
 let stateMap = {};
 let searchQuery = "";
 
+const CATEGORIES = ["fruits", "sec", "legumes", "coupe_fruits", "coupe_legumes"];
+
 // ─── RECHERCHE ────────────────────────────────────────────────────────
-// Recherche intelligente : chaque mot du produit est cherché séparément
 function normalize(str) {
-  return str.toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // enlève accents
-    .trim();
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 }
 
 function matchSearch(productName, query) {
   if (!query) return true;
   const normName = normalize(productName);
   const queryWords = normalize(query).split(/\s+/).filter(Boolean);
-  // Tous les mots de la recherche doivent matcher quelque part dans le nom
   return queryWords.every(word => normName.includes(word));
 }
 
 function handleSearch(input) {
   searchQuery = input.value;
-  const wrap = document.getElementById("searchBarWrap");
-  wrap.classList.toggle("has-value", searchQuery.length > 0);
+  document.getElementById("searchBarWrap").classList.toggle("has-value", searchQuery.length > 0);
   applySearch();
 }
 
@@ -863,13 +842,19 @@ function applySearch() {
     if (visible) anyVisible = true;
   });
 
-  // Afficher/masquer les sections vides
-  ["fruits", "sec", "legumes"].forEach(cat => {
+  CATEGORIES.forEach(cat => {
     const list = document.getElementById("list-" + cat);
     const section = list.closest(".section");
     const hasVisible = [...list.querySelectorAll(".product")].some(d => !d.classList.contains("hidden"));
     section.style.display = hasVisible ? "" : "none";
   });
+
+  // Masquer le titre Coupe si les deux sous-sections sont vides
+  const coupeVisible = ["coupe_fruits", "coupe_legumes"].some(cat => {
+    const list = document.getElementById("list-" + cat);
+    return [...list.querySelectorAll(".product")].some(d => !d.classList.contains("hidden"));
+  });
+  document.querySelector(".coupe-parent-title").style.display = coupeVisible ? "" : "none";
 
   document.getElementById("searchEmpty").style.display = (searchQuery && !anyVisible) ? "block" : "none";
 }
@@ -913,6 +898,7 @@ function renderReservePanel() {
       <div class="reserve-item">
         <span class="reserve-item-name">${p.name}</span>
         <span class="reserve-item-qty">${s.qty}</span>
+        <button class="reserve-taken-btn" onclick="markTaken(${p.id})">✓ Pris</button>
       </div>
     `;
   }).join('');
@@ -947,8 +933,7 @@ function showPage(name) {
 
   document.getElementById('searchBarWrap').style.display = name === 'stats' ? 'none' : 'block';
   document.getElementById('statsBtn').classList.toggle('active-stats', name === 'stats');
-  document.getElementById('headerSub').textContent =
-    name === 'stats' ? 'Statistiques' : 'Outil de Mise En Rayon';
+  document.getElementById('headerSub').textContent = name === 'stats' ? 'Statistiques' : 'Outil de Mise En Rayon';
 
   if (name === 'stats') {
     if (document.body.classList.contains('editing')) toggleEdit();
@@ -987,7 +972,7 @@ async function resetAllIfNeeded() {
   if (error) { console.error("Erreur lecture config", error); return; }
   const lastReset = new Date(data.value);
   if (lastReset >= reset4h) return;
-  await sb.from("products").update({ rupture: false, stock_bas: false }).neq("id", 0);
+  await sb.from("products").update({ rupture: false, stock_bas: false, sur_stock: false }).neq("id", 0);
   await sb.from("state").update({ checked: false, qty: 0 }).neq("product_id", 0);
   await sb.from("config").update({ value: new Date().toISOString() }).eq("key", "last_reset");
   toast("🌅 Nouvelle journée — liste réinitialisée !");
@@ -1024,15 +1009,15 @@ async function loadData() {
 
 async function seedDefaultProducts() {
   const defaults = [
-    {category:"fruits", name:"Pommes", position:0, rupture:false, stock_bas:false},
-    {category:"fruits", name:"Bananes", position:1, rupture:false, stock_bas:false},
-    {category:"fruits", name:"Poires", position:2, rupture:false, stock_bas:false},
-    {category:"sec", name:"Pommes de terre", position:3, rupture:false, stock_bas:false},
-    {category:"sec", name:"Oignons", position:4, rupture:false, stock_bas:false},
-    {category:"sec", name:"Échalotes", position:5, rupture:false, stock_bas:false},
-    {category:"legumes", name:"Tomates", position:6, rupture:false, stock_bas:false},
-    {category:"legumes", name:"Courgettes", position:7, rupture:false, stock_bas:false},
-    {category:"legumes", name:"Poivrons", position:8, rupture:false, stock_bas:false},
+    {category:"fruits", name:"Pommes", position:0, rupture:false, stock_bas:false, sur_stock:false},
+    {category:"fruits", name:"Bananes", position:1, rupture:false, stock_bas:false, sur_stock:false},
+    {category:"fruits", name:"Poires", position:2, rupture:false, stock_bas:false, sur_stock:false},
+    {category:"sec", name:"Pommes de terre", position:3, rupture:false, stock_bas:false, sur_stock:false},
+    {category:"sec", name:"Oignons", position:4, rupture:false, stock_bas:false, sur_stock:false},
+    {category:"sec", name:"Échalotes", position:5, rupture:false, stock_bas:false, sur_stock:false},
+    {category:"legumes", name:"Tomates", position:6, rupture:false, stock_bas:false, sur_stock:false},
+    {category:"legumes", name:"Courgettes", position:7, rupture:false, stock_bas:false, sur_stock:false},
+    {category:"legumes", name:"Poivrons", position:8, rupture:false, stock_bas:false, sur_stock:false},
   ];
   const { data, error } = await sb.from("products").insert(defaults).select();
   if (error) { toast("Erreur initialisation"); console.error(error); return; }
@@ -1082,6 +1067,7 @@ async function markTaken(productId) {
   const p = products.find(p => p.id === productId);
   await sb.from("historique").insert({ product_id: productId, product_name: p.name, action: "pris" });
   await saveState(productId, false, 0);
+  if (reservePanelOpen) renderReservePanel();
 }
 
 async function saveName(productId, input) {
@@ -1096,18 +1082,18 @@ async function saveName(productId, input) {
   render();
 }
 
-// ─── RUPTURE ──────────────────────────────────────────────────────────
+// ─── RUPTURE / STOCK BAS / SUR STOCK ─────────────────────────────────
 async function toggleRuptureItem(productId) {
   const p = products.find(p => p.id === productId);
   if (!p) return;
   const newVal = !p.rupture;
   p.rupture = newVal;
   if (newVal) {
-    p.stock_bas = false;
+    p.stock_bas = false; p.sur_stock = false;
     if (getState(productId).checked) await saveState(productId, false, 0);
   }
   const { error } = await sb.from("products")
-    .update({ rupture: newVal, stock_bas: newVal ? false : p.stock_bas }).eq("id", productId);
+    .update({ rupture: newVal, stock_bas: false, sur_stock: newVal ? false : p.sur_stock }).eq("id", productId);
   if (error) { toast("Erreur sauvegarde"); p.rupture = !newVal; }
   else toast(newVal ? "🚫 Produit en rupture" : "Rupture levée");
   render();
@@ -1118,9 +1104,22 @@ async function toggleStockBas(productId) {
   if (!p || p.rupture) return;
   const newVal = !p.stock_bas;
   p.stock_bas = newVal;
-  const { error } = await sb.from("products").update({ stock_bas: newVal }).eq("id", productId);
+  if (newVal) p.sur_stock = false;
+  const { error } = await sb.from("products").update({ stock_bas: newVal, sur_stock: newVal ? false : p.sur_stock }).eq("id", productId);
   if (error) { toast("Erreur sauvegarde"); p.stock_bas = !newVal; }
-  else toast(newVal ? "🟠 Stock bas signalé" : "Alerte stock levée");
+  else toast(newVal ? "🟠 Stock bas signalé" : "Alerte stock bas levée");
+  render();
+}
+
+async function toggleSurStock(productId) {
+  const p = products.find(p => p.id === productId);
+  if (!p || p.rupture) return;
+  const newVal = !p.sur_stock;
+  p.sur_stock = newVal;
+  if (newVal) p.stock_bas = false;
+  const { error } = await sb.from("products").update({ sur_stock: newVal, stock_bas: newVal ? false : p.stock_bas }).eq("id", productId);
+  if (error) { toast("Erreur sauvegarde"); p.sur_stock = !newVal; }
+  else toast(newVal ? "🔵 Sur stock signalé" : "Alerte sur stock levée");
   render();
 }
 
@@ -1148,7 +1147,7 @@ async function addProduct() {
   if (!name) return;
   const maxPos = products.length > 0 ? Math.max(...products.map(p => p.position)) + 1 : 0;
   const { data, error } = await sb.from("products")
-    .insert({ name, category, position: maxPos, rupture: false, stock_bas: false })
+    .insert({ name, category, position: maxPos, rupture: false, stock_bas: false, sur_stock: false })
     .select().single();
   if (error) { toast("Erreur ajout"); console.error(error); return; }
   products.push(data);
@@ -1176,7 +1175,7 @@ function initSortable() {
   sortableInstances.forEach(s => s.destroy());
   sortableInstances = [];
 
-  ["fruits", "sec", "legumes"].forEach(cat => {
+  CATEGORIES.forEach(cat => {
     const el = document.getElementById("list-" + cat);
     const instance = Sortable.create(el, {
       animation: 150,
@@ -1186,7 +1185,7 @@ function initSortable() {
       disabled: !document.body.classList.contains("editing"),
       onEnd: async () => {
         const allIds = [];
-        ["fruits", "sec", "legumes"].forEach(c => {
+        CATEGORIES.forEach(c => {
           document.getElementById("list-" + c).querySelectorAll(".product").forEach(div => {
             const nameEl = div.querySelector(".product-name, .product-name-input");
             const name = nameEl?.value || nameEl?.textContent;
@@ -1263,7 +1262,6 @@ async function loadStats() {
     const tags = Object.entries(counts)
       .map(([name, qty]) => `<span class="day-product-tag">${name}${qty > 1 ? ` ×${qty}` : ''}</span>`)
       .join('');
-
     return `
       <div class="day-card">
         <div class="day-card-header">
@@ -1289,7 +1287,7 @@ function formatDate(key, isToday) {
 
 // ─── RENDU ────────────────────────────────────────────────────────────
 function render() {
-  ["fruits", "sec", "legumes"].forEach(cat => {
+  CATEGORIES.forEach(cat => {
     document.getElementById("list-" + cat).innerHTML = "";
   });
 
@@ -1300,13 +1298,18 @@ function render() {
     const s = getState(p.id);
     const isRupture = p.rupture;
     const isStockBas = p.stock_bas && !isRupture;
+    const isSurStock = p.sur_stock && !isRupture;
     if (s.checked && !isRupture) totalActive++;
+
+    const listEl = document.getElementById("list-" + p.category);
+    if (!listEl) return;
 
     const div = document.createElement("div");
     let classes = "product";
     if (s.checked && !isRupture) classes += " active";
     if (isRupture) classes += " rupture-item";
     else if (isStockBas) classes += " stock-bas-item";
+    else if (isSurStock) classes += " sur-stock-item";
     div.className = classes;
 
     const nameHtml = isEditing
@@ -1316,6 +1319,10 @@ function render() {
            onclick="event.stopPropagation()" />`
       : `<span class="product-name">${p.name}</span>`;
 
+    let badgeHtml = '';
+    if (isStockBas) badgeHtml = '<span class="badge badge-stock-bas">⚠️ stock bas</span>';
+    else if (isSurStock) badgeHtml = '<span class="badge badge-sur-stock">🔵 sur stock</span>';
+
     div.innerHTML = `
       <div class="check-wrap ${s.checked && !isRupture ? 'checked' : ''}" onclick="toggle(${p.id})">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -1323,30 +1330,29 @@ function render() {
         </svg>
       </div>
       ${nameHtml}
-      ${isStockBas ? '<span class="stock-bas-badge">⚠️ stock bas</span>' : ''}
+      ${badgeHtml}
       <div class="qty-controls">
         <button class="qty-btn" onclick="decrease(${p.id})">−</button>
         <span class="qty-display">${isRupture ? '—' : s.qty}</span>
         <button class="qty-btn plus" onclick="increase(${p.id})">+</button>
-        ${s.checked && !isRupture ? `<button class="taken-btn" onclick="markTaken(${p.id})">✓ Pris</button>` : ''}
       </div>
       <div class="rupture-actions">
         <button class="rupture-toggle-btn" onclick="toggleRuptureItem(${p.id})">🚫</button>
         <button class="stock-bas-toggle-btn" onclick="toggleStockBas(${p.id})">🟠</button>
+        <button class="sur-stock-toggle-btn" onclick="toggleSurStock(${p.id})">🔵</button>
       </div>
       <div class="drag-handle">⠿</div>
       <button class="delete-btn" onclick="deleteProduct(${idx})">✕</button>
     `;
 
-    document.getElementById("list-" + p.category).appendChild(div);
+    listEl.appendChild(div);
   });
 
-  ["fruits", "sec", "legumes"].forEach(cat => {
+  CATEGORIES.forEach(cat => {
     const count = products.filter(p => p.category === cat && getState(p.id).checked && !p.rupture).length;
     document.getElementById("count-" + cat).textContent = count > 0 ? `${count} à prendre` : "";
   });
 
-  // Counter bar
   const bar = document.getElementById("counterBar");
   const txt = document.getElementById("counterText");
   const arrow = document.getElementById("counterArrow");
@@ -1361,13 +1367,8 @@ function render() {
     arrow.style.display = "inline";
   }
 
-  // Mettre à jour le panneau si ouvert
   if (reservePanelOpen) renderReservePanel();
-
-  // Réappliquer la recherche
   applySearch();
-
-  // Drag & drop
   initSortable();
 }
 
