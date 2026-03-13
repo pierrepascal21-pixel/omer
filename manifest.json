@@ -1,18 +1,19 @@
 {
-  "name": "Réserve Rayon",
-  "short_name": "Réserve",
-  "start_url": "/",
+  "name": "O.M.E.R",
+  "short_name": "O.M.E.R",
+  "start_url": "/omer/",
+  "scope": "/omer/",
   "display": "standalone",
   "background_color": "#f5f0e8",
   "theme_color": "#1a1a1a",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/omer/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/omer/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
