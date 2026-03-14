@@ -1273,8 +1273,8 @@ let currentViewMode = localStorage.getItem("view_mode") || "all";
 
 const VIEW_MODE_CATS = {
   all: ["fruits", "sec", "legumes", "coupe_fruits", "coupe_legumes"],
-  fruits_sec: ["fruits", "sec"],
-  legumes: ["legumes", "coupe_fruits", "coupe_legumes"]
+  fruits_sec: ["fruits", "sec", "coupe_fruits"],
+  legumes: ["legumes", "coupe_legumes"]
 };
 
 function setViewMode(mode) {
