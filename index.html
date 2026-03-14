@@ -54,6 +54,7 @@
     min-height: 100vh;
     padding-bottom: 100px;
     transition: background 0.3s, color 0.3s;
+    overflow-x: hidden;
   }
 
   /* ── HEADER ── */
@@ -191,7 +192,7 @@
   /* ── PAGES ── */
   .page { display: none; }
   .page.active { display: block; }
-  .main { padding: 14px; max-width: 600px; margin: 0 auto; }
+  .main { padding: 12px; max-width: 600px; margin: 0 auto; box-sizing: border-box; width: 100%; }
 
   /* ── PANNEAU RÉSERVE ── */
   .reserve-panel {
@@ -307,6 +308,7 @@
     box-shadow: var(--shadow); border: 2px solid transparent;
     transition: border-color 0.2s, background 0.2s, opacity 0.2s;
     position: relative; overflow: hidden;
+    min-width: 0; width: 100%;
   }
   .product.hidden { display: none; }
 
