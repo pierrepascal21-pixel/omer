@@ -515,6 +515,35 @@
   .settings-overlay.open { display: block; }
 
   .mode-btn.active-settings { background: rgba(255,255,255,0.25); color: white; }
+  .view-mode-btn.active-setting { background: rgba(255,255,255,0.15); }
+
+  .reserve-close-btn {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    border: 1.5px solid #fdd;
+    background: #fff5f5;
+    color: #c0392b;
+    font-size: 15px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .reserve-close-btn:hover { background: var(--rupture); color: white; border-color: var(--rupture); }
+
+  /* Section titre dans la liste réserve */
+  .reserve-section-title {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 4px 4px;
+    margin-bottom: 2px;
+  }
+
+  .reserve-section-title:first-child { padding-top: 0; }
 
   .search-empty { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 30px 0; display: none; }
 </style>
@@ -547,6 +576,11 @@
 <div id="settingsPanel" class="settings-panel">
   <button class="settings-item" id="statsItem" onclick="showPage('stats'); toggleSettings()">📊 Statistiques</button>
   <button class="settings-item" id="darkItem" onclick="toggleDark()">🌙 <span id="darkLabel">Thème sombre</span></button>
+  <div style="height:1px;background:rgba(255,255,255,0.1);margin:4px 8px;"></div>
+  <div style="padding:8px 14px 4px;font-size:10px;font-weight:800;letter-spacing:1.5px;color:#888;text-transform:uppercase;">Affichage rayon</div>
+  <button class="settings-item view-mode-btn" id="viewAll" onclick="setViewMode('all')">🌿 Tout afficher</button>
+  <button class="settings-item view-mode-btn" id="viewFruitsSec" onclick="setViewMode('fruits_sec')">🍎 Fruits &amp; Sec</button>
+  <button class="settings-item view-mode-btn" id="viewLegumes" onclick="setViewMode('legumes')">🥦 Légumes</button>
 </div>
 
 <div class="rupture-bar">⚠️ MODE RUPTURE — 🚫 Rupture &nbsp;|&nbsp; 🟠 Stock bas &nbsp;|&nbsp; 🔵 Sur stock</div>
@@ -566,6 +600,7 @@
 <div class="reserve-panel" id="reservePanel">
   <div class="reserve-panel-handle"></div>
   <div class="reserve-panel-header">
+    <button class="reserve-close-btn" onclick="closeReservePanel()">✕</button>
     <span class="reserve-panel-title">🧺 Liste réserve</span>
     <button class="reserve-clear-btn" onclick="clearReserve()">Vider la liste</button>
   </div>
@@ -722,14 +757,33 @@ function renderReservePanel() {
     list.innerHTML = '<div class="reserve-empty">Aucun produit à prendre</div>';
     return;
   }
-  list.innerHTML = active.map(p => {
-    const s = getState(p.id);
-    return `<div class="reserve-item">
-      <span class="reserve-item-name">${p.name}</span>
-      <span class="reserve-item-qty">${s.qty}</span>
-      <button class="reserve-taken-btn" onclick="markTaken(${p.id})">✓ Pris</button>
-    </div>`;
-  }).join('');
+
+  const CAT_LABELS = {
+    fruits: '🍎 Fruits',
+    sec: '🥔 Sec',
+    legumes: '🥦 Légumes',
+    coupe_fruits: '🍓 Coupe fruits',
+    coupe_legumes: '🥗 Coupe légumes'
+  };
+
+  // Grouper par catégorie en respectant l'ordre CATEGORIES
+  const CATEGORIES = ["fruits", "sec", "legumes", "coupe_fruits", "coupe_legumes"];
+  let html = '';
+  CATEGORIES.forEach(cat => {
+    const catProducts = active.filter(p => p.category === cat);
+    if (catProducts.length === 0) return;
+    html += `<div class="reserve-section-title">${CAT_LABELS[cat] || cat}</div>`;
+    catProducts.forEach(p => {
+      const s = getState(p.id);
+      html += `<div class="reserve-item">
+        <span class="reserve-item-name">${p.name}</span>
+        <span class="reserve-item-qty">${s.qty}</span>
+        <button class="reserve-taken-btn" onclick="markTaken(${p.id})">✓ Pris</button>
+      </div>`;
+    });
+  });
+
+  list.innerHTML = html;
 }
 
 async function clearReserve() {
@@ -806,6 +860,8 @@ async function resetAllIfNeeded() {
   await sb.from("products").update({ rupture: false, stock_bas: false, sur_stock: false }).neq("id", 0);
   await sb.from("state").update({ checked: false, qty: 0 }).neq("product_id", 0);
   await sb.from("config").update({ value: new Date().toISOString() }).eq("key", "last_reset");
+  localStorage.setItem("view_mode", "all");
+  currentViewMode = "all";
   toast("🌅 Nouvelle journée — liste réinitialisée !");
 }
 
@@ -831,6 +887,8 @@ async function loadData() {
   if (products.length === 0) { await seedDefaultProducts(); return; }
   document.getElementById("loader").style.display = "none";
   render();
+  applyViewMode();
+  updateViewModeButtons();
 }
 
 async function seedDefaultProducts() {
@@ -1199,6 +1257,46 @@ function render() {
   initSortable();
 }
 
+// ─── MODE VUE ─────────────────────────────────────────────────────────
+// Stocké en localStorage (local à l'appareil, remis à "all" à 4h)
+let currentViewMode = localStorage.getItem("view_mode") || "all";
+
+const VIEW_MODE_CATS = {
+  all: ["fruits", "sec", "legumes", "coupe_fruits", "coupe_legumes"],
+  fruits_sec: ["fruits", "sec"],
+  legumes: ["legumes", "coupe_fruits", "coupe_legumes"]
+};
+
+function setViewMode(mode) {
+  currentViewMode = mode;
+  localStorage.setItem("view_mode", mode);
+  applyViewMode();
+  updateViewModeButtons();
+}
+
+function applyViewMode() {
+  const allowed = VIEW_MODE_CATS[currentViewMode] || VIEW_MODE_CATS.all;
+  const CATEGORIES = ["fruits", "sec", "legumes", "coupe_fruits", "coupe_legumes"];
+  CATEGORIES.forEach(cat => {
+    const section = document.querySelector(`.section[data-cat="${cat}"]`);
+    if (section) section.style.display = allowed.includes(cat) ? "" : "none";
+  });
+  // Titre Coupe
+  const coupeAllowed = allowed.some(c => c.startsWith("coupe_"));
+  const coupeTitle = document.getElementById("coupeTitleEl");
+  if (coupeTitle) coupeTitle.style.display = coupeAllowed ? "" : "none";
+}
+
+function updateViewModeButtons() {
+  ["viewAll", "viewFruitsSec", "viewLegumes"].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.classList.remove("active-setting");
+  });
+  const map = { all: "viewAll", fruits_sec: "viewFruitsSec", legumes: "viewLegumes" };
+  const activeBtn = document.getElementById(map[currentViewMode]);
+  if (activeBtn) activeBtn.classList.add("active-setting");
+}
+
 // ─── RÉGLAGES ─────────────────────────────────────────────────────────
 function toggleSettings() {
   const panel = document.getElementById("settingsPanel");
@@ -1207,7 +1305,7 @@ function toggleSettings() {
   const isOpen = panel.classList.toggle("open");
   overlay.classList.toggle("open", isOpen);
   btn.classList.toggle("active-settings", isOpen);
-  if (isOpen) updateDarkLabel();
+  if (isOpen) { updateDarkLabel(); updateViewModeButtons(); }
 }
 
 if ('serviceWorker' in navigator) {
