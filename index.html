@@ -484,8 +484,8 @@
   /* ── RÉGLAGES ── */
   .settings-panel {
     display: none;
-    position: absolute;
-    top: 58px; right: 12px;
+    position: fixed;
+    top: 62px; right: 12px;
     background: #222;
     border-radius: 14px;
     padding: 6px;
@@ -536,17 +536,18 @@
       <button class="mode-btn" id="settingsBtn" onclick="toggleSettings()" title="Réglages">⚙️</button>
     </div>
   </div>
-  <!-- Panneau réglages -->
-  <div id="settingsPanel" class="settings-panel">
-    <button class="settings-item" id="statsItem" onclick="showPage('stats'); toggleSettings()">📊 Statistiques</button>
-    <button class="settings-item" id="darkItem" onclick="toggleDark()">🌙 <span id="darkLabel">Thème sombre</span></button>
-  </div>
   <div class="search-bar" id="searchBarWrap">
     <span class="search-icon">🔍</span>
     <input id="searchInput" type="text" placeholder="Rechercher un produit..." oninput="handleSearch(this)" />
     <button class="clear-btn" onclick="clearSearch()">✕</button>
   </div>
 </header>
+
+<!-- Panneau réglages -->
+<div id="settingsPanel" class="settings-panel">
+  <button class="settings-item" id="statsItem" onclick="showPage('stats'); toggleSettings()">📊 Statistiques</button>
+  <button class="settings-item" id="darkItem" onclick="toggleDark()">🌙 <span id="darkLabel">Thème sombre</span></button>
+</div>
 
 <div class="rupture-bar">⚠️ MODE RUPTURE — 🚫 Rupture &nbsp;|&nbsp; 🟠 Stock bas &nbsp;|&nbsp; 🔵 Sur stock</div>
 <div class="archive-bar">🗂️ MODE ARCHIVES — Appuyez sur 📥 pour désarchiver un produit</div>
