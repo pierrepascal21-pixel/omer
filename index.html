@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>O.M.E.R</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -480,6 +480,42 @@
     z-index: 200; font-size: 16px; font-weight: 800; letter-spacing: 1px; color: var(--accent);
   }
 
+
+  /* ── RÉGLAGES ── */
+  .settings-panel {
+    display: none;
+    position: absolute;
+    top: 58px; right: 12px;
+    background: #222;
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    z-index: 500;
+    min-width: 190px;
+  }
+
+  .settings-panel.open { display: block; }
+
+  .settings-item {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; background: none; border: none;
+    color: white; font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 700;
+    padding: 10px 14px; border-radius: 10px;
+    cursor: pointer; text-align: left;
+    transition: background 0.15s;
+  }
+
+  .settings-item:hover { background: rgba(255,255,255,0.1); }
+  .settings-item.active-setting { background: rgba(255,255,255,0.15); }
+
+  .settings-overlay {
+    position: fixed; inset: 0; z-index: 499; display: none;
+  }
+  .settings-overlay.open { display: block; }
+
+  .mode-btn.active-settings { background: rgba(255,255,255,0.25); color: white; }
+
   .search-empty { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 30px 0; display: none; }
 </style>
 </head>
@@ -494,12 +530,16 @@
       <p id="headerSub">Outil de Mise En Rayon</p>
     </div>
     <div class="header-actions">
-      <button class="mode-btn" id="statsBtn" onclick="showPage('stats')" title="Statistiques">📊</button>
-      <button class="mode-btn" id="darkBtn" onclick="toggleDark()" title="Thème sombre">🌙</button>
       <button class="mode-btn" id="archiveBtn" onclick="toggleArchive()" title="Mode archives">🗂️</button>
       <button class="mode-btn" id="ruptureBtn" onclick="toggleRupture()" title="Mode rupture">🚫</button>
-      <button class="mode-btn" id="editBtn" onclick="toggleEdit()" title="Mode édition">⚙️</button>
+      <button class="mode-btn" id="editBtn" onclick="toggleEdit()" title="Mode édition">➕</button>
+      <button class="mode-btn" id="settingsBtn" onclick="toggleSettings()" title="Réglages">⚙️</button>
     </div>
+  </div>
+  <!-- Panneau réglages -->
+  <div id="settingsPanel" class="settings-panel">
+    <button class="settings-item" id="statsItem" onclick="showPage('stats'); toggleSettings()">📊 Statistiques</button>
+    <button class="settings-item" id="darkItem" onclick="toggleDark()">🌙 <span id="darkLabel">Thème sombre</span></button>
   </div>
   <div class="search-bar" id="searchBarWrap">
     <span class="search-icon">🔍</span>
@@ -516,6 +556,9 @@
   <span id="counterText">Aucun produit à prendre</span>
   <span class="arrow" id="counterArrow" style="display:none">▲</span>
 </div>
+
+<!-- Overlay réglages -->
+<div class="settings-overlay" id="settingsOverlay" onclick="toggleSettings()"></div>
 
 <!-- PANNEAU RÉSERVE -->
 <div class="reserve-overlay" id="reserveOverlay" onclick="closeReservePanel()"></div>
@@ -708,11 +751,11 @@ function handleEnter(e) { if (e.key === 'Enter') addProduct(); }
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  ['ruptureBtn', 'editBtn', 'archiveBtn'].forEach(id => {
+  ['ruptureBtn', 'editBtn', 'archiveBtn', 'settingsBtn'].forEach(id => {
     document.getElementById(id).style.display = name === 'stats' ? 'none' : 'flex';
   });
   document.getElementById('searchBarWrap').style.display = name === 'stats' ? 'none' : 'block';
-  document.getElementById('statsBtn').classList.toggle('active-stats', name === 'stats');
+  document.getElementById('statsItem')?.classList.toggle('active-setting', name === 'stats');
   document.getElementById('headerSub').textContent = name === 'stats' ? 'Statistiques' : 'Outil de Mise En Rayon';
   if (name === 'stats') {
     if (document.body.classList.contains('editing')) toggleEdit();
@@ -727,14 +770,22 @@ function showPage(name) {
 function initDark() {
   if (localStorage.getItem("dark") === "1") {
     document.body.classList.add("dark");
-    document.getElementById("darkBtn").classList.add("active-dark");
   }
+  updateDarkLabel();
 }
 
 function toggleDark() {
   const isDark = document.body.classList.toggle("dark");
-  document.getElementById("darkBtn").classList.toggle("active-dark", isDark);
   localStorage.setItem("dark", isDark ? "1" : "0");
+  updateDarkLabel();
+}
+
+function updateDarkLabel() {
+  const isDark = document.body.classList.contains("dark");
+  const lbl = document.getElementById("darkLabel");
+  if (lbl) lbl.textContent = isDark ? "Thème clair" : "Thème sombre";
+  const item = document.getElementById("darkItem");
+  if (item) item.classList.toggle("active-setting", isDark);
 }
 
 // ─── RESET 4H ─────────────────────────────────────────────────────────
@@ -1145,6 +1196,17 @@ function render() {
   if (reservePanelOpen) renderReservePanel();
   applySearch();
   initSortable();
+}
+
+// ─── RÉGLAGES ─────────────────────────────────────────────────────────
+function toggleSettings() {
+  const panel = document.getElementById("settingsPanel");
+  const overlay = document.getElementById("settingsOverlay");
+  const btn = document.getElementById("settingsBtn");
+  const isOpen = panel.classList.toggle("open");
+  overlay.classList.toggle("open", isOpen);
+  btn.classList.toggle("active-settings", isOpen);
+  if (isOpen) updateDarkLabel();
 }
 
 if ('serviceWorker' in navigator) {
