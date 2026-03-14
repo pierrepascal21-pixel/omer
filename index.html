@@ -273,6 +273,22 @@
     background: var(--bg); color: var(--text); outline: none; transition: border-color 0.2s;
   }
   .editor-row input:focus, .editor-row select:focus { border-color: var(--accent); }
+
+  .editor-add-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+    display: block;
+    text-align: center;
+  }
   .editor-row button {
     background: var(--accent); color: white; border: none; border-radius: 8px;
     padding: 9px 14px; font-family: 'Nunito', sans-serif; font-size: 14px;
@@ -633,8 +649,8 @@
           <option value="coupe_fruits">🍓 Coupe fruits</option>
           <option value="coupe_legumes">🥗 Coupe légumes</option>
         </select>
-        <button onclick="addProduct()">+ Ajouter</button>
       </div>
+      <button class="editor-add-btn" onclick="addProduct()">+ Ajouter</button>
     </div>
 
     <div id="searchEmpty" class="search-empty">Aucun produit trouvé</div>
