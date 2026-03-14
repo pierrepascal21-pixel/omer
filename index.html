@@ -202,6 +202,7 @@
     transform: translateY(100%);
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     max-height: 75vh; display: flex; flex-direction: column;
+    overflow: visible;
   }
   .reserve-panel.open { transform: translateY(0); }
 
@@ -518,19 +519,28 @@
   .view-mode-btn.active-setting { background: rgba(255,255,255,0.15); }
 
   .reserve-close-btn {
-    width: 28px; height: 28px;
-    border-radius: 8px;
-    border: 1.5px solid #fdd;
-    background: #fff5f5;
-    color: #c0392b;
-    font-size: 15px;
+    position: absolute;
+    top: -54px; left: 12px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: #c0392b;
+    color: white;
+    font-size: 20px;
     font-weight: 900;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: background 0.15s, transform 0.15s;
+    z-index: 301;
+    pointer-events: none;
+    opacity: 0;
   }
-  .reserve-close-btn:hover { background: var(--rupture); color: white; border-color: var(--rupture); }
+  .reserve-panel.open .reserve-close-btn {
+    pointer-events: auto;
+    opacity: 1;
+  }
+  .reserve-close-btn:hover { background: #922b21; transform: scale(1.1); }
 
   /* Section titre dans la liste réserve */
   .reserve-section-title {
@@ -599,8 +609,8 @@
 <div class="reserve-overlay" id="reserveOverlay" onclick="closeReservePanel()"></div>
 <div class="reserve-panel" id="reservePanel">
   <div class="reserve-panel-handle"></div>
+  <button class="reserve-close-btn" onclick="closeReservePanel()">✕</button>
   <div class="reserve-panel-header">
-    <button class="reserve-close-btn" onclick="closeReservePanel()">✕</button>
     <span class="reserve-panel-title">🧺 Liste réserve</span>
     <button class="reserve-clear-btn" onclick="clearReserve()">Vider la liste</button>
   </div>
