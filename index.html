@@ -26,6 +26,8 @@
     --stock-bas-light: #fff4e0;
     --sur-stock: #1a6b8a;
     --sur-stock-light: #edf6fa;
+    --archive: #666;
+    --archive-light: #f0f0f0;
     --shadow: 0 2px 12px rgba(0,0,0,0.07);
     --radius: 14px;
   }
@@ -39,6 +41,7 @@
     --rupture-light: #3d1a1a;
     --stock-bas-light: #3d2a00;
     --sur-stock-light: #0a2030;
+    --archive-light: #333;
     --shadow: 0 2px 12px rgba(0,0,0,0.3);
   }
 
@@ -106,6 +109,7 @@
   .mode-btn.active-rupture { background: var(--rupture); color: white; }
   .mode-btn.active-dark { background: rgba(255,255,255,0.2); color: white; }
   .mode-btn.active-stats { background: #4a90d9; color: white; }
+  .mode-btn.active-archive { background: var(--archive); color: white; }
 
   /* ── RECHERCHE ── */
   .search-bar { position: relative; }
@@ -128,25 +132,17 @@
   .search-bar input:focus { background: rgba(255,255,255,0.18); }
 
   .search-bar .search-icon {
-    position: absolute;
-    left: 10px; top: 50%;
+    position: absolute; left: 10px; top: 50%;
     transform: translateY(-50%);
-    font-size: 14px;
-    opacity: 0.5;
-    pointer-events: none;
+    font-size: 14px; opacity: 0.5; pointer-events: none;
   }
 
   .search-bar .clear-btn {
-    position: absolute;
-    right: 8px; top: 50%;
+    position: absolute; right: 8px; top: 50%;
     transform: translateY(-50%);
-    background: none;
-    border: none;
+    background: none; border: none;
     color: rgba(255,255,255,0.5);
-    font-size: 16px;
-    cursor: pointer;
-    padding: 2px 4px;
-    display: none;
+    font-size: 16px; cursor: pointer; padding: 2px 4px; display: none;
   }
 
   .search-bar.has-value .clear-btn { display: block; }
@@ -156,296 +152,161 @@
     background: var(--accent);
     color: white;
     padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: background 0.2s;
   }
 
   .counter-bar:hover { filter: brightness(1.05); }
-
   .counter-bar .dot {
     width: 8px; height: 8px;
-    background: #7dff7d;
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-    flex-shrink: 0;
+    background: #7dff7d; border-radius: 50%;
+    animation: pulse 1.5s infinite; flex-shrink: 0;
   }
-
   .counter-bar .arrow { margin-left: auto; font-size: 16px; transition: transform 0.3s; }
   .counter-bar.empty { background: #555; cursor: default; }
   .counter-bar.empty:hover { filter: none; }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+  /* Archive bar */
+  .archive-bar {
+    background: var(--archive);
+    color: white;
+    padding: 8px 16px;
+    font-size: 12px; letter-spacing: 1px;
+    text-align: center; display: none; font-weight: 700;
   }
+  body.archiving .archive-bar { display: block; }
+
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
   /* ── RUPTURE BAR ── */
   .rupture-bar {
     background: var(--rupture);
-    color: white;
-    padding: 8px 16px;
-    font-size: 12px;
-    letter-spacing: 1px;
-    text-align: center;
-    display: none;
-    font-weight: 700;
+    color: white; padding: 8px 16px;
+    font-size: 12px; letter-spacing: 1px;
+    text-align: center; display: none; font-weight: 700;
   }
-
   body.rupture .rupture-bar { display: block; }
 
   /* ── PAGES ── */
   .page { display: none; }
   .page.active { display: block; }
-
   .main { padding: 14px; max-width: 600px; margin: 0 auto; }
 
   /* ── PANNEAU RÉSERVE ── */
   .reserve-panel {
-    position: fixed;
-    left: 0; right: 0; bottom: 0;
-    z-index: 300;
-    background: var(--card);
+    position: fixed; left: 0; right: 0; bottom: 0;
+    z-index: 300; background: var(--card);
     border-radius: 20px 20px 0 0;
     box-shadow: 0 -8px 32px rgba(0,0,0,0.18);
     transform: translateY(100%);
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    max-height: 75vh;
-    display: flex;
-    flex-direction: column;
+    max-height: 75vh; display: flex; flex-direction: column;
   }
-
   .reserve-panel.open { transform: translateY(0); }
 
   .reserve-panel-handle {
-    width: 40px; height: 4px;
-    background: #ddd;
-    border-radius: 4px;
-    margin: 12px auto 0;
-    flex-shrink: 0;
+    width: 40px; height: 4px; background: #ddd;
+    border-radius: 4px; margin: 12px auto 0; flex-shrink: 0;
   }
 
   .reserve-panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 18px 10px;
-    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px 10px; flex-shrink: 0;
     border-bottom: 1px solid #eee;
   }
-
   body.dark .reserve-panel-header { border-color: #444; }
 
-  .reserve-panel-title {
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
+  .reserve-panel-title { font-size: 14px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
 
   .reserve-clear-btn {
-    background: var(--rupture-light);
-    color: var(--rupture);
-    border: 1.5px solid #e8b0aa;
-    border-radius: 8px;
-    padding: 5px 12px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s;
+    background: var(--rupture-light); color: var(--rupture);
+    border: 1.5px solid #e8b0aa; border-radius: 8px;
+    padding: 5px 12px; font-family: 'Nunito', sans-serif;
+    font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s;
   }
-
   .reserve-clear-btn:hover { background: var(--rupture); color: white; }
 
-  .reserve-panel-list {
-    overflow-y: auto;
-    padding: 12px 18px 24px;
-    flex: 1;
-  }
+  .reserve-panel-list { overflow-y: auto; padding: 12px 18px 24px; flex: 1; }
 
   .reserve-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 14px;
-    background: var(--accent-light);
-    border-radius: var(--radius);
-    margin-bottom: 8px;
-    border-left: 4px solid var(--accent-border);
-    gap: 10px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px; background: var(--accent-light);
+    border-radius: var(--radius); margin-bottom: 8px;
+    border-left: 4px solid var(--accent-border); gap: 10px;
   }
-
-  .reserve-item-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--accent);
-    flex: 1;
-  }
-
+  .reserve-item-name { font-size: 15px; font-weight: 700; color: var(--accent); flex: 1; }
   .reserve-item-qty {
-    font-size: 20px;
-    font-weight: 900;
-    color: var(--accent);
-    background: white;
-    border-radius: 8px;
-    padding: 2px 10px;
-    min-width: 36px;
-    text-align: center;
+    font-size: 20px; font-weight: 900; color: var(--accent);
+    background: white; border-radius: 8px; padding: 2px 10px;
+    min-width: 36px; text-align: center;
   }
-
   .reserve-taken-btn {
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 7px 12px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: opacity 0.15s;
-    flex-shrink: 0;
+    background: var(--accent); color: white; border: none;
+    border-radius: 8px; padding: 7px 12px;
+    font-family: 'Nunito', sans-serif; font-size: 12px;
+    font-weight: 700; cursor: pointer; white-space: nowrap;
+    transition: opacity 0.15s; flex-shrink: 0;
   }
-
   .reserve-taken-btn:hover { opacity: 0.85; }
-
-  .reserve-empty {
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 600;
-    padding: 30px 0;
-  }
+  .reserve-empty { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 30px 0; }
 
   .reserve-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 299;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    z-index: 299; display: none; opacity: 0; transition: opacity 0.3s;
   }
-
   .reserve-overlay.open { display: block; opacity: 1; }
 
   /* ── EDITOR ── */
   #editorPanel {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 18px;
-    box-shadow: var(--shadow);
-    margin-bottom: 20px;
-    display: none;
+    background: var(--card); border-radius: var(--radius);
+    padding: 18px; box-shadow: var(--shadow); margin-bottom: 20px; display: none;
   }
-
   #editorPanel.open { display: block; }
-
-  #editorPanel h3 {
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    color: var(--muted);
-  }
-
+  #editorPanel h3 { font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; color: var(--muted); }
   .editor-row { display: flex; gap: 8px; align-items: center; }
-
   .editor-row input, .editor-row select {
-    flex: 1;
-    padding: 9px 12px;
-    border: 1.5px solid #ddd;
-    border-radius: 8px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    background: var(--bg);
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.2s;
+    flex: 1; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px;
+    font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600;
+    background: var(--bg); color: var(--text); outline: none; transition: border-color 0.2s;
   }
-
   .editor-row input:focus, .editor-row select:focus { border-color: var(--accent); }
-
   .editor-row button {
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 9px 14px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
+    background: var(--accent); color: white; border: none; border-radius: 8px;
+    padding: 9px 14px; font-family: 'Nunito', sans-serif; font-size: 14px;
+    font-weight: 700; cursor: pointer; white-space: nowrap;
   }
 
   /* ── SECTIONS ── */
   .section { margin-bottom: 20px; }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-    padding: 0 4px;
-  }
-
-  .section-label {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
+  .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding: 0 4px; }
+  .section-label { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
   .section-line { flex: 1; height: 1px; background: #ddd; }
   body.dark .section-line { background: #444; }
   .section-count { font-size: 11px; color: var(--muted); font-weight: 700; }
 
-  /* Couleurs sections */
   .section[data-cat="fruits"] .section-label { color: #c0392b; }
   .section[data-cat="sec"] .section-label { color: #b8860b; }
   .section[data-cat="legumes"] .section-label { color: #1a6b8a; }
   .section[data-cat="coupe_fruits"] .section-label { color: #8e44ad; }
   .section[data-cat="coupe_legumes"] .section-label { color: #6d4c41; }
 
-  /* Titre parent Coupe */
   .coupe-parent-title {
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #8e44ad;
-    padding: 6px 4px 2px;
-    margin-bottom: 4px;
-    border-bottom: 2px solid #8e44ad;
-    margin-top: 8px;
-    opacity: 0.7;
+    font-size: 12px; font-weight: 900; letter-spacing: 3px;
+    text-transform: uppercase; color: #8e44ad;
+    padding: 6px 4px 2px; margin-bottom: 4px;
+    border-bottom: 2px solid #8e44ad; margin-top: 8px; opacity: 0.7;
   }
 
   /* ── PRODUIT ── */
   .product {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 11px 13px;
-    margin-bottom: 7px;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    box-shadow: var(--shadow);
-    border: 2px solid transparent;
+    background: var(--card); border-radius: var(--radius);
+    padding: 11px 13px; margin-bottom: 7px;
+    display: flex; align-items: center; gap: 9px;
+    box-shadow: var(--shadow); border: 2px solid transparent;
     transition: border-color 0.2s, background 0.2s, opacity 0.2s;
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
   }
-
   .product.hidden { display: none; }
 
   .product.active { border-color: var(--accent-border); background: var(--accent-light); }
@@ -461,129 +322,120 @@
   .product.sur-stock-item { border-color: var(--sur-stock); background: var(--sur-stock-light); }
   .product.sur-stock-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--sur-stock); }
 
-  .badge {
-    font-size: 11px;
-    color: white;
-    border-radius: 6px;
-    padding: 2px 7px;
-    font-weight: 700;
-    white-space: nowrap;
-    flex-shrink: 0;
+  /* Produit archivé — visible seulement en mode archive */
+  .product.archived-item { display: none; }
+  body.archiving .product.archived-item {
+    display: flex;
+    opacity: 0.6;
+    background: var(--archive-light);
+    border-color: #ccc;
   }
+  body.archiving .product.archived-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--archive); }
+  body.archiving .product.archived-item .product-name { text-decoration: line-through; color: var(--archive); }
+  /* En mode archive, masquer les produits non archivés */
+  body.archiving .product:not(.archived-item) { display: none; }
 
+  .badge { font-size: 11px; color: white; border-radius: 6px; padding: 2px 7px; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
   .badge-stock-bas { background: var(--stock-bas); }
   .badge-sur-stock { background: var(--sur-stock); }
+  .badge-archived { background: var(--archive); }
 
   .product-name { flex: 1; font-size: 14px; font-weight: 700; min-width: 0; }
   .product.active .product-name { font-weight: 800; }
 
   .product-name-input {
-    flex: 1;
-    font-family: 'Nunito', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    background: var(--bg);
-    color: var(--text);
-    border: 1.5px solid var(--accent);
-    border-radius: 8px;
-    padding: 4px 8px;
-    outline: none;
-    min-width: 0;
+    flex: 1; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+    background: var(--bg); color: var(--text); border: 1.5px solid var(--accent);
+    border-radius: 8px; padding: 4px 8px; outline: none; min-width: 0;
   }
 
   .check-wrap {
-    width: 26px; height: 26px;
-    border-radius: 8px;
-    border: 2px solid #ddd;
-    background: var(--card);
-    cursor: pointer;
+    width: 26px; height: 26px; border-radius: 8px; border: 2px solid #ddd;
+    background: var(--card); cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.15s;
+    flex-shrink: 0; transition: all 0.15s;
   }
-
   .check-wrap.checked { background: var(--accent); border-color: var(--accent); }
   .check-wrap svg { display: none; }
   .check-wrap.checked svg { display: block; }
   .product.rupture-item .check-wrap { pointer-events: none; opacity: 0.3; }
+  .product.archived-item .check-wrap { display: none; }
 
   .qty-controls { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
-
   .qty-btn {
-    width: 30px; height: 30px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 800;
+    width: 30px; height: 30px; border-radius: 8px; border: none;
+    cursor: pointer; font-size: 16px; font-weight: 800;
     display: flex; align-items: center; justify-content: center;
-    transition: transform 0.1s;
-    background: #eee;
-    color: #333;
+    transition: transform 0.1s; background: #eee; color: #333;
   }
-
   body.dark .qty-btn { background: #444; color: #eee; }
   .qty-btn:active { transform: scale(0.88); }
   .qty-btn.plus { background: var(--accent); color: white; }
   .product.rupture-item .qty-btn { pointer-events: none; opacity: 0.3; }
+  .product.archived-item .qty-controls { display: none; }
 
-  .qty-display {
-    font-size: 17px;
-    font-weight: 900;
-    min-width: 26px;
-    text-align: center;
-  }
-
-  .product.active .qty-display { color: var(--accent); }
-
-  /* Pas de bouton "Pris" dans la liste principale */
   .taken-btn { display: none; }
 
+  /* Mode rupture */
   .rupture-actions { display: none; gap: 4px; flex-shrink: 0; }
   body.rupture .rupture-actions { display: flex; }
   body.rupture .qty-controls { display: none; }
   body.rupture .check-wrap { display: none; }
 
   .rupture-toggle-btn, .stock-bas-toggle-btn, .sur-stock-toggle-btn {
-    width: 30px; height: 30px;
-    border-radius: 6px;
-    border: 1.5px solid;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s;
+    width: 30px; height: 30px; border-radius: 6px; border: 1.5px solid;
+    font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
   }
-
   .rupture-toggle-btn { border-color: #e8b0aa; background: var(--rupture-light); color: var(--rupture); }
   .rupture-toggle-btn:hover { background: var(--rupture); color: white; }
   .product.rupture-item .rupture-toggle-btn { background: var(--rupture); color: white; border-color: var(--rupture); }
-
   .stock-bas-toggle-btn { border-color: #f0c070; background: var(--stock-bas-light); color: var(--stock-bas); }
   .stock-bas-toggle-btn:hover { background: var(--stock-bas); color: white; }
   .product.stock-bas-item .stock-bas-toggle-btn { background: var(--stock-bas); color: white; border-color: var(--stock-bas); }
   .product.rupture-item .stock-bas-toggle-btn { pointer-events: none; opacity: 0.3; }
-
   .sur-stock-toggle-btn { border-color: #a8d8ea; background: var(--sur-stock-light); color: var(--sur-stock); }
   .sur-stock-toggle-btn:hover { background: var(--sur-stock); color: white; }
   .product.sur-stock-item .sur-stock-toggle-btn { background: var(--sur-stock); color: white; border-color: var(--sur-stock); }
   .product.rupture-item .sur-stock-toggle-btn { pointer-events: none; opacity: 0.3; }
 
+  /* Mode archive — bouton désarchiver */
+  .archive-actions { display: none; gap: 4px; flex-shrink: 0; }
+  body.archiving .archive-actions { display: flex; }
+  body.archiving .qty-controls { display: none; }
+  body.archiving .check-wrap { display: none; }
+  body.archiving .rupture-actions { display: none; }
+
+  .unarchive-btn {
+    border: 1.5px solid #aaa; background: var(--archive-light); color: var(--archive);
+    border-radius: 8px; padding: 5px 10px; font-family: 'Nunito', sans-serif;
+    font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: all 0.15s;
+  }
+  .unarchive-btn:hover { background: var(--archive); color: white; }
+
+  /* Mode édition */
   body.editing .qty-controls { display: none; }
   body.editing .check-wrap { display: none; }
   body.editing .rupture-actions { display: none; }
+  body.editing .archive-actions { display: none; }
   body.editing .badge { display: none; }
 
-  .drag-handle {
-    display: none;
-    align-items: center; justify-content: center;
-    flex-shrink: 0;
-    width: 26px; height: 26px;
-    color: #bbb;
-    cursor: grab;
-    font-size: 18px;
-    touch-action: none;
+  /* Bouton archiver en mode édition */
+  .archive-btn {
+    width: 28px; height: 28px; border-radius: 6px;
+    border: 1.5px solid #ccc; background: var(--archive-light);
+    font-size: 14px; cursor: pointer; display: none;
+    align-items: center; justify-content: center; color: var(--archive);
+    flex-shrink: 0; transition: all 0.15s;
   }
+  .archive-btn:hover { background: var(--archive); color: white; }
+  body.editing .archive-btn { display: flex; }
 
+  .drag-handle {
+    display: none; align-items: center; justify-content: center;
+    flex-shrink: 0; width: 26px; height: 26px;
+    color: #bbb; cursor: grab; font-size: 18px; touch-action: none;
+  }
   body.editing .drag-handle { display: flex; }
   .drag-handle:active { cursor: grabbing; }
 
@@ -591,83 +443,41 @@
   .product.sortable-chosen { box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important; transform: scale(1.02); }
 
   .delete-btn {
-    width: 28px; height: 28px;
-    border-radius: 6px;
-    border: 1.5px solid #fdd;
-    background: #fff5f5;
-    font-size: 14px;
-    cursor: pointer;
-    display: none;
-    align-items: center; justify-content: center;
-    color: #c0392b;
-    flex-shrink: 0;
+    width: 28px; height: 28px; border-radius: 6px;
+    border: 1.5px solid #fdd; background: #fff5f5;
+    font-size: 14px; cursor: pointer; display: none;
+    align-items: center; justify-content: center; color: #c0392b; flex-shrink: 0;
   }
-
   body.editing .delete-btn { display: flex; }
 
   /* ── STATS ── */
   .stats-main { padding: 14px; max-width: 600px; margin: 0 auto; }
-
-  .stats-title {
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 14px;
-    padding: 0 4px;
-  }
-
-  .day-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    box-shadow: var(--shadow);
-  }
-
+  .stats-title { font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; padding: 0 4px; }
+  .day-card { background: var(--card); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; box-shadow: var(--shadow); }
   .day-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
   .day-label { font-size: 14px; font-weight: 800; }
   .day-label.today { color: var(--accent); }
   .day-count { font-size: 12px; color: var(--muted); font-weight: 600; }
-
   .day-bar-wrap { background: #eee; border-radius: 6px; height: 7px; overflow: hidden; margin-bottom: 10px; }
   body.dark .day-bar-wrap { background: #444; }
   .day-bar { height: 100%; border-radius: 6px; background: var(--accent); transition: width 0.5s ease; }
-
   .day-products { display: flex; flex-wrap: wrap; gap: 5px; }
   .day-product-tag { font-size: 11px; background: var(--accent-light); color: var(--accent); border-radius: 6px; padding: 3px 8px; font-weight: 700; }
-
   .stats-empty, .stats-loading { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 40px 20px; }
 
   /* ── TOAST ── */
   #toast {
-    position: fixed;
-    bottom: 24px; left: 50%; transform: translateX(-50%);
-    background: #1a1a1a;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 700;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    z-index: 999;
-    white-space: nowrap;
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #1a1a1a; color: white; padding: 10px 20px;
+    border-radius: 20px; font-size: 13px; font-weight: 700;
+    opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; white-space: nowrap;
   }
-
   #toast.show { opacity: 1; }
 
   .loading-overlay {
-    position: fixed; inset: 0;
-    background: rgba(245,240,232,0.92);
+    position: fixed; inset: 0; background: rgba(245,240,232,0.92);
     display: flex; align-items: center; justify-content: center;
-    z-index: 200;
-    font-size: 16px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    color: var(--accent);
+    z-index: 200; font-size: 16px; font-weight: 800; letter-spacing: 1px; color: var(--accent);
   }
 
   .search-empty { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 30px 0; display: none; }
@@ -686,6 +496,7 @@
     <div class="header-actions">
       <button class="mode-btn" id="statsBtn" onclick="showPage('stats')" title="Statistiques">📊</button>
       <button class="mode-btn" id="darkBtn" onclick="toggleDark()" title="Thème sombre">🌙</button>
+      <button class="mode-btn" id="archiveBtn" onclick="toggleArchive()" title="Mode archives">🗂️</button>
       <button class="mode-btn" id="ruptureBtn" onclick="toggleRupture()" title="Mode rupture">🚫</button>
       <button class="mode-btn" id="editBtn" onclick="toggleEdit()" title="Mode édition">⚙️</button>
     </div>
@@ -698,6 +509,7 @@
 </header>
 
 <div class="rupture-bar">⚠️ MODE RUPTURE — 🚫 Rupture &nbsp;|&nbsp; 🟠 Stock bas &nbsp;|&nbsp; 🔵 Sur stock</div>
+<div class="archive-bar">🗂️ MODE ARCHIVES — Appuyez sur 📥 pour désarchiver un produit</div>
 
 <div class="counter-bar empty" id="counterBar" onclick="toggleReservePanel()">
   <div class="dot"></div>
@@ -737,50 +549,29 @@
     <div id="searchEmpty" class="search-empty">Aucun produit trouvé</div>
 
     <div class="section" data-cat="fruits">
-      <div class="section-header">
-        <span class="section-label">🍎 Fruits</span>
-        <div class="section-line"></div>
-        <span class="section-count" id="count-fruits"></span>
-      </div>
+      <div class="section-header"><span class="section-label">🍎 Fruits</span><div class="section-line"></div><span class="section-count" id="count-fruits"></span></div>
       <div id="list-fruits"></div>
     </div>
 
     <div class="section" data-cat="sec">
-      <div class="section-header">
-        <span class="section-label">🥔 Sec</span>
-        <div class="section-line"></div>
-        <span class="section-count" id="count-sec"></span>
-      </div>
+      <div class="section-header"><span class="section-label">🥔 Sec</span><div class="section-line"></div><span class="section-count" id="count-sec"></span></div>
       <div id="list-sec"></div>
     </div>
 
     <div class="section" data-cat="legumes">
-      <div class="section-header">
-        <span class="section-label">🥦 Légumes</span>
-        <div class="section-line"></div>
-        <span class="section-count" id="count-legumes"></span>
-      </div>
+      <div class="section-header"><span class="section-label">🥦 Légumes</span><div class="section-line"></div><span class="section-count" id="count-legumes"></span></div>
       <div id="list-legumes"></div>
     </div>
 
-    <!-- COUPE avec titre parent -->
-    <div class="coupe-parent-title">✂️ Coupe</div>
+    <div class="coupe-parent-title" id="coupeTitleEl">✂️ Coupe</div>
 
     <div class="section" data-cat="coupe_fruits">
-      <div class="section-header">
-        <span class="section-label">🍓 Coupe fruits</span>
-        <div class="section-line"></div>
-        <span class="section-count" id="count-coupe_fruits"></span>
-      </div>
+      <div class="section-header"><span class="section-label">🍓 Coupe fruits</span><div class="section-line"></div><span class="section-count" id="count-coupe_fruits"></span></div>
       <div id="list-coupe_fruits"></div>
     </div>
 
     <div class="section" data-cat="coupe_legumes">
-      <div class="section-header">
-        <span class="section-label">🥗 Coupe légumes</span>
-        <div class="section-line"></div>
-        <span class="section-count" id="count-coupe_legumes"></span>
-      </div>
+      <div class="section-header"><span class="section-label">🥗 Coupe légumes</span><div class="section-line"></div><span class="section-count" id="count-coupe_legumes"></span></div>
       <div id="list-coupe_legumes"></div>
     </div>
   </div>
@@ -815,8 +606,7 @@ function normalize(str) {
 function matchSearch(productName, query) {
   if (!query) return true;
   const normName = normalize(productName);
-  const queryWords = normalize(query).split(/\s+/).filter(Boolean);
-  return queryWords.every(word => normName.includes(word));
+  return normalize(query).split(/\s+/).filter(Boolean).every(w => normName.includes(w));
 }
 
 function handleSearch(input) {
@@ -835,6 +625,7 @@ function clearSearch() {
 function applySearch() {
   let anyVisible = false;
   document.querySelectorAll(".product").forEach(div => {
+    if (div.style.display === 'none' && !div.classList.contains('hidden')) return;
     const nameEl = div.querySelector(".product-name, .product-name-input");
     const name = nameEl?.textContent || nameEl?.value || "";
     const visible = matchSearch(name, searchQuery);
@@ -849,13 +640,11 @@ function applySearch() {
     section.style.display = hasVisible ? "" : "none";
   });
 
-  // Masquer le titre Coupe si les deux sous-sections sont vides
   const coupeVisible = ["coupe_fruits", "coupe_legumes"].some(cat => {
     const list = document.getElementById("list-" + cat);
     return [...list.querySelectorAll(".product")].some(d => !d.classList.contains("hidden"));
   });
-  document.querySelector(".coupe-parent-title").style.display = coupeVisible ? "" : "none";
-
+  document.getElementById("coupeTitleEl").style.display = coupeVisible ? "" : "none";
   document.getElementById("searchEmpty").style.display = (searchQuery && !anyVisible) ? "block" : "none";
 }
 
@@ -863,8 +652,7 @@ function applySearch() {
 let reservePanelOpen = false;
 
 function toggleReservePanel() {
-  const bar = document.getElementById("counterBar");
-  if (bar.classList.contains("empty")) return;
+  if (document.getElementById("counterBar").classList.contains("empty")) return;
   reservePanelOpen ? closeReservePanel() : openReservePanel();
 }
 
@@ -885,29 +673,25 @@ function closeReservePanel() {
 
 function renderReservePanel() {
   const list = document.getElementById("reserveList");
-  const activeProducts = products.filter(p => !p.rupture && getState(p.id).checked);
-
-  if (activeProducts.length === 0) {
+  const active = products.filter(p => !p.rupture && !p.archived && getState(p.id).checked);
+  if (active.length === 0) {
     list.innerHTML = '<div class="reserve-empty">Aucun produit à prendre</div>';
     return;
   }
-
-  list.innerHTML = activeProducts.map(p => {
+  list.innerHTML = active.map(p => {
     const s = getState(p.id);
-    return `
-      <div class="reserve-item">
-        <span class="reserve-item-name">${p.name}</span>
-        <span class="reserve-item-qty">${s.qty}</span>
-        <button class="reserve-taken-btn" onclick="markTaken(${p.id})">✓ Pris</button>
-      </div>
-    `;
+    return `<div class="reserve-item">
+      <span class="reserve-item-name">${p.name}</span>
+      <span class="reserve-item-qty">${s.qty}</span>
+      <button class="reserve-taken-btn" onclick="markTaken(${p.id})">✓ Pris</button>
+    </div>`;
   }).join('');
 }
 
 async function clearReserve() {
   if (!confirm("Vider toute la liste réserve ?")) return;
-  const activeProducts = products.filter(p => !p.rupture && getState(p.id).checked);
-  for (const p of activeProducts) {
+  const active = products.filter(p => !p.rupture && !p.archived && getState(p.id).checked);
+  for (const p of active) {
     await sb.from("historique").insert({ product_id: p.id, product_name: p.name, action: "pris" });
     stateMap[p.id] = { checked: false, qty: 0 };
     await sb.from("state").upsert({ product_id: p.id, checked: false, qty: 0 });
@@ -918,26 +702,22 @@ async function clearReserve() {
 }
 
 // ─── TOUCHE ENTRÉE ────────────────────────────────────────────────────
-function handleEnter(e) {
-  if (e.key === 'Enter') addProduct();
-}
+function handleEnter(e) { if (e.key === 'Enter') addProduct(); }
 
 // ─── NAVIGATION ───────────────────────────────────────────────────────
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-
-  ['ruptureBtn', 'editBtn'].forEach(id => {
+  ['ruptureBtn', 'editBtn', 'archiveBtn'].forEach(id => {
     document.getElementById(id).style.display = name === 'stats' ? 'none' : 'flex';
   });
-
   document.getElementById('searchBarWrap').style.display = name === 'stats' ? 'none' : 'block';
   document.getElementById('statsBtn').classList.toggle('active-stats', name === 'stats');
   document.getElementById('headerSub').textContent = name === 'stats' ? 'Statistiques' : 'Outil de Mise En Rayon';
-
   if (name === 'stats') {
     if (document.body.classList.contains('editing')) toggleEdit();
     if (document.body.classList.contains('rupture')) toggleRupture();
+    if (document.body.classList.contains('archiving')) toggleArchive();
     closeReservePanel();
     loadStats();
   }
@@ -960,18 +740,17 @@ function toggleDark() {
 // ─── RESET 4H ─────────────────────────────────────────────────────────
 function getToday4h() {
   const now = new Date();
-  const reset4h = new Date(now);
-  reset4h.setHours(4, 0, 0, 0);
-  if (now < reset4h) reset4h.setDate(reset4h.getDate() - 1);
-  return reset4h;
+  const r = new Date(now);
+  r.setHours(4, 0, 0, 0);
+  if (now < r) r.setDate(r.getDate() - 1);
+  return r;
 }
 
 async function resetAllIfNeeded() {
   const reset4h = getToday4h();
   const { data, error } = await sb.from("config").select("value").eq("key", "last_reset").single();
-  if (error) { console.error("Erreur lecture config", error); return; }
-  const lastReset = new Date(data.value);
-  if (lastReset >= reset4h) return;
+  if (error) { console.error(error); return; }
+  if (new Date(data.value) >= reset4h) return;
   await sb.from("products").update({ rupture: false, stock_bas: false, sur_stock: false }).neq("id", 0);
   await sb.from("state").update({ checked: false, qty: 0 }).neq("product_id", 0);
   await sb.from("config").update({ value: new Date().toISOString() }).eq("key", "last_reset");
@@ -990,154 +769,170 @@ function toast(msg) {
 async function loadData() {
   initDark();
   await resetAllIfNeeded();
-
   const { data: prods, error: e1 } = await sb.from("products").select("*").order("position");
-  if (e1) { toast("Erreur chargement"); console.error(e1); return; }
-
+  if (e1) { toast("Erreur chargement"); return; }
   const { data: states, error: e2 } = await sb.from("state").select("*");
-  if (e2) { toast("Erreur chargement état"); console.error(e2); return; }
-
+  if (e2) { toast("Erreur chargement état"); return; }
   products = prods || [];
   stateMap = {};
   (states || []).forEach(s => { stateMap[s.product_id] = { checked: s.checked, qty: s.qty }; });
-
   if (products.length === 0) { await seedDefaultProducts(); return; }
-
   document.getElementById("loader").style.display = "none";
   render();
 }
 
 async function seedDefaultProducts() {
   const defaults = [
-    {category:"fruits", name:"Pommes", position:0, rupture:false, stock_bas:false, sur_stock:false},
-    {category:"fruits", name:"Bananes", position:1, rupture:false, stock_bas:false, sur_stock:false},
-    {category:"fruits", name:"Poires", position:2, rupture:false, stock_bas:false, sur_stock:false},
-    {category:"sec", name:"Pommes de terre", position:3, rupture:false, stock_bas:false, sur_stock:false},
-    {category:"sec", name:"Oignons", position:4, rupture:false, stock_bas:false, sur_stock:false},
-    {category:"sec", name:"Échalotes", position:5, rupture:false, stock_bas:false, sur_stock:false},
-    {category:"legumes", name:"Tomates", position:6, rupture:false, stock_bas:false, sur_stock:false},
-    {category:"legumes", name:"Courgettes", position:7, rupture:false, stock_bas:false, sur_stock:false},
-    {category:"legumes", name:"Poivrons", position:8, rupture:false, stock_bas:false, sur_stock:false},
+    {category:"fruits", name:"Pommes", position:0, rupture:false, stock_bas:false, sur_stock:false, archived:false},
+    {category:"fruits", name:"Bananes", position:1, rupture:false, stock_bas:false, sur_stock:false, archived:false},
+    {category:"fruits", name:"Poires", position:2, rupture:false, stock_bas:false, sur_stock:false, archived:false},
+    {category:"sec", name:"Pommes de terre", position:3, rupture:false, stock_bas:false, sur_stock:false, archived:false},
+    {category:"sec", name:"Oignons", position:4, rupture:false, stock_bas:false, sur_stock:false, archived:false},
+    {category:"sec", name:"Échalotes", position:5, rupture:false, stock_bas:false, sur_stock:false, archived:false},
+    {category:"legumes", name:"Tomates", position:6, rupture:false, stock_bas:false, sur_stock:false, archived:false},
+    {category:"legumes", name:"Courgettes", position:7, rupture:false, stock_bas:false, sur_stock:false, archived:false},
+    {category:"legumes", name:"Poivrons", position:8, rupture:false, stock_bas:false, sur_stock:false, archived:false},
   ];
   const { data, error } = await sb.from("products").insert(defaults).select();
-  if (error) { toast("Erreur initialisation"); console.error(error); return; }
+  if (error) { toast("Erreur initialisation"); return; }
   products = data;
   document.getElementById("loader").style.display = "none";
   render();
 }
 
 // ─── ÉTAT ─────────────────────────────────────────────────────────────
-function getState(productId) {
-  if (!stateMap[productId]) stateMap[productId] = { checked: false, qty: 0 };
-  return stateMap[productId];
+function getState(id) {
+  if (!stateMap[id]) stateMap[id] = { checked: false, qty: 0 };
+  return stateMap[id];
 }
 
-async function saveState(productId, checked, qty) {
-  stateMap[productId] = { checked, qty };
+async function saveState(id, checked, qty) {
+  stateMap[id] = { checked, qty };
   render();
-  const { error } = await sb.from("state").upsert({ product_id: productId, checked, qty });
-  if (error) { toast("Erreur sauvegarde"); console.error(error); }
+  const { error } = await sb.from("state").upsert({ product_id: id, checked, qty });
+  if (error) { toast("Erreur sauvegarde"); }
 }
 
 // ─── ACTIONS ──────────────────────────────────────────────────────────
-async function toggle(productId) {
-  const p = products.find(p => p.id === productId);
-  if (p?.rupture) return;
-  const s = getState(productId);
-  const newChecked = !s.checked;
-  await saveState(productId, newChecked, newChecked ? Math.max(s.qty, 1) : 0);
+async function toggle(id) {
+  const p = products.find(p => p.id === id);
+  if (p?.rupture || p?.archived) return;
+  const s = getState(id);
+  const c = !s.checked;
+  await saveState(id, c, c ? Math.max(s.qty, 1) : 0);
 }
 
-async function increase(productId) {
-  const p = products.find(p => p.id === productId);
-  if (p?.rupture) return;
-  const s = getState(productId);
-  await saveState(productId, true, s.qty + 1);
+async function increase(id) {
+  const p = products.find(p => p.id === id);
+  if (p?.rupture || p?.archived) return;
+  const s = getState(id);
+  await saveState(id, true, s.qty + 1);
 }
 
-async function decrease(productId) {
-  const p = products.find(p => p.id === productId);
-  if (p?.rupture) return;
-  const s = getState(productId);
-  const newQty = Math.max(0, s.qty - 1);
-  await saveState(productId, newQty > 0, newQty);
+async function decrease(id) {
+  const p = products.find(p => p.id === id);
+  if (p?.rupture || p?.archived) return;
+  const s = getState(id);
+  const q = Math.max(0, s.qty - 1);
+  await saveState(id, q > 0, q);
 }
 
-async function markTaken(productId) {
-  const p = products.find(p => p.id === productId);
-  await sb.from("historique").insert({ product_id: productId, product_name: p.name, action: "pris" });
-  await saveState(productId, false, 0);
+async function markTaken(id) {
+  const p = products.find(p => p.id === id);
+  await sb.from("historique").insert({ product_id: id, product_name: p.name, action: "pris" });
+  await saveState(id, false, 0);
   if (reservePanelOpen) renderReservePanel();
 }
 
-async function saveName(productId, input) {
-  const newName = input.value.trim();
-  if (!newName) { render(); return; }
-  const p = products.find(p => p.id === productId);
-  if (!p || newName === p.name) { render(); return; }
-  p.name = newName;
-  const { error } = await sb.from("products").update({ name: newName }).eq("id", productId);
-  if (error) { toast("Erreur renommage"); console.error(error); }
-  else toast("Nom modifié ✓");
+async function saveName(id, input) {
+  const name = input.value.trim();
+  if (!name) { render(); return; }
+  const p = products.find(p => p.id === id);
+  if (!p || name === p.name) { render(); return; }
+  p.name = name;
+  const { error } = await sb.from("products").update({ name }).eq("id", id);
+  if (error) toast("Erreur renommage"); else toast("Nom modifié ✓");
   render();
 }
 
-// ─── RUPTURE / STOCK BAS / SUR STOCK ─────────────────────────────────
-async function toggleRuptureItem(productId) {
-  const p = products.find(p => p.id === productId);
+// ─── RUPTURE / STOCKS ─────────────────────────────────────────────────
+async function toggleRuptureItem(id) {
+  const p = products.find(p => p.id === id);
   if (!p) return;
-  const newVal = !p.rupture;
-  p.rupture = newVal;
-  if (newVal) {
-    p.stock_bas = false; p.sur_stock = false;
-    if (getState(productId).checked) await saveState(productId, false, 0);
+  const v = !p.rupture;
+  p.rupture = v;
+  if (v) { p.stock_bas = false; p.sur_stock = false; if (getState(id).checked) await saveState(id, false, 0); }
+  await sb.from("products").update({ rupture: v, stock_bas: false, sur_stock: v ? false : p.sur_stock }).eq("id", id);
+  toast(v ? "🚫 Produit en rupture" : "Rupture levée");
+  render();
+}
+
+async function toggleStockBas(id) {
+  const p = products.find(p => p.id === id);
+  if (!p || p.rupture) return;
+  const v = !p.stock_bas;
+  p.stock_bas = v;
+  if (v) p.sur_stock = false;
+  await sb.from("products").update({ stock_bas: v, sur_stock: v ? false : p.sur_stock }).eq("id", id);
+  toast(v ? "🟠 Stock bas signalé" : "Alerte stock bas levée");
+  render();
+}
+
+async function toggleSurStock(id) {
+  const p = products.find(p => p.id === id);
+  if (!p || p.rupture) return;
+  const v = !p.sur_stock;
+  p.sur_stock = v;
+  if (v) p.stock_bas = false;
+  await sb.from("products").update({ sur_stock: v, stock_bas: v ? false : p.stock_bas }).eq("id", id);
+  toast(v ? "🔵 Sur stock signalé" : "Alerte sur stock levée");
+  render();
+}
+
+// ─── ARCHIVE ──────────────────────────────────────────────────────────
+async function archiveProduct(id) {
+  const p = products.find(p => p.id === id);
+  if (!p) return;
+  p.archived = true;
+  if (getState(id).checked) await saveState(id, false, 0);
+  await sb.from("products").update({ archived: true }).eq("id", id);
+  toast(`"${p.name}" archivé`);
+  render();
+}
+
+async function unarchiveProduct(id) {
+  const p = products.find(p => p.id === id);
+  if (!p) return;
+  p.archived = false;
+  await sb.from("products").update({ archived: false }).eq("id", id);
+  toast(`"${p.name}" restauré ✓`);
+  render();
+}
+
+function toggleArchive() {
+  const isArchiving = document.body.classList.toggle("archiving");
+  document.getElementById("archiveBtn").classList.toggle("active-archive", isArchiving);
+  if (isArchiving) {
+    if (document.body.classList.contains("editing")) toggleEdit();
+    if (document.body.classList.contains("rupture")) toggleRupture();
   }
-  const { error } = await sb.from("products")
-    .update({ rupture: newVal, stock_bas: false, sur_stock: newVal ? false : p.sur_stock }).eq("id", productId);
-  if (error) { toast("Erreur sauvegarde"); p.rupture = !newVal; }
-  else toast(newVal ? "🚫 Produit en rupture" : "Rupture levée");
-  render();
 }
 
-async function toggleStockBas(productId) {
-  const p = products.find(p => p.id === productId);
-  if (!p || p.rupture) return;
-  const newVal = !p.stock_bas;
-  p.stock_bas = newVal;
-  if (newVal) p.sur_stock = false;
-  const { error } = await sb.from("products").update({ stock_bas: newVal, sur_stock: newVal ? false : p.sur_stock }).eq("id", productId);
-  if (error) { toast("Erreur sauvegarde"); p.stock_bas = !newVal; }
-  else toast(newVal ? "🟠 Stock bas signalé" : "Alerte stock bas levée");
-  render();
-}
-
-async function toggleSurStock(productId) {
-  const p = products.find(p => p.id === productId);
-  if (!p || p.rupture) return;
-  const newVal = !p.sur_stock;
-  p.sur_stock = newVal;
-  if (newVal) p.stock_bas = false;
-  const { error } = await sb.from("products").update({ sur_stock: newVal, stock_bas: newVal ? false : p.stock_bas }).eq("id", productId);
-  if (error) { toast("Erreur sauvegarde"); p.sur_stock = !newVal; }
-  else toast(newVal ? "🔵 Sur stock signalé" : "Alerte sur stock levée");
-  render();
-}
-
+// ─── MODES ────────────────────────────────────────────────────────────
 function toggleRupture() {
-  const isRupture = document.body.classList.toggle("rupture");
-  document.getElementById("ruptureBtn").classList.toggle("active-rupture", isRupture);
-  if (isRupture && document.body.classList.contains("editing")) toggleEdit();
+  const v = document.body.classList.toggle("rupture");
+  document.getElementById("ruptureBtn").classList.toggle("active-rupture", v);
+  if (v && document.body.classList.contains("editing")) toggleEdit();
+  if (v && document.body.classList.contains("archiving")) toggleArchive();
 }
 
 function toggleEdit() {
-  const isEditing = document.body.classList.toggle("editing");
-  document.getElementById("editBtn").classList.toggle("active-edit", isEditing);
-  document.getElementById("editorPanel").classList.toggle("open", isEditing);
-  if (isEditing && document.body.classList.contains("rupture")) {
-    document.body.classList.remove("rupture");
-    document.getElementById("ruptureBtn").classList.remove("active-rupture");
-  }
-  updateSortable(isEditing);
+  const v = document.body.classList.toggle("editing");
+  document.getElementById("editBtn").classList.toggle("active-edit", v);
+  document.getElementById("editorPanel").classList.toggle("open", v);
+  if (v && document.body.classList.contains("rupture")) { document.body.classList.remove("rupture"); document.getElementById("ruptureBtn").classList.remove("active-rupture"); }
+  if (v && document.body.classList.contains("archiving")) { document.body.classList.remove("archiving"); document.getElementById("archiveBtn").classList.remove("active-archive"); }
+  updateSortable(v);
 }
 
 // ─── EDITION ──────────────────────────────────────────────────────────
@@ -1147,9 +942,9 @@ async function addProduct() {
   if (!name) return;
   const maxPos = products.length > 0 ? Math.max(...products.map(p => p.position)) + 1 : 0;
   const { data, error } = await sb.from("products")
-    .insert({ name, category, position: maxPos, rupture: false, stock_bas: false, sur_stock: false })
+    .insert({ name, category, position: maxPos, rupture: false, stock_bas: false, sur_stock: false, archived: false })
     .select().single();
-  if (error) { toast("Erreur ajout"); console.error(error); return; }
+  if (error) { toast("Erreur ajout"); return; }
   products.push(data);
   document.getElementById("newName").value = "";
   document.getElementById("newName").focus();
@@ -1161,7 +956,7 @@ async function deleteProduct(idx) {
   const p = products[idx];
   if (!confirm(`Supprimer "${p.name}" ?`)) return;
   const { error } = await sb.from("products").delete().eq("id", p.id);
-  if (error) { toast("Erreur suppression"); console.error(error); return; }
+  if (error) { toast("Erreur suppression"); return; }
   delete stateMap[p.id];
   products.splice(idx, 1);
   toast(`"${p.name}" supprimé`);
@@ -1174,14 +969,11 @@ let sortableInstances = [];
 function initSortable() {
   sortableInstances.forEach(s => s.destroy());
   sortableInstances = [];
-
   CATEGORIES.forEach(cat => {
     const el = document.getElementById("list-" + cat);
     const instance = Sortable.create(el, {
-      animation: 150,
-      handle: ".drag-handle",
-      ghostClass: "sortable-ghost",
-      chosenClass: "sortable-chosen",
+      animation: 150, handle: ".drag-handle",
+      ghostClass: "sortable-ghost", chosenClass: "sortable-chosen",
       disabled: !document.body.classList.contains("editing"),
       onEnd: async () => {
         const allIds = [];
@@ -1196,10 +988,7 @@ function initSortable() {
         const updates = [];
         allIds.forEach((id, pos) => {
           const p = products.find(p => p.id === id);
-          if (p && p.position !== pos) {
-            p.position = pos;
-            updates.push(sb.from("products").update({ position: pos }).eq("id", id));
-          }
+          if (p && p.position !== pos) { p.position = pos; updates.push(sb.from("products").update({ position: pos }).eq("id", id)); }
         });
         products.sort((a, b) => a.position - b.position);
         await Promise.all(updates);
@@ -1219,62 +1008,43 @@ async function loadStats() {
   const since = new Date();
   since.setDate(since.getDate() - 6);
   since.setHours(4, 0, 0, 0);
-
   const { data, error } = await sb.from("historique").select("*")
-    .gte("created_at", since.toISOString())
-    .order("created_at", { ascending: false });
-
-  if (error) { toast("Erreur stats"); console.error(error); return; }
-
+    .gte("created_at", since.toISOString()).order("created_at", { ascending: false });
+  if (error) { toast("Erreur stats"); return; }
   if (!data || data.length === 0) {
-    document.getElementById("statsContent").innerHTML =
-      '<div class="stats-empty">Pas encore de données.<br>Les produits marqués "✓ Pris" apparaîtront ici.</div>';
+    document.getElementById("statsContent").innerHTML = '<div class="stats-empty">Pas encore de données.<br>Les produits marqués "✓ Pris" apparaîtront ici.</div>';
     return;
   }
-
   const days = {};
-  data.forEach(entry => {
-    const d = new Date(entry.created_at);
+  data.forEach(e => {
+    const d = new Date(e.created_at);
     if (d.getHours() < 4) d.setDate(d.getDate() - 1);
-    const key = d.toISOString().slice(0, 10);
-    if (!days[key]) days[key] = [];
-    days[key].push(entry.product_name);
+    const k = d.toISOString().slice(0, 10);
+    if (!days[k]) days[k] = [];
+    days[k].push(e.product_name);
   });
-
   const maxCount = Math.max(...Object.values(days).map(v => v.length), 1);
   const today = new Date();
   if (today.getHours() < 4) today.setDate(today.getDate() - 1);
   const todayKey = today.toISOString().slice(0, 10);
-
   const allDays = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i);
-    allDays.push(d.toISOString().slice(0, 10));
-  }
-
-  const html = allDays.map(key => {
+  for (let i = 0; i < 7; i++) { const d = new Date(today); d.setDate(d.getDate() - i); allDays.push(d.toISOString().slice(0, 10)); }
+  document.getElementById("statsContent").innerHTML = allDays.map(key => {
     const items = days[key] || [];
     const isToday = key === todayKey;
     const pct = items.length > 0 ? Math.round((items.length / maxCount) * 100) : 0;
     const counts = {};
-    items.forEach(name => { counts[name] = (counts[name] || 0) + 1; });
-    const tags = Object.entries(counts)
-      .map(([name, qty]) => `<span class="day-product-tag">${name}${qty > 1 ? ` ×${qty}` : ''}</span>`)
-      .join('');
-    return `
-      <div class="day-card">
-        <div class="day-card-header">
-          <span class="day-label ${isToday ? 'today' : ''}">${formatDate(key, isToday)}</span>
-          <span class="day-count">${items.length} produit${items.length > 1 ? 's' : ''} pris</span>
-        </div>
-        <div class="day-bar-wrap"><div class="day-bar" style="width:${pct}%"></div></div>
-        ${items.length > 0 ? `<div class="day-products">${tags}</div>` : '<div style="font-size:12px;color:var(--muted);font-weight:600">Aucun produit pris</div>'}
+    items.forEach(n => { counts[n] = (counts[n] || 0) + 1; });
+    const tags = Object.entries(counts).map(([n, q]) => `<span class="day-product-tag">${n}${q > 1 ? ` ×${q}` : ''}</span>`).join('');
+    return `<div class="day-card">
+      <div class="day-card-header">
+        <span class="day-label ${isToday ? 'today' : ''}">${formatDate(key, isToday)}</span>
+        <span class="day-count">${items.length} produit${items.length > 1 ? 's' : ''} pris</span>
       </div>
-    `;
+      <div class="day-bar-wrap"><div class="day-bar" style="width:${pct}%"></div></div>
+      ${items.length > 0 ? `<div class="day-products">${tags}</div>` : '<div style="font-size:12px;color:var(--muted);font-weight:600">Aucun produit pris</div>'}
+    </div>`;
   }).join('');
-
-  document.getElementById("statsContent").innerHTML = html;
 }
 
 function formatDate(key, isToday) {
@@ -1287,9 +1057,7 @@ function formatDate(key, isToday) {
 
 // ─── RENDU ────────────────────────────────────────────────────────────
 function render() {
-  CATEGORIES.forEach(cat => {
-    document.getElementById("list-" + cat).innerHTML = "";
-  });
+  CATEGORIES.forEach(cat => { document.getElementById("list-" + cat).innerHTML = ""; });
 
   let totalActive = 0;
   const isEditing = document.body.classList.contains("editing");
@@ -1299,32 +1067,33 @@ function render() {
     const isRupture = p.rupture;
     const isStockBas = p.stock_bas && !isRupture;
     const isSurStock = p.sur_stock && !isRupture;
-    if (s.checked && !isRupture) totalActive++;
+    const isArchived = p.archived;
+    if (s.checked && !isRupture && !isArchived) totalActive++;
 
     const listEl = document.getElementById("list-" + p.category);
     if (!listEl) return;
 
     const div = document.createElement("div");
     let classes = "product";
-    if (s.checked && !isRupture) classes += " active";
-    if (isRupture) classes += " rupture-item";
+    if (isArchived) classes += " archived-item";
+    else if (s.checked && !isRupture) classes += " active";
+    else if (isRupture) classes += " rupture-item";
     else if (isStockBas) classes += " stock-bas-item";
     else if (isSurStock) classes += " sur-stock-item";
     div.className = classes;
 
-    const nameHtml = isEditing
+    const nameHtml = isEditing && !isArchived
       ? `<input class="product-name-input" value="${p.name.replace(/"/g, '&quot;')}"
-           onblur="saveName(${p.id}, this)"
-           onkeydown="if(event.key==='Enter') this.blur()"
-           onclick="event.stopPropagation()" />`
+           onblur="saveName(${p.id}, this)" onkeydown="if(event.key==='Enter') this.blur()" onclick="event.stopPropagation()" />`
       : `<span class="product-name">${p.name}</span>`;
 
     let badgeHtml = '';
-    if (isStockBas) badgeHtml = '<span class="badge badge-stock-bas">⚠️ stock bas</span>';
+    if (isArchived) badgeHtml = '<span class="badge badge-archived">archivé</span>';
+    else if (isStockBas) badgeHtml = '<span class="badge badge-stock-bas">⚠️ stock bas</span>';
     else if (isSurStock) badgeHtml = '<span class="badge badge-sur-stock">🔵 sur stock</span>';
 
     div.innerHTML = `
-      <div class="check-wrap ${s.checked && !isRupture ? 'checked' : ''}" onclick="toggle(${p.id})">
+      <div class="check-wrap ${s.checked && !isRupture && !isArchived ? 'checked' : ''}" onclick="toggle(${p.id})">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -1341,6 +1110,12 @@ function render() {
         <button class="stock-bas-toggle-btn" onclick="toggleStockBas(${p.id})">🟠</button>
         <button class="sur-stock-toggle-btn" onclick="toggleSurStock(${p.id})">🔵</button>
       </div>
+      <div class="archive-actions">
+        ${isArchived
+          ? `<button class="unarchive-btn" onclick="unarchiveProduct(${p.id})">📥 Restaurer</button>`
+          : ''}
+      </div>
+      <button class="archive-btn" onclick="archiveProduct(${p.id})" title="Archiver">🗂️</button>
       <div class="drag-handle">⠿</div>
       <button class="delete-btn" onclick="deleteProduct(${idx})">✕</button>
     `;
@@ -1349,7 +1124,7 @@ function render() {
   });
 
   CATEGORIES.forEach(cat => {
-    const count = products.filter(p => p.category === cat && getState(p.id).checked && !p.rupture).length;
+    const count = products.filter(p => p.category === cat && getState(p.id).checked && !p.rupture && !p.archived).length;
     document.getElementById("count-" + cat).textContent = count > 0 ? `${count} à prendre` : "";
   });
 
