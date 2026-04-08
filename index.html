@@ -397,8 +397,8 @@ body.editing .edit-bar { display: block; }
 
 .subcategory-header:hover { background: var(--green-light); }
 
-.subcategory-name { font-size: 11px; font-weight: 900; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; flex: 1; }
-.subcategory-name-input { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 900; color: var(--text); border: 1.5px solid var(--green); border-radius: 6px; padding: 2px 8px; background: var(--bg); outline: none; flex: 1; text-transform: uppercase; letter-spacing: 1px; }
+.subcategory-name { font-size: 15px; font-weight: 900; color: var(--text); letter-spacing: 0.5px; flex: 1; }
+.subcategory-name-input { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; color: var(--text); border: 1.5px solid var(--green); border-radius: 6px; padding: 2px 8px; background: var(--bg); outline: none; flex: 1; }
 .subcategory-count { font-size: 10px; color: var(--muted); font-weight: 700; }
 
 .subcategory-drag-handle { display: none; color: var(--border); cursor: grab; font-size: 14px; width: 20px; height: 20px; align-items: center; justify-content: center; }
@@ -559,19 +559,20 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
 <body>
 
 <!-- ECRAN ROLE -->
-<div class="role-screen" id="roleScreen" style="display:none">
-  <div class="logo">o.m.e.<span>r</span></div>
-  <div class="subtitle">Qui êtes-vous aujourd'hui ?</div>
+<div class="role-screen" id="roleScreen">
+  <div class="role-logo">o.m.e.<span>r</span></div>
+  <div class="role-tagline">Outil de Mise En Rayon</div>
+  <div class="role-question">Qui êtes-vous aujourd'hui ?</div>
   <div class="role-cards">
-    <div class="role-card" onclick="selectRole('vendor')">
+    <div class="role-card vendor" onclick="selectRole('vendor')">
       <div class="role-icon">🛒</div>
       <div class="role-name">Vendeur</div>
-      <div class="role-desc">Gestion du rayon</div>
+      <div class="role-desc">Consultation<br>et gestion du rayon</div>
     </div>
     <div class="role-card admin" onclick="showPwdScreen()">
       <div class="role-icon">🔐</div>
       <div class="role-name">Admin</div>
-      <div class="role-desc">Accès complet</div>
+      <div class="role-desc">Accès complet<br>à toutes les fonctions</div>
     </div>
   </div>
 </div>
@@ -1504,21 +1505,20 @@ function getToday4hStr() {
 function initRole() {
   const lastRoleDate = localStorage.getItem("role_date");
   const today = getToday4hStr();
-  // Si déjà choisi aujourd'hui, appliquer le rôle mémorisé
   if (lastRoleDate === today) {
     const role = localStorage.getItem("role") || "vendor";
-    applyRole(role, false);
-    return false; // pas besoin d'afficher l'écran
+    applyRole(role);
+    return false;
   }
-  return true; // afficher l'écran
+  return true;
 }
 
 function showRoleScreen() {
-  document.getElementById("roleScreen").style.display = "flex";
+  document.getElementById("roleScreen").classList.add("open");
 }
 
 function hideRoleScreen() {
-  document.getElementById("roleScreen").style.display = "none";
+  document.getElementById("roleScreen").classList.remove("open");
 }
 
 function selectRole(role) {
