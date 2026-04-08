@@ -272,12 +272,13 @@ body.editing .edit-bar { display: block; }
 
 /* ── MULTI-SELECT BANNER ── */
 .multiselect-banner {
-  position: fixed; top: 72px; left: 0; right: 0;
+  position: fixed; bottom: 0; left: 0; right: 0;
   background: var(--orange);
-  color: white; padding: 10px 16px;
-  display: none; align-items: center; gap: 10px;
-  font-size: 13px; font-weight: 800; z-index: 98;
-  box-shadow: var(--shadow-md);
+  color: white; padding: 12px 16px;
+  display: none; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 800; z-index: 400;
+  box-shadow: 0 -4px 20px rgba(255,107,43,0.3);
+  flex-wrap: wrap;
 }
 
 .multiselect-banner.open { display: flex; }
@@ -405,6 +406,9 @@ body.editing .subcategory-drag-handle { display: flex; }
 
 .subcategory-archive-btn { display: none; width: 20px; height: 20px; border-radius: 5px; border: 1px solid var(--border); background: var(--archive-light); color: var(--archive); font-size: 11px; cursor: pointer; align-items: center; justify-content: center; }
 body.editing .subcategory-archive-btn { display: flex; }
+
+.subcategory-delete-btn { display: none; width: 20px; height: 20px; border-radius: 5px; border: 1px solid #ffcdd2; background: var(--rupture-light); color: var(--rupture); font-size: 11px; cursor: pointer; align-items: center; justify-content: center; font-weight: 900; }
+body.editing .subcategory-delete-btn { display: flex; }
 
 .subcategory-unarchive-btn { display: none; font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-light); border: 1px solid var(--green-border); border-radius: 6px; padding: 2px 8px; cursor: pointer; }
 body.archiving .subcategory-unarchive-btn { display: flex; align-items: center; }
@@ -1075,6 +1079,18 @@ async function unarchiveProduct(id) {
   toast(`"${p.name}" restauré`); render();
 }
 
+async function deleteSubcat(id) {
+  const sc = subcategories.find(s=>s.id===id); if (!sc) return;
+  if (!confirm(`Supprimer la sous-catégorie "${sc.name}" et tous ses produits ?`)) return;
+  // Remove subcategory_id from products (don't delete them)
+  products.filter(p=>p.subcategory_id===id).forEach(p=>{ p.subcategory_id=null; });
+  await sb.from("products").update({ subcategory_id: null }).eq("subcategory_id", id);
+  await sb.from("subcategories").delete().eq("id", id);
+  subcategories.splice(subcategories.indexOf(sc), 1);
+  updateSubcatSelect();
+  toast(`Sous-catégorie "${sc.name}" supprimée`); render();
+}
+
 async function archiveSubcat(id) {
   const sc = subcategories.find(s=>s.id===id); if (!sc) return;
   sc.archived=true; products.filter(p=>p.subcategory_id===id).forEach(p=>{ p.archived=true; });
@@ -1255,6 +1271,7 @@ function render() {
         <span class="subcategory-name">${sc.name}</span>
         ${activeCount>0?`<span class="subcategory-count">${activeCount} à prendre</span>`:''}
         ${isEditing&&!sc.archived?`<button class="subcategory-archive-btn" onclick="event.stopPropagation();archiveSubcat(${sc.id})">🗂️</button>`:''}
+        ${isEditing&&!sc.archived?`<button class="subcategory-delete-btn" onclick="event.stopPropagation();deleteSubcat(${sc.id})">✕</button>`:''}
         ${isArchiving&&sc.archived?`<button class="subcategory-unarchive-btn" onclick="event.stopPropagation();unarchiveSubcat(${sc.id})">📥 Restaurer</button>`:''}
       `;
       const prodsDiv=document.createElement('div'); prodsDiv.className='subcategory-products';
