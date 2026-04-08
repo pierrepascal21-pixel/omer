@@ -8,53 +8,52 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <link rel="manifest" href="/omer/manifest.json">
-<meta name="theme-color" content="#1B5E20">
+<meta name="theme-color" content="#7AB648">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="O.M.E.R">
 <style>
 /* ── FRESH DA ── */
 :root {
-  --bg: #f4f9f4;
+  --bg: #f9f9f6;
   --card: #ffffff;
-  --text: #1a2e1a;
-  --muted: #7a9a7a;
-  --border: #d8ecd8;
-  --accent: #1B5E20;
-  --accent2: #2E7D32;
-  --accent-light: #e8f5e9;
-  --accent-border: #43A047;
-  --pink: #f8bbd0;
-  --pink-dark: #e91e8c;
-  --orange: #FF6D00;
-  --orange-light: #fff3e0;
-  --rupture: #c62828;
+  --text: #1a1a1a;
+  --muted: #888;
+  --border: #e8e8e0;
+  --green: #7AB648;
+  --green-dark: #5a9030;
+  --green-light: #f0f8e8;
+  --green-border: #a8d878;
+  --pink: #f5c6d0;
+  --pink-dark: #e8729a;
+  --orange: #FF6B2B;
+  --orange-light: #fff3ee;
+  --rupture: #d32f2f;
   --rupture-light: #ffebee;
-  --stock-bas: #FF6D00;
-  --stock-bas-light: #fff3e0;
+  --stock-bas: #FF6B2B;
+  --stock-bas-light: #fff3ee;
   --sur-stock: #1565C0;
   --sur-stock-light: #e3f2fd;
   --archive: #78909C;
   --archive-light: #eceff1;
-  --shadow: 0 2px 16px rgba(27,94,32,0.08);
-  --shadow-strong: 0 4px 24px rgba(27,94,32,0.15);
-  --radius: 16px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.1);
+  --radius: 14px;
   --radius-sm: 10px;
 }
 
 body.dark {
-  --bg: #0d1f0d;
-  --card: #162416;
-  --text: #e8f5e9;
-  --muted: #4a7a4a;
-  --border: #1e3d1e;
-  --accent-light: #1a3d1a;
-  --pink: #4a1a2e;
-  --orange-light: #3d1a00;
-  --rupture-light: #3d0a0a;
-  --stock-bas-light: #3d1a00;
-  --sur-stock-light: #0a1a3d;
-  --archive-light: #1a2a2a;
-  --shadow: 0 2px 16px rgba(0,0,0,0.4);
+  --bg: #111a0d;
+  --card: #1a2614;
+  --text: #e8f5e0;
+  --muted: #5a7a4a;
+  --border: #2a3d20;
+  --green-light: #1a2e10;
+  --orange-light: #2a1800;
+  --rupture-light: #2a0808;
+  --stock-bas-light: #2a1800;
+  --sur-stock-light: #081428;
+  --archive-light: #1a2020;
+  --shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -64,117 +63,102 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  padding-bottom: 120px;
+  padding-bottom: 100px;
   transition: background 0.3s, color 0.3s;
   overflow-x: hidden;
 }
 
 /* ── HEADER ── */
 header {
-  background: var(--accent);
-  color: #fff;
-  padding: 14px 16px 10px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 12px rgba(27,94,32,0.3);
+  background: var(--card);
+  border-bottom: 3px solid var(--green);
+  padding: 12px 16px 10px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: var(--shadow);
 }
 
 .header-top {
-  display: flex;
-  align-items: center;
+  display: flex; align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
+.header-left { cursor: pointer; }
+
 .header-left h1 {
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  cursor: pointer;
-  color: white;
+  font-size: 22px; font-weight: 900;
+  letter-spacing: 3px; text-transform: lowercase;
+  color: var(--green);
+  line-height: 1;
 }
 
+.header-left h1 span { color: var(--orange); }
+
 .header-left p {
-  font-size: 9px;
-  color: rgba(255,255,255,0.6);
-  margin-top: 1px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  font-weight: 700;
+  font-size: 9px; color: var(--muted);
+  margin-top: 2px; letter-spacing: 1.5px;
+  text-transform: uppercase; font-weight: 700;
 }
 
 .header-actions { display: flex; gap: 6px; align-items: center; }
 
 .mode-btn {
-  width: 36px; height: 36px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.7);
-  font-size: 17px;
-  cursor: pointer;
+  width: 36px; height: 36px; border-radius: 10px; border: 2px solid var(--border);
+  background: var(--card); color: var(--muted);
+  font-size: 17px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.2s;
 }
 
-.mode-btn:hover { background: rgba(255,255,255,0.25); }
-.mode-btn.active-edit { background: var(--orange); color: white; }
-.mode-btn.active-rupture { background: var(--rupture); color: white; }
-.mode-btn.active-dark { background: rgba(255,255,255,0.2); color: white; }
-.mode-btn.active-archive { background: var(--archive); color: white; }
-.mode-btn.active-settings { background: rgba(255,255,255,0.3); color: white; }
+.mode-btn:hover { border-color: var(--green); color: var(--green); }
+.mode-btn.active-edit { background: var(--orange); border-color: var(--orange); color: white; }
+.mode-btn.active-rupture { background: var(--rupture); border-color: var(--rupture); color: white; }
+.mode-btn.active-archive { background: var(--archive); border-color: var(--archive); color: white; }
+.mode-btn.active-settings { background: var(--green); border-color: var(--green); color: white; }
 
 /* ── SEARCH ── */
 .search-bar { position: relative; }
 
 .search-bar input {
-  width: 100%;
-  padding: 8px 12px 8px 34px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(255,255,255,0.15);
-  color: white;
-  font-family: 'Nunito', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  outline: none;
-  transition: background 0.2s;
+  width: 100%; padding: 9px 36px 9px 36px;
+  border-radius: 10px; border: 1.5px solid var(--border);
+  background: var(--bg); color: var(--text);
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600;
+  outline: none; transition: border-color 0.2s;
 }
 
-.search-bar input::placeholder { color: rgba(255,255,255,0.5); }
-.search-bar input:focus { background: rgba(255,255,255,0.22); }
-.search-bar .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: 0.6; pointer-events: none; }
-.search-bar .clear-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.6); font-size: 16px; cursor: pointer; padding: 2px 4px; display: none; }
+.search-bar input:focus { border-color: var(--green); }
+.search-bar input::placeholder { color: var(--muted); }
+.search-bar .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: 0.5; pointer-events: none; }
+.search-bar .clear-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 2px 4px; display: none; }
 .search-bar.has-value .clear-btn { display: block; }
 
-/* ── STATUS BARS ── */
+/* ── COUNTER BAR ── */
 .counter-bar {
-  background: var(--accent2);
-  color: white;
-  padding: 11px 16px;
+  background: var(--green);
+  color: white; padding: 10px 16px;
   display: flex; align-items: center; gap: 10px;
   font-size: 13px; font-weight: 800;
   cursor: pointer; transition: background 0.2s;
-  border-bottom: 3px solid var(--orange);
 }
 
-.counter-bar:hover { background: var(--accent); }
-.counter-bar .dot { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; animation: pulse 1.5s infinite; flex-shrink: 0; }
+.counter-bar:hover { background: var(--green-dark); }
+.counter-bar .dot { width: 8px; height: 8px; background: white; border-radius: 50%; animation: pulse 1.5s infinite; flex-shrink: 0; opacity: 0.8; }
+.counter-bar .tip { font-size: 11px; font-weight: 600; opacity: 0.8; }
 .counter-bar .arrow { margin-left: auto; font-size: 14px; transition: transform 0.3s; }
-.counter-bar.empty { background: #455a64; border-bottom-color: transparent; cursor: default; }
-.counter-bar.empty:hover { background: #455a64; }
+.counter-bar.empty { background: #b0bec5; cursor: default; }
+.counter-bar.empty:hover { background: #b0bec5; }
 
-@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+@keyframes pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 0.3; } }
 
-.rupture-bar { background: var(--rupture); color: white; padding: 8px 16px; font-size: 12px; text-align: center; display: none; font-weight: 800; letter-spacing: 0.5px; }
+/* ── STATUS BARS ── */
+.rupture-bar { background: var(--rupture); color: white; padding: 7px 16px; font-size: 12px; text-align: center; display: none; font-weight: 800; }
 body.rupture .rupture-bar { display: block; }
 
-.archive-bar { background: var(--archive); color: white; padding: 8px 16px; font-size: 12px; text-align: center; display: none; font-weight: 800; letter-spacing: 0.5px; }
+.archive-bar { background: var(--archive); color: white; padding: 7px 16px; font-size: 12px; text-align: center; display: none; font-weight: 800; }
 body.archiving .archive-bar { display: block; }
 
-.edit-bar { background: var(--orange); color: white; padding: 8px 16px; font-size: 12px; text-align: center; display: none; font-weight: 800; letter-spacing: 0.5px; }
+.edit-bar { background: var(--orange); color: white; padding: 7px 16px; font-size: 12px; text-align: center; display: none; font-weight: 800; }
 body.editing .edit-bar { display: block; }
 
 /* ── PAGES ── */
@@ -184,16 +168,12 @@ body.editing .edit-bar { display: block; }
 
 /* ── SETTINGS PANEL ── */
 .settings-panel {
-  display: none;
-  position: fixed;
-  top: 68px; right: 12px;
-  background: var(--accent);
-  border-radius: 16px;
-  padding: 6px;
-  box-shadow: var(--shadow-strong);
-  z-index: 500;
-  min-width: 200px;
-  border: 1px solid rgba(255,255,255,0.2);
+  display: none; position: fixed;
+  top: 72px; right: 12px;
+  background: var(--card); border-radius: 16px;
+  padding: 6px; box-shadow: var(--shadow-md);
+  z-index: 500; min-width: 210px;
+  border: 1.5px solid var(--border);
 }
 
 .settings-panel.open { display: block; }
@@ -201,31 +181,29 @@ body.editing .edit-bar { display: block; }
 .settings-item {
   display: flex; align-items: center; gap: 10px;
   width: 100%; background: none; border: none;
-  color: white; font-family: 'Nunito', sans-serif;
+  color: var(--text); font-family: 'Nunito', sans-serif;
   font-size: 14px; font-weight: 700;
   padding: 10px 14px; border-radius: 10px;
-  cursor: pointer; text-align: left;
-  transition: background 0.15s;
+  cursor: pointer; text-align: left; transition: background 0.15s;
 }
 
-.settings-item:hover { background: rgba(255,255,255,0.15); }
-.settings-item.active-setting { background: rgba(255,255,255,0.2); }
+.settings-item:hover { background: var(--green-light); color: var(--green-dark); }
+.settings-item.active-setting { background: var(--green-light); color: var(--green); }
 
-.settings-divider { height: 1px; background: rgba(255,255,255,0.15); margin: 4px 8px; }
-.settings-label { padding: 6px 14px 2px; font-size: 10px; font-weight: 900; letter-spacing: 2px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
-
+.settings-divider { height: 1px; background: var(--border); margin: 4px 8px; }
+.settings-label { padding: 6px 14px 2px; font-size: 10px; font-weight: 900; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
 .settings-overlay { position: fixed; inset: 0; z-index: 499; display: none; }
 .settings-overlay.open { display: block; }
 
 /* ── RESERVE PANEL ── */
-.reserve-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 299; display: none; opacity: 0; transition: opacity 0.3s; }
+.reserve-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 299; display: none; opacity: 0; transition: opacity 0.3s; }
 .reserve-overlay.open { display: block; opacity: 1; }
 
 .reserve-panel {
   position: fixed; left: 0; right: 0; bottom: 0;
   z-index: 300; background: var(--card);
   border-radius: 24px 24px 0 0;
-  box-shadow: 0 -8px 40px rgba(27,94,32,0.2);
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
   transform: translateY(100%);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   max-height: 80vh; display: flex; flex-direction: column;
@@ -235,23 +213,18 @@ body.editing .edit-bar { display: block; }
 .reserve-panel.open { transform: translateY(0); }
 
 .reserve-close-btn {
-  position: absolute;
-  top: -52px; left: 14px;
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  border: none;
-  background: var(--rupture);
-  color: white;
-  font-size: 20px; font-weight: 900;
-  cursor: pointer;
+  position: absolute; top: -52px; left: 14px;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: none; background: var(--rupture); color: white;
+  font-size: 20px; font-weight: 900; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
   transition: background 0.15s, transform 0.15s;
   pointer-events: none; opacity: 0;
 }
 
 .reserve-panel.open .reserve-close-btn { pointer-events: auto; opacity: 1; }
-.reserve-close-btn:hover { background: #922b21; transform: scale(1.1); }
+.reserve-close-btn:hover { background: #b71c1c; transform: scale(1.1); }
 
 .reserve-handle { width: 40px; height: 4px; background: var(--border); border-radius: 4px; margin: 14px auto 0; flex-shrink: 0; }
 
@@ -261,7 +234,7 @@ body.editing .edit-bar { display: block; }
   border-bottom: 1px solid var(--border);
 }
 
-.reserve-title { font-size: 15px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+.reserve-title { font-size: 15px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--green); }
 
 .reserve-clear-btn {
   background: var(--rupture-light); color: var(--rupture);
@@ -274,253 +247,184 @@ body.editing .edit-bar { display: block; }
 
 .reserve-list { overflow-y: auto; padding: 12px 18px 24px; flex: 1; }
 
-.reserve-section-title {
-  font-size: 10px; font-weight: 900; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--muted);
-  padding: 12px 2px 6px;
-}
-
+.reserve-section-title { font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding: 12px 2px 6px; }
 .reserve-section-title:first-child { padding-top: 0; }
 
 .reserve-item {
   display: flex; align-items: center;
-  padding: 12px 14px; background: var(--accent-light);
+  padding: 11px 14px; background: var(--green-light);
   border-radius: var(--radius-sm); margin-bottom: 8px;
-  border-left: 4px solid var(--accent-border); gap: 10px;
+  border-left: 4px solid var(--green); gap: 10px;
 }
 
-.reserve-item-name { font-size: 14px; font-weight: 700; color: var(--accent); flex: 1; }
-.reserve-item-qty { font-size: 19px; font-weight: 900; color: var(--accent); background: white; border-radius: 8px; padding: 2px 10px; min-width: 36px; text-align: center; }
+.reserve-item-name { font-size: 14px; font-weight: 700; color: var(--green-dark); flex: 1; }
+.reserve-item-qty { font-size: 18px; font-weight: 900; color: var(--green); background: white; border-radius: 8px; padding: 2px 10px; min-width: 36px; text-align: center; border: 1.5px solid var(--green-border); }
 
 .reserve-taken-btn {
-  background: var(--accent); color: white; border: none;
+  background: var(--green); color: white; border: none;
   border-radius: 8px; padding: 7px 12px;
   font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800;
-  cursor: pointer; white-space: nowrap; transition: opacity 0.15s;
+  cursor: pointer; white-space: nowrap; transition: background 0.15s;
 }
 
-.reserve-taken-btn:hover { opacity: 0.85; }
+.reserve-taken-btn:hover { background: var(--green-dark); }
 .reserve-empty { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 30px 0; }
 
-/* ── MULTI-SELECT PANEL ── */
-.multiselect-panel {
-  position: fixed;
-  bottom: 24px; left: 50%; transform: translateX(-50%) translateY(120%);
-  background: var(--accent);
-  border-radius: 16px;
-  padding: 12px 16px;
-  box-shadow: var(--shadow-strong);
-  z-index: 400;
-  display: flex; align-items: center; gap: 10px;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 280px;
-  border: 2px solid rgba(255,255,255,0.2);
+/* ── MULTI-SELECT BANNER ── */
+.multiselect-banner {
+  position: fixed; top: 72px; left: 0; right: 0;
+  background: var(--orange);
+  color: white; padding: 10px 16px;
+  display: none; align-items: center; gap: 10px;
+  font-size: 13px; font-weight: 800; z-index: 98;
+  box-shadow: var(--shadow-md);
 }
 
-.multiselect-panel.open { transform: translateX(-50%) translateY(0); }
+.multiselect-banner.open { display: flex; }
 
-.multiselect-count {
-  font-size: 13px; font-weight: 800; color: white;
-  background: rgba(255,255,255,0.2);
-  border-radius: 8px; padding: 4px 10px;
-  white-space: nowrap;
-}
-
-.multiselect-label { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.8); flex: 1; }
+.multiselect-count { background: rgba(255,255,255,0.25); border-radius: 8px; padding: 3px 10px; white-space: nowrap; }
 
 .multiselect-subcat-select {
-  flex: 1;
-  padding: 7px 10px;
-  border-radius: 8px;
-  border: none;
-  background: rgba(255,255,255,0.2);
-  color: white;
-  font-family: 'Nunito', sans-serif;
-  font-size: 13px; font-weight: 700;
-  outline: none;
+  flex: 1; padding: 7px 10px; border-radius: 8px; border: none;
+  background: rgba(255,255,255,0.2); color: white;
+  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+  outline: none; min-width: 0;
+}
+
+.multiselect-subcat-select option { background: #333; color: white; }
+
+.multiselect-apply-btn {
+  background: white; color: var(--orange); border: none;
+  border-radius: 8px; padding: 7px 14px;
+  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900;
+  cursor: pointer; white-space: nowrap;
+}
+
+.multiselect-cancel-btn {
+  background: rgba(255,255,255,0.2); color: white; border: none;
+  border-radius: 8px; padding: 7px 10px;
+  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
   cursor: pointer;
 }
 
-.multiselect-subcat-select option { background: var(--accent); color: white; }
-
-.multiselect-apply-btn {
-  background: var(--orange); color: white; border: none;
-  border-radius: 8px; padding: 7px 14px;
-  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
-  cursor: pointer; white-space: nowrap; transition: opacity 0.15s;
-}
-
-.multiselect-apply-btn:hover { opacity: 0.85; }
-
-.multiselect-cancel-btn {
-  background: rgba(255,255,255,0.15); color: white; border: none;
-  border-radius: 8px; padding: 7px 10px;
-  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
-  cursor: pointer; transition: opacity 0.15s;
-}
-
-/* ── EDITOR PANEL ── */
+/* ── EDITOR ── */
 #editorPanel {
   background: var(--card); border-radius: var(--radius);
-  padding: 18px; box-shadow: var(--shadow); margin-bottom: 18px;
-  display: none; border: 1px solid var(--border);
+  padding: 16px; box-shadow: var(--shadow); margin-bottom: 16px;
+  display: none; border: 1.5px solid var(--border);
 }
 
 #editorPanel.open { display: block; }
 
-.editor-tabs {
-  display: flex; gap: 6px; margin-bottom: 14px;
-}
+.editor-tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
 
 .editor-tab {
-  padding: 6px 14px; border-radius: 8px; border: none;
+  padding: 6px 14px; border-radius: 8px; border: 1.5px solid var(--border);
   font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800;
   cursor: pointer; transition: all 0.15s;
   background: var(--bg); color: var(--muted);
 }
 
-.editor-tab.active { background: var(--accent); color: white; }
+.editor-tab.active { background: var(--green); color: white; border-color: var(--green); }
+.editor-tab.active-orange { background: var(--orange); color: white; border-color: var(--orange); }
 
 .editor-section { display: none; }
 .editor-section.active { display: block; }
 
-.editor-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.editor-label { font-size: 11px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
 
 .editor-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
 
 .editor-row input, .editor-row select {
-  flex: 1; min-width: 0;
-  padding: 10px 12px; border: 1.5px solid var(--border);
-  border-radius: 10px; font-family: 'Nunito', sans-serif;
-  font-size: 14px; font-weight: 600;
-  background: var(--bg); color: var(--text);
-  outline: none; transition: border-color 0.2s;
+  flex: 1; min-width: 0; padding: 10px 12px;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600;
+  background: var(--bg); color: var(--text); outline: none;
+  transition: border-color 0.2s;
 }
 
-.editor-row input:focus, .editor-row select:focus { border-color: var(--accent); }
+.editor-row input:focus, .editor-row select:focus { border-color: var(--green); }
 
 .editor-add-btn {
-  background: var(--accent); color: white; border: none;
+  background: var(--green); color: white; border: none;
   border-radius: 10px; padding: 11px 14px;
   font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
   cursor: pointer; width: 100%; margin-top: 4px; text-align: center;
   transition: background 0.15s;
 }
 
-.editor-add-btn:hover { background: var(--accent2); }
+.editor-add-btn:hover { background: var(--green-dark); }
 
 /* ── SECTIONS ── */
-.section { margin-bottom: 6px; }
+.section { margin-bottom: 4px; }
 
-.section-header {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 4px 6px;
-}
+.section-header { display: flex; align-items: center; gap: 8px; padding: 10px 2px 6px; }
 
-.section-label {
-  font-size: 11px; font-weight: 900; letter-spacing: 2px;
-  text-transform: uppercase;
-}
+.section-label { font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
 
-.section-line { flex: 1; height: 2px; border-radius: 2px; background: var(--border); }
+.section-line { flex: 1; height: 2px; border-radius: 2px; }
 .section-count { font-size: 11px; color: var(--muted); font-weight: 800; }
 
 .section[data-cat="fruits"] .section-label { color: #e53935; }
-.section[data-cat="fruits"] .section-line { background: #ffcdd2; }
-.section[data-cat="sec"] .section-label { color: #F57F17; }
-.section[data-cat="sec"] .section-line { background: #fff9c4; }
-.section[data-cat="legumes"] .section-label { color: var(--accent); }
-.section[data-cat="legumes"] .section-line { background: var(--border); }
-.section[data-cat="coupe_fruits"] .section-label { color: #8e24aa; }
-.section[data-cat="coupe_fruits"] .section-line { background: #f3e5f5; }
-.section[data-cat="coupe_legumes"] .section-label { color: #6d4c41; }
-.section[data-cat="coupe_legumes"] .section-line { background: #efebe9; }
+.section[data-cat="fruits"] .section-line { background: var(--pink); }
+.section[data-cat="sec"] .section-label { color: #e65100; }
+.section[data-cat="sec"] .section-line { background: #ffe0b2; }
+.section[data-cat="legumes"] .section-label { color: var(--green); }
+.section[data-cat="legumes"] .section-line { background: var(--green-border); }
+.section[data-cat="coupe_fruits"] .section-label { color: var(--pink-dark); }
+.section[data-cat="coupe_fruits"] .section-line { background: var(--pink); }
+.section[data-cat="coupe_legumes"] .section-label { color: #558b2f; }
+.section[data-cat="coupe_legumes"] .section-line { background: #dcedc8; }
 
 .coupe-parent-title {
   font-size: 10px; font-weight: 900; letter-spacing: 3px;
-  text-transform: uppercase; color: #8e24aa;
-  padding: 14px 4px 2px; opacity: 0.8;
+  text-transform: uppercase; color: var(--muted);
+  padding: 14px 2px 4px;
   display: flex; align-items: center; gap: 8px;
 }
 
-.coupe-parent-title::after { content: ''; flex: 1; height: 1px; background: #e1bee7; }
+.coupe-parent-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
 /* ── SOUS-CATÉGORIE ── */
 .subcategory-group { margin-bottom: 4px; }
 
 .subcategory-header {
   display: flex; align-items: center; gap: 6px;
-  padding: 6px 8px 4px;
-  cursor: pointer;
+  padding: 5px 8px 3px; cursor: pointer;
+  border-radius: 8px; transition: background 0.1s;
 }
 
-.subcategory-name {
-  font-size: 12px; font-weight: 800;
-  color: var(--muted); letter-spacing: 0.5px;
-  flex: 1;
-}
+.subcategory-header:hover { background: var(--green-light); }
 
-.subcategory-name-input {
-  font-family: 'Nunito', sans-serif;
-  font-size: 12px; font-weight: 800;
-  color: var(--text);
-  border: 1.5px solid var(--accent);
-  border-radius: 6px;
-  padding: 2px 8px;
-  background: var(--bg);
-  outline: none;
-  flex: 1;
-}
-
+.subcategory-name { font-size: 11px; font-weight: 900; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; flex: 1; }
+.subcategory-name-input { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 900; color: var(--text); border: 1.5px solid var(--green); border-radius: 6px; padding: 2px 8px; background: var(--bg); outline: none; flex: 1; text-transform: uppercase; letter-spacing: 1px; }
 .subcategory-count { font-size: 10px; color: var(--muted); font-weight: 700; }
 
-.subcategory-drag-handle {
-  display: none; color: #ccc; cursor: grab; font-size: 16px;
-  align-items: center; justify-content: center;
-  width: 22px; height: 22px;
-}
-
+.subcategory-drag-handle { display: none; color: var(--border); cursor: grab; font-size: 14px; width: 20px; height: 20px; align-items: center; justify-content: center; }
 body.editing .subcategory-drag-handle { display: flex; }
 
-.subcategory-archive-btn {
-  display: none; width: 22px; height: 22px;
-  border-radius: 6px; border: 1px solid #ccc;
-  background: var(--archive-light); color: var(--archive);
-  font-size: 12px; cursor: pointer;
-  align-items: center; justify-content: center;
-}
-
+.subcategory-archive-btn { display: none; width: 20px; height: 20px; border-radius: 5px; border: 1px solid var(--border); background: var(--archive-light); color: var(--archive); font-size: 11px; cursor: pointer; align-items: center; justify-content: center; }
 body.editing .subcategory-archive-btn { display: flex; }
 
-.subcategory-unarchive-btn {
-  display: none; font-size: 11px; font-weight: 700;
-  color: var(--accent); background: var(--accent-light);
-  border: 1px solid var(--accent-border); border-radius: 6px;
-  padding: 2px 8px; cursor: pointer;
-}
-
+.subcategory-unarchive-btn { display: none; font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-light); border: 1px solid var(--green-border); border-radius: 6px; padding: 2px 8px; cursor: pointer; }
 body.archiving .subcategory-unarchive-btn { display: flex; align-items: center; }
 
-.no-subcat-group { padding-left: 0; }
+.subcategory-products { padding-left: 8px; border-left: 2px solid var(--border); margin-left: 8px; }
 
 /* ── PRODUIT ── */
 .product {
-  background: var(--card);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  margin-bottom: 6px;
+  background: var(--card); border-radius: var(--radius-sm);
+  padding: 10px 12px; margin-bottom: 6px;
   display: flex; align-items: center; gap: 8px;
-  box-shadow: var(--shadow);
-  border: 1.5px solid var(--border);
-  transition: border-color 0.2s, background 0.2s, opacity 0.2s;
-  position: relative; overflow: hidden;
+  box-shadow: var(--shadow); border: 1.5px solid var(--border);
+  transition: all 0.15s; position: relative; overflow: hidden;
   min-width: 0; width: 100%;
 }
 
 .product.hidden { display: none; }
 
-.product.active { border-color: var(--accent-border); background: var(--accent-light); }
-.product.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent-border); border-radius: 2px 0 0 2px; }
+.product.active { border-color: var(--green); background: var(--green-light); }
+.product.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--green); }
 
 .product.rupture-item { opacity: 0.5; background: var(--rupture-light); border-color: #ffcdd2; }
 .product.rupture-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--rupture); }
@@ -532,31 +436,13 @@ body.archiving .subcategory-unarchive-btn { display: flex; align-items: center; 
 .product.sur-stock-item { border-color: var(--sur-stock); background: var(--sur-stock-light); }
 .product.sur-stock-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--sur-stock); }
 
-.product.archived-item { display: none; border-color: #ccc; background: var(--archive-light); opacity: 0.6; }
+.product.archived-item { display: none; background: var(--archive-light); border-color: #ccc; opacity: 0.6; }
 body.archiving .product.archived-item { display: flex; }
 body.archiving .product.archived-item .product-name { text-decoration: line-through; color: var(--archive); }
 body.archiving .product:not(.archived-item) { display: none; }
 
-/* Multi-select */
-.product.selected {
-  border-color: var(--orange) !important;
-  background: var(--orange-light) !important;
-  box-shadow: 0 0 0 2px var(--orange);
-}
-
-.product-select-cb {
-  display: none;
-  width: 22px; height: 22px;
-  border-radius: 6px; border: 2px solid var(--border);
-  background: var(--card); cursor: pointer;
-  flex-shrink: 0; align-items: center; justify-content: center;
-  transition: all 0.15s;
-}
-
-body.multiselecting .product-select-cb { display: flex; }
-body.multiselecting .check-wrap { display: none; }
-
-.product-select-cb.checked { background: var(--orange); border-color: var(--orange); color: white; font-size: 12px; }
+/* Multi-select highlight */
+.product.selected { border-color: var(--orange) !important; background: var(--orange-light) !important; box-shadow: 0 0 0 2px var(--orange); }
 
 .badge { font-size: 10px; color: white; border-radius: 6px; padding: 2px 6px; font-weight: 800; white-space: nowrap; flex-shrink: 0; }
 .badge-stock-bas { background: var(--orange); }
@@ -564,24 +450,14 @@ body.multiselecting .check-wrap { display: none; }
 .badge-archived { background: var(--archive); }
 
 .product-name { flex: 1; font-size: 14px; font-weight: 700; min-width: 0; }
-.product.active .product-name { font-weight: 800; color: var(--accent); }
+.product.active .product-name { font-weight: 800; color: var(--green-dark); }
+body.renaming .product-name { cursor: pointer; text-decoration: underline dotted var(--green); }
 
-.product-name-input {
-  flex: 1; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
-  background: var(--bg); color: var(--text);
-  border: 1.5px solid var(--accent); border-radius: 8px;
-  padding: 3px 8px; outline: none; min-width: 0;
-}
+.product-name-input { flex: 1; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700; background: var(--bg); color: var(--text); border: 1.5px solid var(--green); border-radius: 8px; padding: 3px 8px; outline: none; min-width: 0; }
 
 /* Check */
-.check-wrap {
-  width: 26px; height: 26px; border-radius: 8px;
-  border: 2px solid var(--border); background: var(--card);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all 0.15s;
-}
-
-.check-wrap.checked { background: var(--accent); border-color: var(--accent); }
+.check-wrap { width: 26px; height: 26px; border-radius: 8px; border: 2px solid var(--border); background: var(--card); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+.check-wrap.checked { background: var(--green); border-color: var(--green); }
 .check-wrap svg { display: none; }
 .check-wrap.checked svg { display: block; }
 .product.rupture-item .check-wrap { pointer-events: none; opacity: 0.3; }
@@ -589,158 +465,100 @@ body.multiselecting .check-wrap { display: none; }
 
 /* Qty */
 .qty-controls { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
-
-.qty-btn {
-  width: 30px; height: 30px; border-radius: 8px; border: none;
-  cursor: pointer; font-size: 16px; font-weight: 900;
-  display: flex; align-items: center; justify-content: center;
-  transition: transform 0.1s; background: var(--border); color: var(--text);
-}
-
+.qty-btn { width: 30px; height: 30px; border-radius: 8px; border: 1.5px solid var(--border); cursor: pointer; font-size: 16px; font-weight: 900; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; background: var(--bg); color: var(--text); }
 .qty-btn:active { transform: scale(0.85); }
-.qty-btn.plus { background: var(--accent); color: white; }
+.qty-btn.plus { background: var(--green); color: white; border-color: var(--green); }
 .product.rupture-item .qty-btn { pointer-events: none; opacity: 0.3; }
 .product.archived-item .qty-controls { display: none; }
 
 .qty-display { font-size: 17px; font-weight: 900; min-width: 26px; text-align: center; }
-.product.active .qty-display { color: var(--accent); }
+.product.active .qty-display { color: var(--green); }
 
-/* Rupture actions */
+/* Rupture */
 .rupture-actions { display: none; gap: 4px; flex-shrink: 0; }
 body.rupture .rupture-actions { display: flex; }
 body.rupture .qty-controls { display: none; }
 body.rupture .check-wrap { display: none; }
 
-.r-btn {
-  width: 30px; height: 30px; border-radius: 7px; border: 1.5px solid;
-  font-size: 13px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; transition: all 0.15s;
-}
-
+.r-btn { width: 28px; height: 28px; border-radius: 7px; border: 1.5px solid; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
 .rupture-toggle-btn { border-color: #ffcdd2; background: var(--rupture-light); color: var(--rupture); }
 .rupture-toggle-btn:hover, .product.rupture-item .rupture-toggle-btn { background: var(--rupture); color: white; border-color: var(--rupture); }
-
 .stock-bas-toggle-btn { border-color: #ffcc80; background: var(--stock-bas-light); color: var(--orange); }
 .stock-bas-toggle-btn:hover, .product.stock-bas-item .stock-bas-toggle-btn { background: var(--orange); color: white; border-color: var(--orange); }
 .product.rupture-item .stock-bas-toggle-btn { pointer-events: none; opacity: 0.3; }
-
 .sur-stock-toggle-btn { border-color: #90caf9; background: var(--sur-stock-light); color: var(--sur-stock); }
 .sur-stock-toggle-btn:hover, .product.sur-stock-item .sur-stock-toggle-btn { background: var(--sur-stock); color: white; border-color: var(--sur-stock); }
 .product.rupture-item .sur-stock-toggle-btn { pointer-events: none; opacity: 0.3; }
 
-/* Archive actions */
+/* Archive */
 .archive-actions { display: none; gap: 4px; flex-shrink: 0; }
 body.archiving .archive-actions { display: flex; }
 body.archiving .qty-controls { display: none; }
 body.archiving .check-wrap { display: none; }
 body.archiving .rupture-actions { display: none; }
 
-.unarchive-btn {
-  border: 1.5px solid #aaa; background: var(--archive-light); color: var(--archive);
-  border-radius: 8px; padding: 5px 10px; font-family: 'Nunito', sans-serif;
-  font-size: 11px; font-weight: 800; cursor: pointer; transition: all 0.15s; white-space: nowrap;
-}
-
+.unarchive-btn { border: 1.5px solid #aaa; background: var(--archive-light); color: var(--archive); border-radius: 8px; padding: 4px 8px; font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 800; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
 .unarchive-btn:hover { background: var(--archive); color: white; }
 
-/* Edit mode */
+/* Edit */
 body.editing .qty-controls { display: none; }
 body.editing .check-wrap { display: none; }
 body.editing .rupture-actions { display: none; }
 body.editing .archive-actions { display: none; }
 body.editing .badge { display: none; }
-body.editing .product-select-cb { display: none !important; }
 
-.archive-btn {
-  width: 26px; height: 26px; border-radius: 6px;
-  border: 1px solid var(--border); background: var(--archive-light);
-  font-size: 12px; cursor: pointer; display: none;
-  align-items: center; justify-content: center; color: var(--archive); flex-shrink: 0;
-}
-
+.archive-btn { width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--border); background: var(--archive-light); font-size: 12px; cursor: pointer; display: none; align-items: center; justify-content: center; color: var(--archive); flex-shrink: 0; }
 body.editing .archive-btn { display: flex; }
 
-.drag-handle {
-  display: none; align-items: center; justify-content: center;
-  flex-shrink: 0; width: 24px; height: 24px;
-  color: var(--border); cursor: grab; font-size: 16px; touch-action: none;
-}
-
+.drag-handle { display: none; align-items: center; justify-content: center; flex-shrink: 0; width: 22px; height: 22px; color: #ccc; cursor: grab; font-size: 16px; touch-action: none; }
 body.editing .drag-handle { display: flex; }
 .drag-handle:active { cursor: grabbing; }
 
-.product.sortable-ghost { opacity: 0.3; background: var(--accent-light) !important; border: 2px dashed var(--accent-border) !important; }
-.product.sortable-chosen { box-shadow: 0 8px 24px rgba(27,94,32,0.2) !important; transform: scale(1.01); }
+.product.sortable-ghost { opacity: 0.3; background: var(--green-light) !important; border: 2px dashed var(--green) !important; }
+.product.sortable-chosen { box-shadow: 0 8px 24px rgba(122,182,72,0.3) !important; transform: scale(1.01); }
 
-.delete-btn {
-  width: 26px; height: 26px; border-radius: 6px;
-  border: 1px solid #ffcdd2; background: var(--rupture-light);
-  font-size: 13px; cursor: pointer; display: none;
-  align-items: center; justify-content: center; color: var(--rupture); flex-shrink: 0;
-}
-
+.delete-btn { width: 26px; height: 26px; border-radius: 6px; border: 1px solid #ffcdd2; background: var(--rupture-light); font-size: 12px; cursor: pointer; display: none; align-items: center; justify-content: center; color: var(--rupture); flex-shrink: 0; }
 body.editing .delete-btn { display: flex; }
 
 /* ── STATS ── */
 .stats-main { padding: 14px; max-width: 700px; margin: 0 auto; }
-.stats-title { font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; padding: 0 4px; }
-.day-card { background: var(--card); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.stats-title { font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; padding: 0 2px; }
+.day-card { background: var(--card); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; box-shadow: var(--shadow); border: 1.5px solid var(--border); }
 .day-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .day-label { font-size: 14px; font-weight: 800; }
-.day-label.today { color: var(--accent); }
+.day-label.today { color: var(--green); }
 .day-count { font-size: 12px; color: var(--muted); font-weight: 700; }
 .day-bar-wrap { background: var(--border); border-radius: 6px; height: 7px; overflow: hidden; margin-bottom: 10px; }
-.day-bar { height: 100%; border-radius: 6px; background: var(--accent); transition: width 0.5s ease; }
+.day-bar { height: 100%; border-radius: 6px; background: var(--green); transition: width 0.5s ease; }
 .day-products { display: flex; flex-wrap: wrap; gap: 5px; }
-.day-product-tag { font-size: 11px; background: var(--accent-light); color: var(--accent); border-radius: 6px; padding: 3px 8px; font-weight: 700; }
+.day-product-tag { font-size: 11px; background: var(--green-light); color: var(--green-dark); border-radius: 6px; padding: 3px 8px; font-weight: 700; }
 .stats-empty, .stats-loading { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 40px 20px; }
 
 /* ── TOAST ── */
-#toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: var(--accent); color: white; padding: 10px 20px;
-  border-radius: 20px; font-size: 13px; font-weight: 800;
-  opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; white-space: nowrap;
-  box-shadow: var(--shadow-strong);
-}
-
+#toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--green); color: white; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 800; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; box-shadow: var(--shadow-md); }
 #toast.show { opacity: 1; }
 
-.loading-overlay {
-  position: fixed; inset: 0; background: var(--bg);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 200; font-size: 16px; font-weight: 800; letter-spacing: 1px; color: var(--accent);
-  flex-direction: column; gap: 12px;
-}
-
-.loading-spinner {
-  width: 40px; height: 40px; border-radius: 50%;
-  border: 4px solid var(--border); border-top-color: var(--accent);
-  animation: spin 0.8s linear infinite;
-}
-
+.loading-overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 200; flex-direction: column; gap: 14px; }
+.loading-logo { font-size: 28px; font-weight: 900; letter-spacing: 4px; color: var(--green); text-transform: lowercase; }
+.loading-logo span { color: var(--orange); }
+.loading-spinner { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--green); animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .search-empty { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 30px 0; display: none; }
-
-/* ── RENAME MODE ── */
-body.renaming .product-name { cursor: pointer; }
-body.renaming .product-name:hover { color: var(--accent); text-decoration: underline dotted; }
-body.renaming .subcategory-name { cursor: pointer; }
-body.renaming .subcategory-name:hover { color: var(--accent); text-decoration: underline dotted; }
+body.renaming .subcategory-name { cursor: pointer; text-decoration: underline dotted var(--green); }
 </style>
 </head>
 <body>
 
 <div class="loading-overlay" id="loader">
+  <div class="loading-logo">o.m.e.<span>r</span></div>
   <div class="loading-spinner"></div>
-  <span>Chargement...</span>
 </div>
 
 <header>
   <div class="header-top">
     <div class="header-left" onclick="showPage('main')">
-      <h1>O.M.E.R</h1>
+      <h1>o.m.e.<span>r</span></h1>
       <p id="headerSub">Outil de Mise En Rayon</p>
     </div>
     <div class="header-actions">
@@ -757,7 +575,20 @@ body.renaming .subcategory-name:hover { color: var(--accent); text-decoration: u
   </div>
 </header>
 
-<!-- SETTINGS PANEL -->
+<!-- STATUS BARS -->
+<div class="rupture-bar">⚠️ MODE RUPTURE — 🚫 Rupture &nbsp;|&nbsp; 🟠 Stock bas &nbsp;|&nbsp; 🔵 Sur stock</div>
+<div class="archive-bar">🗂️ MODE ARCHIVES — Appuyez sur 📥 pour désarchiver</div>
+<div class="edit-bar">✏️ MODE ÉDITION — Ctrl/Cmd+clic pour multi-sélection</div>
+
+<!-- COUNTER BAR -->
+<div class="counter-bar empty" id="counterBar" onclick="toggleReservePanel()">
+  <div class="dot"></div>
+  <span id="counterText">Aucun produit à prendre</span>
+  <span class="tip" id="counterTip"></span>
+  <span class="arrow" id="counterArrow" style="display:none">▲</span>
+</div>
+
+<!-- SETTINGS -->
 <div class="settings-overlay" id="settingsOverlay" onclick="toggleSettings()"></div>
 <div id="settingsPanel" class="settings-panel">
   <button class="settings-item" id="statsItem" onclick="showPage('stats'); toggleSettings()">📊 Statistiques</button>
@@ -767,16 +598,6 @@ body.renaming .subcategory-name:hover { color: var(--accent); text-decoration: u
   <button class="settings-item view-mode-btn" id="viewAll" onclick="setViewMode('all')">🌿 Tout afficher</button>
   <button class="settings-item view-mode-btn" id="viewFruitsSec" onclick="setViewMode('fruits_sec')">🍎 Fruits &amp; Sec</button>
   <button class="settings-item view-mode-btn" id="viewLegumes" onclick="setViewMode('legumes')">🥦 Légumes</button>
-</div>
-
-<div class="rupture-bar">⚠️ MODE RUPTURE — 🚫 Rupture &nbsp;|&nbsp; 🟠 Stock bas &nbsp;|&nbsp; 🔵 Sur stock</div>
-<div class="archive-bar">🗂️ MODE ARCHIVES — Appuyez sur 📥 pour désarchiver</div>
-<div class="edit-bar" id="editBar">➕ MODE ÉDITION — ✏️ Renommer &nbsp;|&nbsp; ⠿ Glisser &nbsp;|&nbsp; 🗂️ Archiver</div>
-
-<div class="counter-bar empty" id="counterBar" onclick="toggleReservePanel()">
-  <div class="dot"></div>
-  <span id="counterText">Aucun produit à prendre</span>
-  <span class="arrow" id="counterArrow" style="display:none">▲</span>
 </div>
 
 <!-- RESERVE PANEL -->
@@ -791,8 +612,8 @@ body.renaming .subcategory-name:hover { color: var(--accent); text-decoration: u
   <div class="reserve-list" id="reserveList"></div>
 </div>
 
-<!-- MULTI-SELECT PANEL -->
-<div class="multiselect-panel" id="multiselectPanel">
+<!-- MULTI-SELECT BANNER -->
+<div class="multiselect-banner" id="multiselectBanner">
   <span class="multiselect-count" id="multiselectCount">0 sélectionné</span>
   <select class="multiselect-subcat-select" id="multiselectSubcat">
     <option value="">— Choisir sous-catégorie —</option>
@@ -807,13 +628,11 @@ body.renaming .subcategory-name:hover { color: var(--accent); text-decoration: u
 
     <div id="editorPanel">
       <div class="editor-tabs">
-        <button class="editor-tab active" onclick="switchTab('product')">+ Produit</button>
-        <button class="editor-tab" onclick="switchTab('subcat')">+ Sous-catégorie</button>
+        <button class="editor-tab active" id="tab-product-btn" onclick="switchTab('product', this)">+ Produit</button>
+        <button class="editor-tab" id="tab-subcat-btn" onclick="switchTab('subcat', this)">+ Sous-catégorie</button>
         <button class="editor-tab" id="renameModeTab" onclick="toggleRenameMode()">✏️ Renommer</button>
-        <button class="editor-tab" id="multiselectTab" onclick="toggleMultiselect()">☑️ Multi-sélect</button>
       </div>
 
-      <!-- Ajouter produit -->
       <div class="editor-section active" id="tab-product">
         <div class="editor-label">Nouveau produit</div>
         <div class="editor-row">
@@ -827,14 +646,11 @@ body.renaming .subcategory-name:hover { color: var(--accent); text-decoration: u
           </select>
         </div>
         <div class="editor-row">
-          <select id="newSubcat">
-            <option value="">— Aucune sous-catégorie —</option>
-          </select>
+          <select id="newSubcat"><option value="">— Aucune sous-catégorie —</option></select>
         </div>
         <button class="editor-add-btn" onclick="addProduct()">+ Ajouter le produit</button>
       </div>
 
-      <!-- Ajouter sous-catégorie -->
       <div class="editor-section" id="tab-subcat">
         <div class="editor-label">Nouvelle sous-catégorie</div>
         <div class="editor-row">
@@ -857,24 +673,19 @@ body.renaming .subcategory-name:hover { color: var(--accent); text-decoration: u
       <div class="section-header"><span class="section-label">🍎 Fruits</span><div class="section-line"></div><span class="section-count" id="count-fruits"></span></div>
       <div id="list-fruits"></div>
     </div>
-
     <div class="section" data-cat="sec">
       <div class="section-header"><span class="section-label">🥔 Sec</span><div class="section-line"></div><span class="section-count" id="count-sec"></span></div>
       <div id="list-sec"></div>
     </div>
-
     <div class="section" data-cat="legumes">
       <div class="section-header"><span class="section-label">🥦 Légumes</span><div class="section-line"></div><span class="section-count" id="count-legumes"></span></div>
       <div id="list-legumes"></div>
     </div>
-
-    <div class="coupe-parent-title" id="coupeTitleEl">✂️ Coupe</div>
-
+    <div class="coupe-parent-title" id="coupeTitleEl">✂️ coupe</div>
     <div class="section" data-cat="coupe_fruits">
       <div class="section-header"><span class="section-label">🍓 Coupe fruits</span><div class="section-line"></div><span class="section-count" id="count-coupe_fruits"></span></div>
       <div id="list-coupe_fruits"></div>
     </div>
-
     <div class="section" data-cat="coupe_legumes">
       <div class="section-header"><span class="section-label">🥗 Coupe légumes</span><div class="section-line"></div><span class="section-count" id="count-coupe_legumes"></span></div>
       <div id="list-coupe_legumes"></div>
@@ -899,37 +710,26 @@ const SUPABASE_KEY = "sb_publishable_5MmXincngpKk_qDAFKUvnA_AkjKMDQx";
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const CATEGORIES = ["fruits", "sec", "legumes", "coupe_fruits", "coupe_legumes"];
+const CAT_LABELS = { fruits:'🍎 Fruits', sec:'🥔 Sec', legumes:'🥦 Légumes', coupe_fruits:'🍓 Coupe fruits', coume_legumes:'🥗 Coupe légumes' };
+CAT_LABELS.coupe_legumes = '🥗 Coupe légumes';
 
-const CAT_LABELS = {
-  fruits: '🍎 Fruits', sec: '🥔 Sec', legumes: '🥦 Légumes',
-  coupe_fruits: '🍓 Coupe fruits', coupe_legumes: '🥗 Coupe légumes'
-};
-
-let products = [];
-let subcategories = [];
-let stateMap = {};
+let products = [], subcategories = [], stateMap = {};
 let searchQuery = "";
 let selectedProducts = new Set();
 let isMultiselecting = false;
 let isRenaming = false;
 
-// ─── TABS ─────────────────────────────────────────────────────────────
-function switchTab(tab) {
-  document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+// ─── TABS ────────────────────────────────────────────────────────────
+function switchTab(tab, btn) {
+  document.querySelectorAll('.editor-tab').forEach(t => { if (!t.id.includes('rename')) t.classList.remove('active'); });
   document.querySelectorAll('.editor-section').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-' + tab)?.classList.add('active');
-  event.target.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
-// ─── RECHERCHE ────────────────────────────────────────────────────────
-function normalize(str) {
-  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-}
-
-function matchSearch(name, query) {
-  if (!query) return true;
-  return normalize(query).split(/\s+/).filter(Boolean).every(w => normalize(name).includes(w));
-}
+// ─── SEARCH ──────────────────────────────────────────────────────────
+function normalize(str) { return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim(); }
+function matchSearch(name, q) { if (!q) return true; return normalize(q).split(/\s+/).filter(Boolean).every(w => normalize(name).includes(w)); }
 
 function handleSearch(input) {
   searchQuery = input.value;
@@ -953,24 +753,22 @@ function applySearch() {
     div.classList.toggle("hidden", !visible);
     if (visible) anyVisible = true;
   });
-
   CATEGORIES.forEach(cat => {
     const list = document.getElementById("list-" + cat);
     const section = list?.closest(".section");
     const hasVisible = [...(list?.querySelectorAll(".product") || [])].some(d => !d.classList.contains("hidden"));
     if (section) section.style.display = hasVisible ? "" : "none";
   });
-
-  const coupeVisible = ["coupe_fruits", "coupe_legumes"].some(cat => {
+  const coupeVisible = ["coupe_fruits","coupe_legumes"].some(cat => {
     const list = document.getElementById("list-" + cat);
-    return [...(list?.querySelectorAll(".product") || [])].some(d => !d.classList.contains("hidden"));
+    return [...(list?.querySelectorAll(".product")||[])].some(d => !d.classList.contains("hidden"));
   });
-  const coupeTitle = document.getElementById("coupeTitleEl");
-  if (coupeTitle) coupeTitle.style.display = coupeVisible ? "" : "none";
+  const ct = document.getElementById("coupeTitleEl");
+  if (ct) ct.style.display = coupeVisible ? "" : "none";
   document.getElementById("searchEmpty").style.display = (searchQuery && !anyVisible) ? "block" : "none";
 }
 
-// ─── RESERVE PANEL ────────────────────────────────────────────────────
+// ─── RESERVE ─────────────────────────────────────────────────────────
 let reservePanelOpen = false;
 
 function toggleReservePanel() {
@@ -996,22 +794,15 @@ function closeReservePanel() {
 function renderReservePanel() {
   const list = document.getElementById("reserveList");
   const active = products.filter(p => !p.rupture && !p.archived && getState(p.id).checked);
-  if (active.length === 0) {
-    list.innerHTML = '<div class="reserve-empty">Aucun produit à prendre</div>';
-    return;
-  }
+  if (active.length === 0) { list.innerHTML = '<div class="reserve-empty">Aucun produit à prendre</div>'; return; }
   let html = '';
   CATEGORIES.forEach(cat => {
-    const catProds = active.filter(p => p.category === cat);
-    if (catProds.length === 0) return;
+    const cp = active.filter(p => p.category === cat);
+    if (!cp.length) return;
     html += `<div class="reserve-section-title">${CAT_LABELS[cat]}</div>`;
-    catProds.forEach(p => {
+    cp.forEach(p => {
       const s = getState(p.id);
-      html += `<div class="reserve-item">
-        <span class="reserve-item-name">${p.name}</span>
-        <span class="reserve-item-qty">${s.qty}</span>
-        <button class="reserve-taken-btn" onclick="markTaken(${p.id})">✓ Pris</button>
-      </div>`;
+      html += `<div class="reserve-item"><span class="reserve-item-name">${p.name}</span><span class="reserve-item-qty">${s.qty}</span><button class="reserve-taken-btn" onclick="markTaken(${p.id})">✓ Pris</button></div>`;
     });
   });
   list.innerHTML = html;
@@ -1025,49 +816,47 @@ async function clearReserve() {
     stateMap[p.id] = { checked: false, qty: 0 };
     await sb.from("state").upsert({ product_id: p.id, checked: false, qty: 0 });
   }
-  closeReservePanel();
-  toast("🧺 Liste réserve vidée");
-  render();
+  closeReservePanel(); toast("🧺 Liste réserve vidée"); render();
 }
 
-// ─── MULTI-SELECT ─────────────────────────────────────────────────────
-function toggleMultiselect() {
-  isMultiselecting = !isMultiselecting;
-  document.getElementById("multiselectTab").classList.toggle("active", isMultiselecting);
-  document.body.classList.toggle("multiselecting", isMultiselecting);
-  if (!isMultiselecting) cancelMultiselect();
-  else { updateMultiselectPanel(); updateSubcatSelect(); }
+// ─── MULTI-SELECT (Cmd/Ctrl+clic) ────────────────────────────────────
+function handleProductClick(e, productId) {
+  if (e.metaKey || e.ctrlKey) {
+    // Cmd/Ctrl+clic = sélection multiple
+    e.preventDefault(); e.stopPropagation();
+    isMultiselecting = true;
+    if (selectedProducts.has(productId)) selectedProducts.delete(productId);
+    else selectedProducts.add(productId);
+    updateMultiselectUI();
+    return;
+  }
+  // Clic normal
+  if (isMultiselecting) {
+    selectedProducts.add(productId);
+    updateMultiselectUI();
+    return;
+  }
+  toggle(productId);
 }
 
-function toggleProductSelect(productId) {
-  if (!isMultiselecting) return;
-  if (selectedProducts.has(productId)) selectedProducts.delete(productId);
-  else selectedProducts.add(productId);
-  updateMultiselectPanel();
-  document.querySelectorAll('.product').forEach(div => {
+function updateMultiselectUI() {
+  const count = selectedProducts.size;
+  document.getElementById("multiselectCount").textContent = `${count} sélectionné${count > 1 ? 's' : ''}`;
+  document.getElementById("multiselectBanner").classList.toggle("open", count > 0 || isMultiselecting);
+
+  document.querySelectorAll('.product[data-id]').forEach(div => {
     const id = parseInt(div.dataset.id);
     div.classList.toggle('selected', selectedProducts.has(id));
-    const cb = div.querySelector('.product-select-cb');
-    if (cb) cb.classList.toggle('checked', selectedProducts.has(id));
-    if (cb) cb.textContent = selectedProducts.has(id) ? '✓' : '';
   });
 }
 
-function updateMultiselectPanel() {
-  const panel = document.getElementById("multiselectPanel");
-  const count = selectedProducts.size;
-  document.getElementById("multiselectCount").textContent = `${count} sélectionné${count > 1 ? 's' : ''}`;
-  panel.classList.toggle("open", isMultiselecting);
-}
-
 function updateSubcatSelect() {
-  const sel = document.getElementById("multiselectSubcat");
-  const newSubcatSel = document.getElementById("newSubcat");
   const activeSubcats = subcategories.filter(s => !s.archived);
   const opts = '<option value="">— Aucune sous-catégorie —</option>' +
     activeSubcats.map(s => `<option value="${s.id}">${CAT_LABELS[s.category]} › ${s.name}</option>`).join('');
-  sel.innerHTML = opts;
-  if (newSubcatSel) newSubcatSel.innerHTML = opts;
+  document.getElementById("multiselectSubcat").innerHTML = opts;
+  const ns = document.getElementById("newSubcat");
+  if (ns) ns.innerHTML = opts;
 }
 
 async function applyMultiselect() {
@@ -1080,21 +869,16 @@ async function applyMultiselect() {
     await sb.from("products").update({ subcategory_id: val }).eq("id", id);
   }
   toast(`${selectedProducts.size} produit(s) mis à jour`);
-  cancelMultiselect();
-  render();
+  cancelMultiselect(); render();
 }
 
 function cancelMultiselect() {
-  selectedProducts.clear();
-  isMultiselecting = false;
-  document.getElementById("multiselectTab").classList.remove("active");
-  document.body.classList.remove("multiselecting");
-  document.getElementById("multiselectPanel").classList.remove("open");
+  selectedProducts.clear(); isMultiselecting = false;
+  document.getElementById("multiselectBanner").classList.remove("open");
   document.querySelectorAll('.product.selected').forEach(d => d.classList.remove('selected'));
-  document.querySelectorAll('.product-select-cb').forEach(cb => { cb.classList.remove('checked'); cb.textContent = ''; });
 }
 
-// ─── RENAME MODE ──────────────────────────────────────────────────────
+// ─── RENAME ──────────────────────────────────────────────────────────
 function toggleRenameMode() {
   isRenaming = !isRenaming;
   document.getElementById("renameModeTab").classList.toggle("active", isRenaming);
@@ -1106,15 +890,14 @@ function startRenameProduct(productId) {
   if (!isRenaming) return;
   const p = products.find(p => p.id === productId);
   if (!p) return;
-  const spans = document.querySelectorAll(`.product[data-id="${productId}"] .product-name`);
-  spans.forEach(span => {
+  document.querySelectorAll(`.product[data-id="${productId}"] .product-name`).forEach(span => {
     const input = document.createElement('input');
     input.className = 'product-name-input';
     input.value = p.name;
+    input.onclick = e => e.stopPropagation();
     input.onblur = () => saveName(productId, input);
     input.onkeydown = e => { if (e.key === 'Enter') input.blur(); if (e.key === 'Escape') render(); };
-    span.replaceWith(input);
-    input.focus(); input.select();
+    span.replaceWith(input); input.focus(); input.select();
   });
 }
 
@@ -1122,48 +905,44 @@ function startRenameSubcat(subcatId) {
   if (!isRenaming) return;
   const sc = subcategories.find(s => s.id === subcatId);
   if (!sc) return;
-  const spans = document.querySelectorAll(`.subcategory-header[data-id="${subcatId}"] .subcategory-name`);
-  spans.forEach(span => {
+  document.querySelectorAll(`.subcategory-header[data-id="${subcatId}"] .subcategory-name`).forEach(span => {
     const input = document.createElement('input');
     input.className = 'subcategory-name-input';
     input.value = sc.name;
+    input.onclick = e => e.stopPropagation();
     input.onblur = () => saveSubcatName(subcatId, input);
     input.onkeydown = e => { if (e.key === 'Enter') input.blur(); if (e.key === 'Escape') render(); };
-    span.replaceWith(input);
-    input.focus(); input.select();
+    span.replaceWith(input); input.focus(); input.select();
   });
 }
 
-async function saveName(productId, input) {
+async function saveName(id, input) {
   const name = input.value.trim();
   if (!name) { render(); return; }
-  const p = products.find(p => p.id === productId);
+  const p = products.find(p => p.id === id);
   if (!p || name === p.name) { render(); return; }
   p.name = name;
-  await sb.from("products").update({ name }).eq("id", productId);
-  toast("Nom modifié ✓");
-  render();
+  await sb.from("products").update({ name }).eq("id", id);
+  toast("Nom modifié ✓"); render();
 }
 
-async function saveSubcatName(subcatId, input) {
+async function saveSubcatName(id, input) {
   const name = input.value.trim();
   if (!name) { render(); return; }
-  const sc = subcategories.find(s => s.id === subcatId);
+  const sc = subcategories.find(s => s.id === id);
   if (!sc || name === sc.name) { render(); return; }
   sc.name = name;
-  await sb.from("subcategories").update({ name }).eq("id", subcatId);
-  toast("Nom modifié ✓");
-  render();
+  await sb.from("subcategories").update({ name }).eq("id", id);
+  toast("Nom modifié ✓"); render();
 }
 
-// ─── ENTER KEY ────────────────────────────────────────────────────────
+// ─── NAVIGATION ──────────────────────────────────────────────────────
 function handleEnter(e) { if (e.key === 'Enter') addProduct(); }
 
-// ─── NAVIGATION ───────────────────────────────────────────────────────
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name)?.classList.add('active');
-  ['ruptureBtn', 'editBtn', 'archiveBtn', 'settingsBtn'].forEach(id => {
+  ['ruptureBtn','editBtn','archiveBtn','settingsBtn'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = name === 'stats' ? 'none' : 'flex';
   });
@@ -1172,97 +951,64 @@ function showPage(name) {
   document.getElementById('statsItem')?.classList.toggle('active-setting', name === 'stats');
   document.getElementById('headerSub').textContent = name === 'stats' ? 'Statistiques' : 'Outil de Mise En Rayon';
   if (name === 'stats') {
-    if (document.body.classList.contains('editing')) toggleEdit();
-    if (document.body.classList.contains('rupture')) toggleRupture();
-    if (document.body.classList.contains('archiving')) toggleArchive();
-    closeReservePanel();
-    loadStats();
+    ['editing','rupture','archiving'].forEach(c => { if (document.body.classList.contains(c)) { if(c==='editing') toggleEdit(); if(c==='rupture') toggleRupture(); if(c==='archiving') toggleArchive(); } });
+    closeReservePanel(); loadStats();
   }
 }
 
-// ─── THÈME ────────────────────────────────────────────────────────────
-function initDark() {
-  if (localStorage.getItem("dark") === "1") document.body.classList.add("dark");
-  updateDarkLabel();
-}
-
-function toggleDark() {
-  const isDark = document.body.classList.toggle("dark");
-  localStorage.setItem("dark", isDark ? "1" : "0");
-  updateDarkLabel();
-}
-
+// ─── THÈME ───────────────────────────────────────────────────────────
+function initDark() { if (localStorage.getItem("dark") === "1") document.body.classList.add("dark"); updateDarkLabel(); }
+function toggleDark() { const d = document.body.classList.toggle("dark"); localStorage.setItem("dark", d ? "1" : "0"); updateDarkLabel(); }
 function updateDarkLabel() {
-  const isDark = document.body.classList.contains("dark");
-  const lbl = document.getElementById("darkLabel");
-  if (lbl) lbl.textContent = isDark ? "Thème clair" : "Thème sombre";
-  document.getElementById("darkItem")?.classList.toggle("active-setting", isDark);
+  const d = document.body.classList.contains("dark");
+  const lbl = document.getElementById("darkLabel"); if (lbl) lbl.textContent = d ? "Thème clair" : "Thème sombre";
+  document.getElementById("darkItem")?.classList.toggle("active-setting", d);
 }
 
-// ─── RESET 4H ─────────────────────────────────────────────────────────
-function getToday4h() {
-  const now = new Date(), r = new Date(now);
-  r.setHours(4, 0, 0, 0);
-  if (now < r) r.setDate(r.getDate() - 1);
-  return r;
-}
+// ─── RESET 4H ────────────────────────────────────────────────────────
+function getToday4h() { const now = new Date(), r = new Date(now); r.setHours(4,0,0,0); if (now < r) r.setDate(r.getDate()-1); return r; }
 
 async function resetAllIfNeeded() {
   const reset4h = getToday4h();
-  const { data } = await sb.from("config").select("value").eq("key", "last_reset").single();
+  const { data } = await sb.from("config").select("value").eq("key","last_reset").single();
   if (!data || new Date(data.value) >= reset4h) return;
-  await sb.from("products").update({ rupture: false, stock_bas: false, sur_stock: false }).neq("id", 0);
-  await sb.from("state").update({ checked: false, qty: 0 }).neq("product_id", 0);
-  await sb.from("config").update({ value: new Date().toISOString() }).eq("key", "last_reset");
-  localStorage.setItem("view_mode", "all");
-  currentViewMode = "all";
+  await sb.from("products").update({ rupture:false, stock_bas:false, sur_stock:false }).neq("id",0);
+  await sb.from("state").update({ checked:false, qty:0 }).neq("product_id",0);
+  await sb.from("config").update({ value: new Date().toISOString() }).eq("key","last_reset");
+  localStorage.setItem("view_mode","all"); currentViewMode = "all";
   toast("🌅 Nouvelle journée — liste réinitialisée !");
 }
 
-// ─── TOAST ────────────────────────────────────────────────────────────
-function toast(msg) {
-  const el = document.getElementById("toast");
-  el.textContent = msg;
-  el.classList.add("show");
-  setTimeout(() => el.classList.remove("show"), 3000);
-}
+// ─── TOAST ───────────────────────────────────────────────────────────
+function toast(msg) { const el = document.getElementById("toast"); el.textContent = msg; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 3000); }
 
-// ─── CHARGEMENT ───────────────────────────────────────────────────────
+// ─── LOAD ────────────────────────────────────────────────────────────
 async function loadData() {
   initDark();
   await resetAllIfNeeded();
-
   const [{ data: prods }, { data: subcats }, { data: states }] = await Promise.all([
     sb.from("products").select("*").order("position"),
     sb.from("subcategories").select("*").order("position"),
     sb.from("state").select("*")
   ]);
-
-  products = prods || [];
-  subcategories = subcats || [];
-  stateMap = {};
-  (states || []).forEach(s => { stateMap[s.product_id] = { checked: s.checked, qty: s.qty }; });
-
+  products = prods || []; subcategories = subcats || []; stateMap = {};
+  (states||[]).forEach(s => { stateMap[s.product_id] = { checked: s.checked, qty: s.qty }; });
   if (products.length === 0) { await seedDefaultProducts(); return; }
-
   document.getElementById("loader").style.display = "none";
-  updateSubcatSelect();
-  render();
-  applyViewMode();
-  updateViewModeButtons();
+  updateSubcatSelect(); render(); applyViewMode(); updateViewModeButtons();
 }
 
 async function seedDefaultProducts() {
   const defaults = [
-    {category:"fruits", name:"Pommes", position:0, rupture:false, stock_bas:false, sur_stock:false, archived:false},
-    {category:"fruits", name:"Bananes", position:1, rupture:false, stock_bas:false, sur_stock:false, archived:false},
-    {category:"fruits", name:"Poires", position:2, rupture:false, stock_bas:false, sur_stock:false, archived:false},
-    {category:"sec", name:"Pommes de terre", position:3, rupture:false, stock_bas:false, sur_stock:false, archived:false},
-    {category:"sec", name:"Oignons", position:4, rupture:false, stock_bas:false, sur_stock:false, archived:false},
-    {category:"sec", name:"Échalotes", position:5, rupture:false, stock_bas:false, sur_stock:false, archived:false},
-    {category:"legumes", name:"Tomates", position:6, rupture:false, stock_bas:false, sur_stock:false, archived:false},
-    {category:"legumes", name:"Courgettes", position:7, rupture:false, stock_bas:false, sur_stock:false, archived:false},
-    {category:"legumes", name:"Poivrons", position:8, rupture:false, stock_bas:false, sur_stock:false, archived:false},
+    {category:"fruits",name:"Pommes",position:0,rupture:false,stock_bas:false,sur_stock:false,archived:false},
+    {category:"fruits",name:"Bananes",position:1,rupture:false,stock_bas:false,sur_stock:false,archived:false},
+    {category:"fruits",name:"Poires",position:2,rupture:false,stock_bas:false,sur_stock:false,archived:false},
+    {category:"sec",name:"Pommes de terre",position:3,rupture:false,stock_bas:false,sur_stock:false,archived:false},
+    {category:"sec",name:"Oignons",position:4,rupture:false,stock_bas:false,sur_stock:false,archived:false},
+    {category:"sec",name:"Échalotes",position:5,rupture:false,stock_bas:false,sur_stock:false,archived:false},
+    {category:"legumes",name:"Tomates",position:6,rupture:false,stock_bas:false,sur_stock:false,archived:false},
+    {category:"legumes",name:"Courgettes",position:7,rupture:false,stock_bas:false,sur_stock:false,archived:false},
+    {category:"legumes",name:"Poivrons",position:8,rupture:false,stock_bas:false,sur_stock:false,archived:false},
   ];
   const { data } = await sb.from("products").insert(defaults).select();
   products = data || [];
@@ -1270,477 +1016,292 @@ async function seedDefaultProducts() {
   render();
 }
 
-// ─── ÉTAT ─────────────────────────────────────────────────────────────
-function getState(id) {
-  if (!stateMap[id]) stateMap[id] = { checked: false, qty: 0 };
-  return stateMap[id];
-}
+// ─── STATE ───────────────────────────────────────────────────────────
+function getState(id) { if (!stateMap[id]) stateMap[id] = { checked:false, qty:0 }; return stateMap[id]; }
+async function saveState(id, checked, qty) { stateMap[id] = { checked, qty }; render(); await sb.from("state").upsert({ product_id:id, checked, qty }); }
 
-async function saveState(id, checked, qty) {
-  stateMap[id] = { checked, qty };
-  render();
-  await sb.from("state").upsert({ product_id: id, checked, qty });
-}
-
-// ─── ACTIONS ──────────────────────────────────────────────────────────
+// ─── ACTIONS ─────────────────────────────────────────────────────────
 async function toggle(id) {
-  if (isMultiselecting) { toggleProductSelect(id); return; }
   const p = products.find(p => p.id === id);
   if (p?.rupture || p?.archived) return;
-  const s = getState(id);
-  const c = !s.checked;
-  await saveState(id, c, c ? Math.max(s.qty, 1) : 0);
+  const s = getState(id), c = !s.checked;
+  await saveState(id, c, c ? Math.max(s.qty,1) : 0);
 }
 
-async function increase(id) {
-  const p = products.find(p => p.id === id);
-  if (p?.rupture || p?.archived) return;
-  const s = getState(id);
-  await saveState(id, true, s.qty + 1);
-}
-
-async function decrease(id) {
-  const p = products.find(p => p.id === id);
-  if (p?.rupture || p?.archived) return;
-  const s = getState(id);
-  const q = Math.max(0, s.qty - 1);
-  await saveState(id, q > 0, q);
-}
+async function increase(id) { const p = products.find(p=>p.id===id); if (p?.rupture||p?.archived) return; const s = getState(id); await saveState(id,true,s.qty+1); }
+async function decrease(id) { const p = products.find(p=>p.id===id); if (p?.rupture||p?.archived) return; const s = getState(id); const q=Math.max(0,s.qty-1); await saveState(id,q>0,q); }
 
 async function markTaken(id) {
-  const p = products.find(p => p.id === id);
-  await sb.from("historique").insert({ product_id: id, product_name: p.name, action: "pris" });
-  await saveState(id, false, 0);
+  const p = products.find(p=>p.id===id);
+  await sb.from("historique").insert({ product_id:id, product_name:p.name, action:"pris" });
+  await saveState(id,false,0);
   if (reservePanelOpen) renderReservePanel();
 }
 
-// ─── RUPTURE / STOCKS ─────────────────────────────────────────────────
+// ─── RUPTURE/STOCKS ──────────────────────────────────────────────────
 async function toggleRuptureItem(id) {
-  const p = products.find(p => p.id === id);
-  if (!p) return;
-  const v = !p.rupture;
-  p.rupture = v; p.stock_bas = false; p.sur_stock = false;
-  if (v && getState(id).checked) await saveState(id, false, 0);
-  await sb.from("products").update({ rupture: v, stock_bas: false, sur_stock: false }).eq("id", id);
-  toast(v ? "🚫 Rupture" : "Rupture levée");
-  render();
+  const p = products.find(p=>p.id===id); if (!p) return;
+  const v = !p.rupture; p.rupture=v; p.stock_bas=false; p.sur_stock=false;
+  if (v && getState(id).checked) await saveState(id,false,0);
+  await sb.from("products").update({ rupture:v, stock_bas:false, sur_stock:false }).eq("id",id);
+  toast(v ? "🚫 Rupture" : "Rupture levée"); render();
 }
 
 async function toggleStockBas(id) {
-  const p = products.find(p => p.id === id);
-  if (!p || p.rupture) return;
-  const v = !p.stock_bas;
-  p.stock_bas = v; if (v) p.sur_stock = false;
-  await sb.from("products").update({ stock_bas: v, sur_stock: v ? false : p.sur_stock }).eq("id", id);
-  toast(v ? "🟠 Stock bas" : "Alerte levée");
-  render();
+  const p = products.find(p=>p.id===id); if (!p||p.rupture) return;
+  const v = !p.stock_bas; p.stock_bas=v; if(v) p.sur_stock=false;
+  await sb.from("products").update({ stock_bas:v, sur_stock:v?false:p.sur_stock }).eq("id",id);
+  toast(v ? "🟠 Stock bas" : "Alerte levée"); render();
 }
 
 async function toggleSurStock(id) {
-  const p = products.find(p => p.id === id);
-  if (!p || p.rupture) return;
-  const v = !p.sur_stock;
-  p.sur_stock = v; if (v) p.stock_bas = false;
-  await sb.from("products").update({ sur_stock: v, stock_bas: v ? false : p.stock_bas }).eq("id", id);
-  toast(v ? "🔵 Sur stock" : "Alerte levée");
-  render();
+  const p = products.find(p=>p.id===id); if (!p||p.rupture) return;
+  const v = !p.sur_stock; p.sur_stock=v; if(v) p.stock_bas=false;
+  await sb.from("products").update({ sur_stock:v, stock_bas:v?false:p.stock_bas }).eq("id",id);
+  toast(v ? "🔵 Sur stock" : "Alerte levée"); render();
 }
 
-// ─── ARCHIVE ──────────────────────────────────────────────────────────
+// ─── ARCHIVE ─────────────────────────────────────────────────────────
 async function archiveProduct(id) {
-  const p = products.find(p => p.id === id);
-  if (!p) return;
-  p.archived = true;
-  if (getState(id).checked) await saveState(id, false, 0);
-  await sb.from("products").update({ archived: true }).eq("id", id);
-  toast(`"${p.name}" archivé`);
-  render();
+  const p = products.find(p=>p.id===id); if (!p) return;
+  p.archived=true; if(getState(id).checked) await saveState(id,false,0);
+  await sb.from("products").update({ archived:true }).eq("id",id);
+  toast(`"${p.name}" archivé`); render();
 }
 
 async function unarchiveProduct(id) {
-  const p = products.find(p => p.id === id);
-  if (!p) return;
-  p.archived = false;
-  await sb.from("products").update({ archived: false }).eq("id", id);
-  toast(`"${p.name}" restauré`);
-  render();
+  const p = products.find(p=>p.id===id); if (!p) return;
+  p.archived=false; await sb.from("products").update({ archived:false }).eq("id",id);
+  toast(`"${p.name}" restauré`); render();
 }
 
 async function archiveSubcat(id) {
-  const sc = subcategories.find(s => s.id === id);
-  if (!sc) return;
-  sc.archived = true;
-  products.filter(p => p.subcategory_id === id).forEach(p => { p.archived = true; });
-  await sb.from("subcategories").update({ archived: true }).eq("id", id);
-  await sb.from("products").update({ archived: true }).eq("subcategory_id", id);
-  toast(`Sous-catégorie archivée`);
-  render();
+  const sc = subcategories.find(s=>s.id===id); if (!sc) return;
+  sc.archived=true; products.filter(p=>p.subcategory_id===id).forEach(p=>{ p.archived=true; });
+  await sb.from("subcategories").update({ archived:true }).eq("id",id);
+  await sb.from("products").update({ archived:true }).eq("subcategory_id",id);
+  toast("Sous-catégorie archivée"); render();
 }
 
 async function unarchiveSubcat(id) {
-  const sc = subcategories.find(s => s.id === id);
-  if (!sc) return;
-  sc.archived = false;
-  products.filter(p => p.subcategory_id === id).forEach(p => { p.archived = false; });
-  await sb.from("subcategories").update({ archived: false }).eq("id", id);
-  await sb.from("products").update({ archived: false }).eq("subcategory_id", id);
-  toast(`Sous-catégorie restaurée`);
-  render();
+  const sc = subcategories.find(s=>s.id===id); if (!sc) return;
+  sc.archived=false; products.filter(p=>p.subcategory_id===id).forEach(p=>{ p.archived=false; });
+  await sb.from("subcategories").update({ archived:false }).eq("id",id);
+  await sb.from("products").update({ archived:false }).eq("subcategory_id",id);
+  toast("Sous-catégorie restaurée"); render();
 }
 
-// ─── MODES ────────────────────────────────────────────────────────────
-function toggleArchive() {
-  const v = document.body.classList.toggle("archiving");
-  document.getElementById("archiveBtn").classList.toggle("active-archive", v);
-  if (v) { if (document.body.classList.contains("editing")) toggleEdit(); if (document.body.classList.contains("rupture")) toggleRupture(); }
-}
-
-function toggleRupture() {
-  const v = document.body.classList.toggle("rupture");
-  document.getElementById("ruptureBtn").classList.toggle("active-rupture", v);
-  if (v) { if (document.body.classList.contains("editing")) toggleEdit(); if (document.body.classList.contains("archiving")) toggleArchive(); }
-}
-
+// ─── MODES ───────────────────────────────────────────────────────────
+function toggleArchive() { const v=document.body.classList.toggle("archiving"); document.getElementById("archiveBtn").classList.toggle("active-archive",v); if(v){if(document.body.classList.contains("editing"))toggleEdit();if(document.body.classList.contains("rupture"))toggleRupture();} }
+function toggleRupture() { const v=document.body.classList.toggle("rupture"); document.getElementById("ruptureBtn").classList.toggle("active-rupture",v); if(v){if(document.body.classList.contains("editing"))toggleEdit();if(document.body.classList.contains("archiving"))toggleArchive();} }
 function toggleEdit() {
-  const v = document.body.classList.toggle("editing");
-  document.getElementById("editBtn").classList.toggle("active-edit", v);
-  document.getElementById("editorPanel").classList.toggle("open", v);
-  if (!v) { cancelMultiselect(); if (isRenaming) toggleRenameMode(); }
-  if (v) { if (document.body.classList.contains("rupture")) toggleRupture(); if (document.body.classList.contains("archiving")) toggleArchive(); }
+  const v=document.body.classList.toggle("editing");
+  document.getElementById("editBtn").classList.toggle("active-edit",v);
+  document.getElementById("editorPanel").classList.toggle("open",v);
+  if(!v){cancelMultiselect();if(isRenaming)toggleRenameMode();}
+  if(v){if(document.body.classList.contains("rupture"))toggleRupture();if(document.body.classList.contains("archiving"))toggleArchive();}
   updateSortable(v);
 }
 
 function toggleSettings() {
-  const panel = document.getElementById("settingsPanel");
-  const overlay = document.getElementById("settingsOverlay");
-  const btn = document.getElementById("settingsBtn");
-  const isOpen = panel.classList.toggle("open");
-  overlay.classList.toggle("open", isOpen);
-  btn.classList.toggle("active-settings", isOpen);
-  if (isOpen) { updateDarkLabel(); updateViewModeButtons(); }
+  const panel=document.getElementById("settingsPanel"), overlay=document.getElementById("settingsOverlay"), btn=document.getElementById("settingsBtn");
+  const isOpen=panel.classList.toggle("open"); overlay.classList.toggle("open",isOpen); btn.classList.toggle("active-settings",isOpen);
+  if(isOpen){updateDarkLabel();updateViewModeButtons();}
 }
 
-// ─── SOUS-CATÉGORIES ──────────────────────────────────────────────────
+// ─── SOUS-CATÉGORIES ─────────────────────────────────────────────────
 async function addSubcategory() {
-  const name = document.getElementById("newSubcatName").value.trim();
-  const category = document.getElementById("newSubcatCat").value;
+  const name=document.getElementById("newSubcatName").value.trim();
+  const category=document.getElementById("newSubcatCat").value;
   if (!name) return;
-  const maxPos = subcategories.length > 0 ? Math.max(...subcategories.map(s => s.position)) + 1 : 0;
-  const { data, error } = await sb.from("subcategories")
-    .insert({ name, category, position: maxPos, archived: false }).select().single();
-  if (error) { toast("Erreur ajout"); return; }
+  const maxPos = subcategories.length > 0 ? Math.max(...subcategories.map(s=>s.position))+1 : 0;
+  const { data, error } = await sb.from("subcategories").insert({ name, category, position:maxPos, archived:false }).select().single();
+  if (error) { toast("Erreur"); return; }
   subcategories.push(data);
-  document.getElementById("newSubcatName").value = "";
-  updateSubcatSelect();
-  toast(`Sous-catégorie "${name}" ajoutée !`);
-  render();
+  document.getElementById("newSubcatName").value="";
+  updateSubcatSelect(); toast(`Sous-catégorie "${name}" ajoutée !`); render();
 }
 
-// ─── PRODUITS ─────────────────────────────────────────────────────────
+// ─── PRODUITS ────────────────────────────────────────────────────────
 async function addProduct() {
-  const name = document.getElementById("newName").value.trim();
-  const category = document.getElementById("newCat").value;
-  const subcatVal = document.getElementById("newSubcat").value;
-  const subcategory_id = subcatVal ? parseInt(subcatVal) : null;
+  const name=document.getElementById("newName").value.trim();
+  const category=document.getElementById("newCat").value;
+  const subcatVal=document.getElementById("newSubcat").value;
+  const subcategory_id=subcatVal?parseInt(subcatVal):null;
   if (!name) return;
-  const maxPos = products.length > 0 ? Math.max(...products.map(p => p.position)) + 1 : 0;
+  const maxPos=products.length>0?Math.max(...products.map(p=>p.position))+1:0;
   const { data, error } = await sb.from("products")
-    .insert({ name, category, position: maxPos, rupture: false, stock_bas: false, sur_stock: false, archived: false, subcategory_id })
+    .insert({ name, category, position:maxPos, rupture:false, stock_bas:false, sur_stock:false, archived:false, subcategory_id })
     .select().single();
   if (error) { toast("Erreur ajout"); return; }
   products.push(data);
-  document.getElementById("newName").value = "";
+  document.getElementById("newName").value="";
   document.getElementById("newName").focus();
-  toast(`"${name}" ajouté !`);
-  render();
-  applyViewMode();
+  toast(`"${name}" ajouté !`); render(); applyViewMode();
 }
 
 async function deleteProduct(idx) {
-  const p = products[idx];
-  if (!confirm(`Supprimer "${p.name}" ?`)) return;
-  await sb.from("products").delete().eq("id", p.id);
-  delete stateMap[p.id];
-  products.splice(idx, 1);
-  toast(`"${p.name}" supprimé`);
-  render();
+  const p=products[idx]; if (!confirm(`Supprimer "${p.name}" ?`)) return;
+  await sb.from("products").delete().eq("id",p.id);
+  delete stateMap[p.id]; products.splice(idx,1);
+  toast(`"${p.name}" supprimé`); render();
 }
 
-// ─── DRAG & DROP ──────────────────────────────────────────────────────
+// ─── DRAG & DROP ─────────────────────────────────────────────────────
 let sortableInstances = [];
 
 function initSortable() {
-  sortableInstances.forEach(s => s.destroy());
-  sortableInstances = [];
-  const isEditing = document.body.classList.contains("editing");
-
-  CATEGORIES.forEach(cat => {
-    const el = document.getElementById("list-" + cat);
-    if (!el) return;
-    // Also init sortable on subcategory product lists
-    el.querySelectorAll('.subcategory-products').forEach(subEl => {
-      const inst = Sortable.create(subEl, {
-        animation: 150, handle: ".drag-handle",
-        ghostClass: "sortable-ghost", chosenClass: "sortable-chosen",
-        group: "products",
-        disabled: !isEditing,
-        onEnd: async () => await reindexProducts()
-      });
-      sortableInstances.push(inst);
+  sortableInstances.forEach(s=>s.destroy()); sortableInstances=[];
+  const isEditing=document.body.classList.contains("editing");
+  document.querySelectorAll('.subcategory-products, .no-subcat-products').forEach(el => {
+    const inst=Sortable.create(el,{
+      animation:150, handle:".drag-handle",
+      ghostClass:"sortable-ghost", chosenClass:"sortable-chosen",
+      group:"products", disabled:!isEditing,
+      onEnd: async()=>await reindexProducts()
     });
-
-    const noSubcatEl = el.querySelector('.no-subcat-products');
-    if (noSubcatEl) {
-      const inst = Sortable.create(noSubcatEl, {
-        animation: 150, handle: ".drag-handle",
-        ghostClass: "sortable-ghost", chosenClass: "sortable-chosen",
-        group: "products",
-        disabled: !isEditing,
-        onEnd: async () => await reindexProducts()
-      });
-      sortableInstances.push(inst);
-    }
+    sortableInstances.push(inst);
   });
 }
 
 async function reindexProducts() {
-  const allIds = [];
+  const allIds=[];
   CATEGORIES.forEach(cat => {
-    const listEl = document.getElementById("list-" + cat);
-    listEl?.querySelectorAll('.product[data-id]').forEach(div => {
-      allIds.push(parseInt(div.dataset.id));
-    });
+    document.getElementById("list-"+cat)?.querySelectorAll('.product[data-id]').forEach(div => { allIds.push(parseInt(div.dataset.id)); });
   });
-  const updates = [];
-  allIds.forEach((id, pos) => {
-    const p = products.find(p => p.id === id);
-    if (p && p.position !== pos) { p.position = pos; updates.push(sb.from("products").update({ position: pos }).eq("id", id)); }
-  });
-  products.sort((a, b) => a.position - b.position);
-  await Promise.all(updates);
+  const updates=[];
+  allIds.forEach((id,pos)=>{ const p=products.find(p=>p.id===id); if(p&&p.position!==pos){p.position=pos;updates.push(sb.from("products").update({position:pos}).eq("id",id));} });
+  products.sort((a,b)=>a.position-b.position); await Promise.all(updates);
 }
 
-function updateSortable(enabled) {
-  sortableInstances.forEach(s => s.option("disabled", !enabled));
-}
+function updateSortable(enabled) { sortableInstances.forEach(s=>s.option("disabled",!enabled)); }
 
-// ─── VIEW MODE ────────────────────────────────────────────────────────
-let currentViewMode = localStorage.getItem("view_mode") || "all";
+// ─── VIEW MODE ───────────────────────────────────────────────────────
+let currentViewMode=localStorage.getItem("view_mode")||"all";
+const VIEW_MODE_CATS={ all:CATEGORIES, fruits_sec:["fruits","sec","coupe_fruits"], legumes:["legumes","coupe_legumes"] };
 
-const VIEW_MODE_CATS = {
-  all: ["fruits", "sec", "legumes", "coupe_fruits", "coupe_legumes"],
-  fruits_sec: ["fruits", "sec", "coupe_fruits"],
-  legumes: ["legumes", "coupe_legumes"]
-};
-
-function setViewMode(mode) {
-  currentViewMode = mode;
-  localStorage.setItem("view_mode", mode);
-  applyViewMode();
-  updateViewModeButtons();
-}
+function setViewMode(mode) { currentViewMode=mode; localStorage.setItem("view_mode",mode); applyViewMode(); updateViewModeButtons(); }
 
 function applyViewMode() {
-  const allowed = VIEW_MODE_CATS[currentViewMode] || VIEW_MODE_CATS.all;
-  CATEGORIES.forEach(cat => {
-    const section = document.querySelector(`.section[data-cat="${cat}"]`);
-    if (section) section.style.display = allowed.includes(cat) ? "" : "none";
-  });
-  const coupeAllowed = allowed.some(c => c.startsWith("coupe_"));
-  const coupeTitle = document.getElementById("coupeTitleEl");
-  if (coupeTitle) coupeTitle.style.display = coupeAllowed ? "" : "none";
+  const allowed=VIEW_MODE_CATS[currentViewMode]||CATEGORIES;
+  CATEGORIES.forEach(cat=>{ const s=document.querySelector(`.section[data-cat="${cat}"]`); if(s) s.style.display=allowed.includes(cat)?"":"none"; });
+  const coupeAllowed=allowed.some(c=>c.startsWith("coupe_"));
+  const ct=document.getElementById("coupeTitleEl"); if(ct) ct.style.display=coupeAllowed?"":"none";
 }
 
 function updateViewModeButtons() {
-  ["viewAll", "viewFruitsSec", "viewLegumes"].forEach(id => document.getElementById(id)?.classList.remove("active-setting"));
-  const map = { all: "viewAll", fruits_sec: "viewFruitsSec", legumes: "viewLegumes" };
+  ["viewAll","viewFruitsSec","viewLegumes"].forEach(id=>document.getElementById(id)?.classList.remove("active-setting"));
+  const map={all:"viewAll",fruits_sec:"viewFruitsSec",legumes:"viewLegumes"};
   document.getElementById(map[currentViewMode])?.classList.add("active-setting");
 }
 
-// ─── STATS ────────────────────────────────────────────────────────────
+// ─── STATS ───────────────────────────────────────────────────────────
 async function loadStats() {
-  document.getElementById("statsContent").innerHTML = '<div class="stats-loading">Chargement...</div>';
-  const since = new Date();
-  since.setDate(since.getDate() - 6); since.setHours(4, 0, 0, 0);
-  const { data } = await sb.from("historique").select("*")
-    .gte("created_at", since.toISOString()).order("created_at", { ascending: false });
-  if (!data || data.length === 0) {
-    document.getElementById("statsContent").innerHTML = '<div class="stats-empty">Pas encore de données.</div>';
-    return;
-  }
-  const days = {};
-  data.forEach(e => {
-    const d = new Date(e.created_at);
-    if (d.getHours() < 4) d.setDate(d.getDate() - 1);
-    const k = d.toISOString().slice(0, 10);
-    if (!days[k]) days[k] = [];
-    days[k].push(e.product_name);
-  });
-  const maxCount = Math.max(...Object.values(days).map(v => v.length), 1);
-  const today = new Date();
-  if (today.getHours() < 4) today.setDate(today.getDate() - 1);
-  const todayKey = today.toISOString().slice(0, 10);
-  const allDays = [];
-  for (let i = 0; i < 7; i++) { const d = new Date(today); d.setDate(d.getDate() - i); allDays.push(d.toISOString().slice(0, 10)); }
-  document.getElementById("statsContent").innerHTML = allDays.map(key => {
-    const items = days[key] || [];
-    const isToday = key === todayKey;
-    const pct = items.length > 0 ? Math.round((items.length / maxCount) * 100) : 0;
-    const counts = {};
-    items.forEach(n => { counts[n] = (counts[n] || 0) + 1; });
-    const tags = Object.entries(counts).map(([n, q]) => `<span class="day-product-tag">${n}${q > 1 ? ` ×${q}` : ''}</span>`).join('');
-    return `<div class="day-card">
-      <div class="day-card-header">
-        <span class="day-label ${isToday ? 'today' : ''}">${formatDate(key, isToday)}</span>
-        <span class="day-count">${items.length} produit${items.length > 1 ? 's' : ''} pris</span>
-      </div>
-      <div class="day-bar-wrap"><div class="day-bar" style="width:${pct}%"></div></div>
-      ${items.length > 0 ? `<div class="day-products">${tags}</div>` : '<div style="font-size:12px;color:var(--muted);font-weight:600">Aucun produit pris</div>'}
-    </div>`;
+  document.getElementById("statsContent").innerHTML='<div class="stats-loading">Chargement...</div>';
+  const since=new Date(); since.setDate(since.getDate()-6); since.setHours(4,0,0,0);
+  const { data } = await sb.from("historique").select("*").gte("created_at",since.toISOString()).order("created_at",{ascending:false});
+  if (!data||!data.length) { document.getElementById("statsContent").innerHTML='<div class="stats-empty">Pas encore de données.</div>'; return; }
+  const days={};
+  data.forEach(e=>{ const d=new Date(e.created_at); if(d.getHours()<4) d.setDate(d.getDate()-1); const k=d.toISOString().slice(0,10); if(!days[k]) days[k]=[]; days[k].push(e.product_name); });
+  const maxCount=Math.max(...Object.values(days).map(v=>v.length),1);
+  const today=new Date(); if(today.getHours()<4) today.setDate(today.getDate()-1);
+  const todayKey=today.toISOString().slice(0,10);
+  const allDays=[]; for(let i=0;i<7;i++){const d=new Date(today);d.setDate(d.getDate()-i);allDays.push(d.toISOString().slice(0,10));}
+  document.getElementById("statsContent").innerHTML=allDays.map(key=>{
+    const items=days[key]||[]; const isToday=key===todayKey;
+    const pct=items.length>0?Math.round((items.length/maxCount)*100):0;
+    const counts={}; items.forEach(n=>{counts[n]=(counts[n]||0)+1;});
+    const tags=Object.entries(counts).map(([n,q])=>`<span class="day-product-tag">${n}${q>1?` ×${q}`:''}</span>`).join('');
+    return `<div class="day-card"><div class="day-card-header"><span class="day-label ${isToday?'today':''}">${formatDate(key,isToday)}</span><span class="day-count">${items.length} produit${items.length>1?'s':''} pris</span></div><div class="day-bar-wrap"><div class="day-bar" style="width:${pct}%"></div></div>${items.length>0?`<div class="day-products">${tags}</div>`:'<div style="font-size:12px;color:var(--muted);font-weight:600">Aucun produit pris</div>'}</div>`;
   }).join('');
 }
 
-function formatDate(key, isToday) {
-  if (isToday) return "Aujourd'hui";
-  const d = new Date(key + "T12:00:00");
-  const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-  const months = ['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+function formatDate(key,isToday) {
+  if(isToday) return "Aujourd'hui";
+  const d=new Date(key+"T12:00:00");
+  const days=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const months=['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
   return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
 }
 
-// ─── RENDU ────────────────────────────────────────────────────────────
+// ─── RENDER ──────────────────────────────────────────────────────────
 function render() {
-  CATEGORIES.forEach(cat => { const el = document.getElementById("list-" + cat); if (el) el.innerHTML = ""; });
+  CATEGORIES.forEach(cat=>{ const el=document.getElementById("list-"+cat); if(el) el.innerHTML=""; });
+  let totalActive=0;
+  const isEditing=document.body.classList.contains("editing");
+  const isArchiving=document.body.classList.contains("archiving");
 
-  let totalActive = 0;
-  const isEditing = document.body.classList.contains("editing");
-  const isArchiving = document.body.classList.contains("archiving");
+  CATEGORIES.forEach(cat=>{
+    const listEl=document.getElementById("list-"+cat); if(!listEl) return;
+    const catProducts=products.filter(p=>p.category===cat);
+    const catSubcats=subcategories.filter(s=>s.category===cat&&(isArchiving?s.archived:!s.archived));
 
-  CATEGORIES.forEach(cat => {
-    const listEl = document.getElementById("list-" + cat);
-    if (!listEl) return;
+    // No-subcat products
+    const noSubcatProds=catProducts.filter(p=>!p.subcategory_id||!subcategories.find(s=>s.id===p.subcategory_id));
+    const noSubcatDiv=document.createElement('div'); noSubcatDiv.className='no-subcat-group';
+    const noSubcatProdsDiv=document.createElement('div'); noSubcatProdsDiv.className='no-subcat-products';
+    noSubcatProds.forEach(p=>{ const gi=products.indexOf(p); const card=buildCard(p,gi,isEditing,isArchiving); if(card){noSubcatProdsDiv.appendChild(card); if(getState(p.id).checked&&!p.rupture&&!p.archived) totalActive++;} });
+    noSubcatDiv.appendChild(noSubcatProdsDiv); listEl.appendChild(noSubcatDiv);
 
-    const catProducts = products.filter(p => p.category === cat);
-    const catSubcats = subcategories.filter(s => s.category === cat && (isArchiving ? s.archived : !s.archived));
-
-    // Produits sans sous-catégorie
-    const noSubcatProds = catProducts.filter(p => !p.subcategory_id || !subcategories.find(s => s.id === p.subcategory_id));
-
-    // Wrapper sans sous-cat
-    const noSubcatDiv = document.createElement('div');
-    noSubcatDiv.className = 'no-subcat-group';
-    const noSubcatProdsDiv = document.createElement('div');
-    noSubcatProdsDiv.className = 'no-subcat-products';
-
-    noSubcatProds.forEach((p, localIdx) => {
-      const globalIdx = products.indexOf(p);
-      const card = buildProductCard(p, globalIdx, isEditing, isArchiving);
-      if (card) { noSubcatProdsDiv.appendChild(card); if (getState(p.id).checked && !p.rupture && !p.archived) totalActive++; }
-    });
-
-    noSubcatDiv.appendChild(noSubcatProdsDiv);
-    listEl.appendChild(noSubcatDiv);
-
-    // Sous-catégories
-    catSubcats.forEach(sc => {
-      const scDiv = document.createElement('div');
-      scDiv.className = 'subcategory-group';
-
-      const header = document.createElement('div');
-      header.className = 'subcategory-header';
-      header.dataset.id = sc.id;
-      header.onclick = () => { if (isRenaming) startRenameSubcat(sc.id); };
-
-      const scProds = catProducts.filter(p => p.subcategory_id === sc.id);
-      const activeCount = scProds.filter(p => getState(p.id).checked && !p.rupture && !p.archived).length;
-
-      header.innerHTML = `
+    // Subcategories
+    catSubcats.forEach(sc=>{
+      const scDiv=document.createElement('div'); scDiv.className='subcategory-group';
+      const header=document.createElement('div'); header.className='subcategory-header'; header.dataset.id=sc.id;
+      header.onclick=()=>{ if(isRenaming) startRenameSubcat(sc.id); };
+      const scProds=catProducts.filter(p=>p.subcategory_id===sc.id);
+      const activeCount=scProds.filter(p=>getState(p.id).checked&&!p.rupture&&!p.archived).length;
+      header.innerHTML=`
         <span class="subcategory-drag-handle">⠿</span>
         <span class="subcategory-name">${sc.name}</span>
-        ${activeCount > 0 ? `<span class="subcategory-count">${activeCount} à prendre</span>` : ''}
-        ${isEditing && !sc.archived ? `<button class="subcategory-archive-btn" onclick="event.stopPropagation();archiveSubcat(${sc.id})">🗂️</button>` : ''}
-        ${isArchiving && sc.archived ? `<button class="subcategory-unarchive-btn" onclick="event.stopPropagation();unarchiveSubcat(${sc.id})">📥 Restaurer</button>` : ''}
+        ${activeCount>0?`<span class="subcategory-count">${activeCount} à prendre</span>`:''}
+        ${isEditing&&!sc.archived?`<button class="subcategory-archive-btn" onclick="event.stopPropagation();archiveSubcat(${sc.id})">🗂️</button>`:''}
+        ${isArchiving&&sc.archived?`<button class="subcategory-unarchive-btn" onclick="event.stopPropagation();unarchiveSubcat(${sc.id})">📥 Restaurer</button>`:''}
       `;
-
-      const prodsDiv = document.createElement('div');
-      prodsDiv.className = 'subcategory-products';
-      prodsDiv.style.paddingLeft = '10px';
-
-      scProds.forEach(p => {
-        const globalIdx = products.indexOf(p);
-        const card = buildProductCard(p, globalIdx, isEditing, isArchiving);
-        if (card) { prodsDiv.appendChild(card); if (getState(p.id).checked && !p.rupture && !p.archived) totalActive++; }
-      });
-
-      scDiv.appendChild(header);
-      scDiv.appendChild(prodsDiv);
-      listEl.appendChild(scDiv);
+      const prodsDiv=document.createElement('div'); prodsDiv.className='subcategory-products';
+      scProds.forEach(p=>{ const gi=products.indexOf(p); const card=buildCard(p,gi,isEditing,isArchiving); if(card){prodsDiv.appendChild(card); if(getState(p.id).checked&&!p.rupture&&!p.archived) totalActive++;} });
+      scDiv.appendChild(header); scDiv.appendChild(prodsDiv); listEl.appendChild(scDiv);
     });
   });
 
-  // Counts
-  CATEGORIES.forEach(cat => {
-    const count = products.filter(p => p.category === cat && getState(p.id).checked && !p.rupture && !p.archived).length;
-    const el = document.getElementById("count-" + cat);
-    if (el) el.textContent = count > 0 ? `${count} à prendre` : "";
+  CATEGORIES.forEach(cat=>{
+    const count=products.filter(p=>p.category===cat&&getState(p.id).checked&&!p.rupture&&!p.archived).length;
+    const el=document.getElementById("count-"+cat); if(el) el.textContent=count>0?`${count} à prendre`:"";
   });
 
-  // Counter bar
-  const bar = document.getElementById("counterBar");
-  const txt = document.getElementById("counterText");
-  const arrow = document.getElementById("counterArrow");
-  if (totalActive === 0) {
-    bar.className = "counter-bar empty";
-    txt.textContent = "Aucun produit à prendre";
-    arrow.style.display = "none";
-    closeReservePanel();
-  } else {
-    bar.className = "counter-bar";
-    txt.textContent = `${totalActive} produit${totalActive > 1 ? 's' : ''} à aller chercher en réserve`;
-    arrow.style.display = "inline";
-  }
+  const bar=document.getElementById("counterBar"), txt=document.getElementById("counterText"), arrow=document.getElementById("counterArrow"), tip=document.getElementById("counterTip");
+  if(totalActive===0){ bar.className="counter-bar empty"; txt.textContent="Aucun produit à prendre"; arrow.style.display="none"; tip.textContent=""; closeReservePanel(); }
+  else { bar.className="counter-bar"; txt.textContent=`${totalActive} produit${totalActive>1?'s':''} à aller chercher`; tip.textContent="Appuyez pour voir la liste"; arrow.style.display="inline"; }
 
-  if (reservePanelOpen) renderReservePanel();
-  applySearch();
-  applyViewMode();
-  initSortable();
+  if(reservePanelOpen) renderReservePanel();
+  applySearch(); applyViewMode(); initSortable();
 }
 
-function buildProductCard(p, idx, isEditing, isArchiving) {
-  const s = getState(p.id);
-  const isRupture = p.rupture;
-  const isStockBas = p.stock_bas && !isRupture;
-  const isSurStock = p.sur_stock && !isRupture;
-  const isArchived = p.archived;
+function buildCard(p, idx, isEditing, isArchiving) {
+  const s=getState(p.id); const isRupture=p.rupture; const isStockBas=p.stock_bas&&!isRupture; const isSurStock=p.sur_stock&&!isRupture; const isArchived=p.archived;
+  const div=document.createElement("div"); div.dataset.id=p.id;
+  let classes="product";
+  if(isArchived) classes+=" archived-item";
+  else if(s.checked&&!isRupture) classes+=" active";
+  else if(isRupture) classes+=" rupture-item";
+  else if(isStockBas) classes+=" stock-bas-item";
+  else if(isSurStock) classes+=" sur-stock-item";
+  if(selectedProducts.has(p.id)) classes+=" selected";
+  div.className=classes;
 
-  const div = document.createElement("div");
-  div.dataset.id = p.id;
-  let classes = "product";
-  if (isArchived) classes += " archived-item";
-  else if (s.checked && !isRupture) classes += " active";
-  else if (isRupture) classes += " rupture-item";
-  else if (isStockBas) classes += " stock-bas-item";
-  else if (isSurStock) classes += " sur-stock-item";
-  if (selectedProducts.has(p.id)) classes += " selected";
-  div.className = classes;
+  let badgeHtml='';
+  if(isArchived) badgeHtml='<span class="badge badge-archived">archivé</span>';
+  else if(isStockBas) badgeHtml='<span class="badge badge-stock-bas">⚠️ stock bas</span>';
+  else if(isSurStock) badgeHtml='<span class="badge badge-sur-stock">🔵 sur stock</span>';
 
-  const nameHtml = `<span class="product-name" onclick="if(document.body.classList.contains('renaming')) startRenameProduct(${p.id})">${p.name}</span>`;
-
-  let badgeHtml = '';
-  if (isArchived) badgeHtml = '<span class="badge badge-archived">archivé</span>';
-  else if (isStockBas) badgeHtml = '<span class="badge badge-stock-bas">⚠️ stock bas</span>';
-  else if (isSurStock) badgeHtml = '<span class="badge badge-sur-stock">🔵 sur stock</span>';
-
-  div.innerHTML = `
-    <div class="product-select-cb ${selectedProducts.has(p.id) ? 'checked' : ''}" onclick="toggleProductSelect(${p.id})">${selectedProducts.has(p.id) ? '✓' : ''}</div>
-    <div class="check-wrap ${s.checked && !isRupture && !isArchived ? 'checked' : ''}" onclick="toggle(${p.id})">
+  div.innerHTML=`
+    <div class="check-wrap ${s.checked&&!isRupture&&!isArchived?'checked':''}" onclick="handleProductClick(event,${p.id})">
       <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
-    ${nameHtml}
+    <span class="product-name" onclick="if(document.body.classList.contains('renaming')){event.stopPropagation();startRenameProduct(${p.id});}else{handleProductClick(event,${p.id});}">${p.name}</span>
     ${badgeHtml}
     <div class="qty-controls">
       <button class="qty-btn" onclick="decrease(${p.id})">−</button>
-      <span class="qty-display">${isRupture ? '—' : s.qty}</span>
+      <span class="qty-display">${isRupture?'—':s.qty}</span>
       <button class="qty-btn plus" onclick="increase(${p.id})">+</button>
     </div>
     <div class="rupture-actions">
@@ -1749,19 +1310,16 @@ function buildProductCard(p, idx, isEditing, isArchiving) {
       <button class="r-btn sur-stock-toggle-btn" onclick="toggleSurStock(${p.id})">🔵</button>
     </div>
     <div class="archive-actions">
-      ${isArchived ? `<button class="unarchive-btn" onclick="unarchiveProduct(${p.id})">📥 Restaurer</button>` : ''}
+      ${isArchived?`<button class="unarchive-btn" onclick="unarchiveProduct(${p.id})">📥 Restaurer</button>`:''}
     </div>
     <button class="archive-btn" onclick="archiveProduct(${p.id})">🗂️</button>
     <div class="drag-handle">⠿</div>
     <button class="delete-btn" onclick="deleteProduct(${idx})">✕</button>
   `;
-
   return div;
 }
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js');
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/service-worker.js');
 
 loadData();
 </script>
