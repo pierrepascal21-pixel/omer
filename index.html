@@ -1081,14 +1081,18 @@ async function unarchiveProduct(id) {
 
 async function deleteSubcat(id) {
   const sc = subcategories.find(s=>s.id===id); if (!sc) return;
-  if (!confirm(`Supprimer la sous-catégorie "${sc.name}" et tous ses produits ?`)) return;
-  // Remove subcategory_id from products (don't delete them)
+  if (!confirm(`Supprimer la sous-catégorie "${sc.name}" ? Les produits resteront dans la liste.`)) return;
+  // D'abord on retire la référence dans les produits
   products.filter(p=>p.subcategory_id===id).forEach(p=>{ p.subcategory_id=null; });
-  await sb.from("products").update({ subcategory_id: null }).eq("subcategory_id", id);
-  await sb.from("subcategories").delete().eq("id", id);
-  subcategories.splice(subcategories.indexOf(sc), 1);
+  const { error: e1 } = await sb.from("products").update({ subcategory_id: null }).eq("subcategory_id", id);
+  if (e1) { toast("Erreur : " + e1.message); console.error(e1); return; }
+  // Ensuite on supprime la sous-catégorie
+  const { error: e2 } = await sb.from("subcategories").delete().eq("id", id);
+  if (e2) { toast("Erreur : " + e2.message); console.error(e2); return; }
+  const idx = subcategories.indexOf(sc);
+  if (idx > -1) subcategories.splice(idx, 1);
   updateSubcatSelect();
-  toast(`Sous-catégorie "${sc.name}" supprimée`); render();
+  toast(`"${sc.name}" supprimée`); render();
 }
 
 async function archiveSubcat(id) {
