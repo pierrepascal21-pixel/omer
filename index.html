@@ -391,13 +391,14 @@ body.editing .edit-bar { display: block; }
 
 .subcategory-header {
   display: flex; align-items: center; gap: 6px;
-  padding: 5px 8px 3px; cursor: pointer;
+  padding: 12px 8px 10px; cursor: pointer;
   border-radius: 8px; transition: background 0.1s;
+  min-height: 48px;
 }
 
 .subcategory-header:hover { background: var(--green-light); }
 
-.subcategory-name { font-size: 15px; font-weight: 900; color: var(--text); letter-spacing: 0.5px; flex: 1; }
+.subcategory-name { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: 0.3px; flex: 1; }
 .subcategory-name-input { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; color: var(--text); border: 1.5px solid var(--green); border-radius: 6px; padding: 2px 8px; background: var(--bg); outline: none; flex: 1; }
 .subcategory-count { font-size: 10px; color: var(--muted); font-weight: 700; }
 
@@ -552,14 +553,51 @@ body.editing .delete-btn { display: flex; }
 .loading-spinner { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--green); animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.search-empty { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 30px 0; display: none; }
+
+  /* ── BOUTON SOUS-CAT (mode édition uniquement) ── */
+  .product-subcat-btn {
+    display: none;
+    align-items: center; justify-content: center;
+    background: var(--green-light); color: var(--green-dark);
+    border: 1.5px solid var(--green-border); border-radius: 8px;
+    padding: 4px 8px; font-family: 'Nunito', sans-serif;
+    font-size: 11px; font-weight: 800; cursor: pointer;
+    white-space: nowrap; flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  body.editing .product-subcat-btn { display: flex; }
+  .product-subcat-btn:hover { background: var(--green); color: white; }
+
+  /* Mini popup sous-cat */
+  .subcat-popup {
+    position: fixed; z-index: 600;
+    background: white; border-radius: 14px;
+    box-shadow: var(--shadow-md); padding: 8px;
+    min-width: 200px; border: 1.5px solid var(--border);
+    display: none;
+  }
+  .subcat-popup.open { display: block; }
+  .subcat-popup-item {
+    display: block; width: 100%; text-align: left;
+    padding: 10px 14px; border: none; background: none;
+    font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--text); cursor: pointer; border-radius: 8px;
+    transition: background 0.1s;
+  }
+  .subcat-popup-item:hover { background: var(--green-light); color: var(--green-dark); }
+  .subcat-popup-item.active { color: var(--green); background: var(--green-light); }
+  .subcat-popup-item.none { color: var(--muted); font-weight: 600; }
+  .subcat-popup-overlay { position: fixed; inset: 0; z-index: 599; display: none; }
+  .subcat-popup-overlay.open { display: block; }
+
+  .search-empty { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 30px 0; display: none; }
 body.renaming .subcategory-name { cursor: pointer; text-decoration: underline dotted var(--green); }
 </style>
 </head>
 <body>
 
 <!-- ECRAN ROLE -->
-<div class="role-screen" id="roleScreen">
+<div class="role-screen hidden" id="roleScreen">
   <div class="role-logo">o.m.e.<span>r</span></div>
   <div class="role-tagline">Outil de Mise En Rayon</div>
   <div class="role-question">Qui êtes-vous aujourd'hui ?</div>
@@ -567,25 +605,24 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
     <div class="role-card vendor" onclick="selectRole('vendor')">
       <div class="role-icon">🛒</div>
       <div class="role-name">Vendeur</div>
-      <div class="role-desc">Consultation<br>et gestion du rayon</div>
+      <div class="role-desc">Consultation<br>et gestion<br>du rayon</div>
     </div>
-    <div class="role-card admin" onclick="showPwdScreen()">
+    <div class="role-card admin" onclick="openPwd()">
       <div class="role-icon">🔐</div>
       <div class="role-name">Admin</div>
-      <div class="role-desc">Accès complet<br>à toutes les fonctions</div>
+      <div class="role-desc">Accès complet<br>à toutes<br>les fonctions</div>
     </div>
   </div>
 </div>
-
 <!-- MOT DE PASSE ADMIN -->
-<div class="pwd-screen" id="pwdScreen">
+<div class="pwd-overlay hidden" id="pwdOverlay">
   <div class="pwd-box">
     <h3>🔐 Accès administrateur</h3>
     <p>Entrez le mot de passe pour continuer</p>
-    <input class="pwd-input" id="pwdInput" type="password" placeholder="••••••••••••"
-      onkeydown="if(event.key==='Enter') checkPwd()" />
+    <input class="pwd-input" id="pwdInput" type="password" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter')checkPwd()" />
     <button class="pwd-btn" onclick="checkPwd()">Valider</button>
-    <button class="pwd-cancel" onclick="hidePwdScreen()">Annuler</button>
+    <button class="pwd-cancel" onclick="closePwd()">Annuler</button>
   </div>
 </div>
 
@@ -662,6 +699,10 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
   <button class="multiselect-apply-btn" onclick="applyMultiselect()">Appliquer</button>
   <button class="multiselect-cancel-btn" onclick="cancelMultiselect()">✕</button>
 </div>
+
+<!-- POPUP SOUS-CAT -->
+<div class="subcat-popup-overlay" id="subcatPopupOverlay" onclick="closeSubcatPopup()"></div>
+<div class="subcat-popup" id="subcatPopup"></div>
 
 <!-- PAGE PRINCIPALE -->
 <div class="page active" id="page-main">
@@ -1026,9 +1067,8 @@ function toast(msg) { const el = document.getElementById("toast"); el.textConten
 // ─── LOAD ────────────────────────────────────────────────────────────
 async function loadData() {
   initDark();
+  initRole();
   await resetAllIfNeeded();
-  const needRole = initRole();
-  if (needRole) showRoleScreen();
   const [{ data: prods }, { data: subcats }, { data: states }] = await Promise.all([
     sb.from("products").select("*").order("position"),
     sb.from("subcategories").select("*").order("position"),
@@ -1460,90 +1500,15 @@ function buildCard(p, idx, isEditing, isArchiving) {
     <div class="archive-actions">
       ${isArchived?`<button class="unarchive-btn" onclick="unarchiveProduct(${p.id})">📥 Restaurer</button>`:''}
     </div>
-    <select class="product-subcat-select" onchange="assignSubcat(${p.id}, this.value)" onclick="event.stopPropagation()">
-      <option value="">— Sous-cat. —</option>
-    </select>
+    <button class="product-subcat-btn" onclick="event.stopPropagation();openSubcatPopup(event,${p.id})" title="Assigner une sous-catégorie">📂</button>
     <button class="archive-btn" onclick="archiveProduct(${p.id})">🗂️</button>
     <div class="drag-handle">⠿</div>
     <button class="delete-btn" onclick="deleteProduct(${idx})">✕</button>
   `;
-  // Peupler le select sous-cat
-  const sel = div.querySelector('.product-subcat-select');
-  if (sel) {
-    const catSubcats = subcategories.filter(s => !s.archived);
-    catSubcats.forEach(sc => {
-      const opt = document.createElement('option');
-      opt.value = sc.id;
-      opt.textContent = sc.name;
-      if (p.subcategory_id === sc.id) opt.selected = true;
-      sel.appendChild(opt);
-    });
-  }
-
   return div;
 }
 
-// ─── ASSIGN SOUS-CAT ─────────────────────────────────────────────────
-async function assignSubcat(productId, subcatId) {
-  const p = products.find(p => p.id === productId);
-  if (!p) return;
-  const val = subcatId ? parseInt(subcatId) : null;
-  p.subcategory_id = val;
-  await sb.from("products").update({ subcategory_id: val }).eq("id", productId);
-  toast(subcatId ? "Sous-catégorie assignée ✓" : "Sous-catégorie retirée");
-  render();
-}
 
-// ─── RÔLE / ADMIN ─────────────────────────────────────────────────────
-const ADMIN_PWD = "Mandarines01";
-
-function getToday4hStr() {
-  const r = getToday4h();
-  return r.toISOString().slice(0, 10);
-}
-
-function initRole() {
-  const lastRoleDate = localStorage.getItem("role_date");
-  const today = getToday4hStr();
-  if (lastRoleDate === today) {
-    const role = localStorage.getItem("role") || "vendor";
-    applyRole(role);
-    return false;
-  }
-  return true;
-}
-
-function showRoleScreen() {
-  document.getElementById("roleScreen").classList.add("open");
-}
-
-function hideRoleScreen() {
-  document.getElementById("roleScreen").classList.remove("open");
-}
-
-function selectRole(role) {
-  localStorage.setItem("role", role);
-  localStorage.setItem("role_date", getToday4hStr());
-  applyRole(role, true);
-  hideRoleScreen();
-}
-
-function applyRole(role, animate) {
-  if (role === "vendor") {
-    document.body.classList.add("vendor");
-    document.body.classList.remove("admin");
-    updateSwitchRoleLabel("vendor");
-  } else {
-    document.body.classList.remove("vendor");
-    document.body.classList.add("admin");
-    updateSwitchRoleLabel("admin");
-  }
-}
-
-function updateSwitchRoleLabel(role) {
-  const lbl = document.getElementById("switchRoleLabel");
-  if (lbl) lbl.textContent = role === "vendor" ? "Passer en mode Admin" : "Passer en mode Vendeur";
-}
 
 function switchRole() {
   toggleSettings();
@@ -1576,6 +1541,127 @@ function checkPwd() {
     input.classList.add("error");
     input.value = "";
     setTimeout(() => input.classList.remove("error"), 500);
+    toast("Mot de passe incorrect");
+  }
+}
+
+
+// ─── POPUP SOUS-CAT ───────────────────────────────────────────────────
+let currentSubcatProductId = null;
+
+function openSubcatPopup(e, productId) {
+  e.stopPropagation();
+  currentSubcatProductId = productId;
+  const p = products.find(p => p.id === productId);
+  const popup = document.getElementById('subcatPopup');
+  const overlay = document.getElementById('subcatPopupOverlay');
+
+  // Construire les options
+  let html = `<button class="subcat-popup-item none" onclick="assignSubcat(${productId}, null); closeSubcatPopup()">— Aucune sous-catégorie —</button>`;
+  subcategories.filter(s => !s.archived).forEach(sc => {
+    const isActive = p && p.subcategory_id === sc.id;
+    html += `<button class="subcat-popup-item ${isActive ? 'active' : ''}" onclick="assignSubcat(${productId}, ${sc.id}); closeSubcatPopup()">${isActive ? '✓ ' : ''}${sc.name}</button>`;
+  });
+  popup.innerHTML = html;
+
+  // Positionner le popup près du bouton
+  const rect = e.currentTarget.getBoundingClientRect();
+  const top = Math.min(rect.bottom + 6, window.innerHeight - 220);
+  const left = Math.min(rect.left, window.innerWidth - 220);
+  popup.style.top = top + 'px';
+  popup.style.left = left + 'px';
+
+  popup.classList.add('open');
+  overlay.classList.add('open');
+}
+
+function closeSubcatPopup() {
+  document.getElementById('subcatPopup').classList.remove('open');
+  document.getElementById('subcatPopupOverlay').classList.remove('open');
+  currentSubcatProductId = null;
+}
+
+async function assignSubcat(productId, subcatId) {
+  const p = products.find(p => p.id === productId);
+  if (!p) return;
+  p.subcategory_id = subcatId;
+  await sb.from("products").update({ subcategory_id: subcatId }).eq("id", productId);
+  toast(subcatId ? "Sous-catégorie assignée ✓" : "Sous-catégorie retirée");
+  render();
+}
+
+// ─── RÔLE ─────────────────────────────────────────────────────────────
+const ADMIN_PWD = "Mandarines01";
+
+function getToday4hStr() {
+  const r = getToday4h();
+  return r.toISOString().slice(0, 10);
+}
+
+function initRole() {
+  const lastRoleDate = localStorage.getItem("role_date");
+  const today = getToday4hStr();
+  if (lastRoleDate === today) {
+    applyRole(localStorage.getItem("role") || "vendor");
+    return;
+  }
+  // Premier lancement du jour
+  document.getElementById("roleScreen").classList.remove("hidden");
+}
+
+function selectRole(role) {
+  localStorage.setItem("role", role);
+  localStorage.setItem("role_date", getToday4hStr());
+  applyRole(role);
+  document.getElementById("roleScreen").classList.add("hidden");
+  toast(role === "admin" ? "🔐 Mode admin activé" : "🛒 Mode vendeur activé");
+}
+
+function applyRole(role) {
+  if (role === "vendor") {
+    document.body.classList.add("vendor");
+    document.body.classList.remove("admin");
+  } else {
+    document.body.classList.remove("vendor");
+    document.body.classList.add("admin");
+  }
+  updateSwitchRoleLabel(role);
+}
+
+function updateSwitchRoleLabel(role) {
+  const lbl = document.getElementById("switchRoleLabel");
+  if (lbl) lbl.textContent = role === "vendor" ? "Passer en mode Admin" : "Passer en mode Vendeur";
+}
+
+function switchRole() {
+  toggleSettings();
+  const currentRole = localStorage.getItem("role") || "vendor";
+  if (currentRole === "vendor") {
+    openPwd();
+  } else {
+    selectRole("vendor");
+  }
+}
+
+function openPwd() {
+  document.getElementById("pwdOverlay").classList.remove("hidden");
+  document.getElementById("pwdInput").value = "";
+  setTimeout(() => document.getElementById("pwdInput").focus(), 100);
+}
+
+function closePwd() {
+  document.getElementById("pwdOverlay").classList.add("hidden");
+}
+
+function checkPwd() {
+  const input = document.getElementById("pwdInput");
+  if (input.value === ADMIN_PWD) {
+    closePwd();
+    selectRole("admin");
+  } else {
+    input.classList.add("error");
+    input.value = "";
+    setTimeout(() => { input.classList.remove("error"); input.focus(); }, 500);
     toast("Mot de passe incorrect");
   }
 }
