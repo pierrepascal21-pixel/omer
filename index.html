@@ -413,7 +413,11 @@ body.editing .subcategory-delete-btn { display: flex; }
 .subcategory-unarchive-btn { display: none; font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-light); border: 1px solid var(--green-border); border-radius: 6px; padding: 2px 8px; cursor: pointer; }
 body.archiving .subcategory-unarchive-btn { display: flex; align-items: center; }
 
-.subcategory-products { padding-left: 8px; border-left: 2px solid var(--border); margin-left: 8px; }
+.subcategory-products { padding-left: 8px; border-left: 2px solid var(--border); margin-left: 8px; overflow: hidden; transition: max-height 0.25s ease, opacity 0.2s ease; max-height: 2000px; opacity: 1; }
+.subcategory-products.collapsed { max-height: 0; opacity: 0; pointer-events: none; }
+
+.subcategory-toggle { font-size: 10px; color: var(--muted); transition: transform 0.2s; display: inline-block; margin-right: 4px; }
+.subcategory-group.collapsed .subcategory-toggle { transform: rotate(-90deg); }
 
 /* ── PRODUIT ── */
 .product {
@@ -1301,10 +1305,21 @@ function render() {
     catSubcats.forEach(sc=>{
       const scDiv=document.createElement('div'); scDiv.className='subcategory-group';
       const header=document.createElement('div'); header.className='subcategory-header'; header.dataset.id=sc.id;
-      header.onclick=()=>{ if(isRenaming) startRenameSubcat(sc.id); };
+      // Restore collapsed state
+      const isCollapsed = localStorage.getItem('subcat_collapsed_' + sc.id) === '1';
+      if (isCollapsed) scDiv.classList.add('collapsed');
+
+      header.onclick=(e)=>{
+        if (isRenaming) { startRenameSubcat(sc.id); return; }
+        if (e.target.closest('button')) return; // ignore clicks on buttons
+        scDiv.classList.toggle('collapsed');
+        const nowCollapsed = scDiv.classList.contains('collapsed');
+        localStorage.setItem('subcat_collapsed_' + sc.id, nowCollapsed ? '1' : '0');
+      };
       const scProds=catProducts.filter(p=>p.subcategory_id===sc.id);
       const activeCount=scProds.filter(p=>getState(p.id).checked&&!p.rupture&&!p.archived).length;
       header.innerHTML=`
+        <span class="subcategory-toggle">▾</span>
         <span class="subcategory-name">${sc.name}</span>
         ${activeCount>0?`<span class="subcategory-count">${activeCount} à prendre</span>`:''}
         <button class="subcategory-archive-btn" onclick="event.stopPropagation();archiveSubcat(${sc.id})">🗂️</button>
@@ -1312,7 +1327,9 @@ function render() {
         ${sc.archived?`<button class="subcategory-unarchive-btn" onclick="event.stopPropagation();unarchiveSubcat(${sc.id})">📥 Restaurer</button>`:''}
         <span class="subcategory-drag-handle">⠿</span>
       `;
-      const prodsDiv=document.createElement('div'); prodsDiv.className='subcategory-products';
+      const prodsDiv=document.createElement('div');
+      const alreadyCollapsed = localStorage.getItem('subcat_collapsed_' + sc.id) === '1';
+      prodsDiv.className='subcategory-products' + (alreadyCollapsed ? ' collapsed' : '');
       scProds.forEach(p=>{ const gi=products.indexOf(p); const card=buildCard(p,gi,isEditing,isArchiving); if(card){prodsDiv.appendChild(card); if(getState(p.id).checked&&!p.rupture&&!p.archived) totalActive++;} });
       scDiv.appendChild(header); scDiv.appendChild(prodsDiv); listEl.appendChild(scDiv);
     });
