@@ -1169,6 +1169,8 @@ let sortableInstances = [];
 function initSortable() {
   sortableInstances.forEach(s=>s.destroy()); sortableInstances=[];
   const isEditing=document.body.classList.contains("editing");
+
+  // Drag & drop produits
   document.querySelectorAll('.subcategory-products, .no-subcat-products').forEach(el => {
     const inst=Sortable.create(el,{
       animation:150, handle:".drag-handle",
@@ -1178,6 +1180,38 @@ function initSortable() {
     });
     sortableInstances.push(inst);
   });
+
+  // Drag & drop sous-catégories au sein de chaque section
+  CATEGORIES.forEach(cat => {
+    const listEl = document.getElementById("list-" + cat);
+    if (!listEl) return;
+    const inst = Sortable.create(listEl, {
+      animation: 150,
+      handle: ".subcategory-drag-handle",
+      draggable: ".subcategory-group",
+      ghostClass: "sortable-ghost",
+      disabled: !isEditing,
+      onEnd: async () => await reindexSubcats()
+    });
+    sortableInstances.push(inst);
+  });
+}
+
+async function reindexSubcats() {
+  const allIds = [];
+  CATEGORIES.forEach(cat => {
+    document.getElementById("list-" + cat)?.querySelectorAll('.subcategory-group').forEach(div => {
+      const header = div.querySelector('.subcategory-header[data-id]');
+      if (header) allIds.push(parseInt(header.dataset.id));
+    });
+  });
+  const updates = [];
+  allIds.forEach((id, pos) => {
+    const sc = subcategories.find(s => s.id === id);
+    if (sc && sc.position !== pos) { sc.position = pos; updates.push(sb.from("subcategories").update({ position: pos }).eq("id", id)); }
+  });
+  subcategories.sort((a, b) => a.position - b.position);
+  await Promise.all(updates);
 }
 
 async function reindexProducts() {
@@ -1267,12 +1301,12 @@ function render() {
       const scProds=catProducts.filter(p=>p.subcategory_id===sc.id);
       const activeCount=scProds.filter(p=>getState(p.id).checked&&!p.rupture&&!p.archived).length;
       header.innerHTML=`
-        <span class="subcategory-drag-handle">⠿</span>
         <span class="subcategory-name">${sc.name}</span>
         ${activeCount>0?`<span class="subcategory-count">${activeCount} à prendre</span>`:''}
         ${isEditing&&!sc.archived?`<button class="subcategory-archive-btn" onclick="event.stopPropagation();archiveSubcat(${sc.id})">🗂️</button>`:''}
         ${isEditing&&!sc.archived?`<button class="subcategory-delete-btn" onclick="event.stopPropagation();deleteSubcat(${sc.id})">✕</button>`:''}
         ${isArchiving&&sc.archived?`<button class="subcategory-unarchive-btn" onclick="event.stopPropagation();unarchiveSubcat(${sc.id})">📥 Restaurer</button>`:''}
+        <span class="subcategory-drag-handle">⠿</span>
       `;
       const prodsDiv=document.createElement('div'); prodsDiv.className='subcategory-products';
       scProds.forEach(p=>{ const gi=products.indexOf(p); const card=buildCard(p,gi,isEditing,isArchiving); if(card){prodsDiv.appendChild(card); if(getState(p.id).checked&&!p.rupture&&!p.archived) totalActive++;} });
