@@ -592,39 +592,140 @@ body.editing .delete-btn { display: flex; }
 
   .search-empty { text-align: center; color: var(--muted); font-size: 14px; font-weight: 600; padding: 30px 0; display: none; }
 body.renaming .subcategory-name { cursor: pointer; text-decoration: underline dotted var(--green); }
+
+  /* ══ SPLASH + ROLE ══════════════════════════════════════════════ */
+  .splash-screen {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #7AB648;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.4s;
+  }
+  .splash-screen.fade { opacity: 0; pointer-events: none; }
+  .splash-screen.gone { display: none; }
+  .splash-logo-txt {
+    font-family: 'Nunito', sans-serif;
+    font-size: 52px; font-weight: 900;
+    letter-spacing: 6px; color: white;
+  }
+  .splash-logo-txt span { color: rgba(255,255,255,0.45); }
+
+  .role-screen {
+    position: fixed; inset: 0; z-index: 9998;
+    background: white;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 28px;
+  }
+  .role-screen.gone { display: none; }
+
+  .role-logo-txt {
+    font-family: 'Nunito', sans-serif;
+    font-size: 42px; font-weight: 900;
+    letter-spacing: 5px; color: #7AB648;
+    margin-bottom: 6px;
+  }
+  .role-logo-txt span { color: #FF6B2B; }
+  .role-tagline-txt {
+    font-size: 10px; color: #999; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 60px;
+  }
+  .role-hello {
+    font-size: 24px; font-weight: 900; color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .role-sub {
+    font-size: 13px; color: #999; font-weight: 600;
+    margin-bottom: 40px;
+  }
+  .role-cards-wrap {
+    display: flex; gap: 16px;
+    width: 100%; max-width: 340px;
+  }
+  .role-card-item {
+    flex: 1; background: white;
+    border: 2px solid #e8e8e0;
+    border-radius: 20px; padding: 30px 14px 24px;
+    cursor: pointer; text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .role-card-item:active { transform: scale(0.96); }
+  .role-card-item.v:hover, .role-card-item.v:active { background: #f0f8e8; border-color: #7AB648; }
+  .role-card-item.a:hover, .role-card-item.a:active { background: #fff3ee; border-color: #FF6B2B; }
+  .role-card-icon { font-size: 40px; margin-bottom: 12px; }
+  .role-card-name { font-size: 17px; font-weight: 900; color: #1a1a1a; margin-bottom: 6px; }
+  .role-card-desc { font-size: 11px; color: #999; font-weight: 600; line-height: 1.6; }
+
+  .pwd-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .pwd-overlay.gone { display: none; }
+  .pwd-box {
+    background: white; border-radius: 24px;
+    padding: 36px 28px; width: 100%; max-width: 320px;
+    text-align: center;
+  }
+  .pwd-box h3 { font-size: 20px; font-weight: 900; color: #1a1a1a; margin-bottom: 6px; }
+  .pwd-box p { font-size: 12px; color: #999; font-weight: 600; margin-bottom: 24px; }
+  .pwd-input {
+    width: 100%; padding: 14px; border: 2px solid #e8e8e0;
+    border-radius: 14px; font-family: 'Nunito', sans-serif;
+    font-size: 22px; font-weight: 700; text-align: center;
+    letter-spacing: 4px; outline: none; margin-bottom: 14px;
+    background: white; color: #1a1a1a; transition: border-color 0.2s;
+  }
+  .pwd-input:focus { border-color: #7AB648; }
+  .pwd-input.error { border-color: #d32f2f; animation: shake 0.3s; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+  .pwd-btn {
+    width: 100%; padding: 14px; background: #7AB648; color: white;
+    border: none; border-radius: 14px; font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 800; cursor: pointer; margin-bottom: 10px;
+  }
+  .pwd-btn:active { background: #5a9030; }
+  .pwd-cancel { background: none; border: none; color: #999; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; padding: 6px; }
+
+  body.vendor #editBtn { display: none !important; }
+  body.vendor #archiveBtn { display: none !important; }
+  /* ══ FIN SPLASH + ROLE ══════════════════════════════════════════ */
 </style>
 </head>
 <body>
 
 <!-- SPLASH SCREEN -->
 <div class="splash-screen" id="splashScreen">
-  <div class="splash-logo">o.m.e.<span>r</span></div>
+  <div class="splash-logo-txt">o.m.e.<span>r</span></div>
 </div>
 
 <!-- ECRAN ROLE -->
-<div class="role-screen hidden" id="roleScreen">
-  <div class="role-logo">o.m.e.<span>r</span></div>
-  <div class="role-tagline">Outil de Mise En Rayon</div>
-  <div class="role-question">Bonjour 👋</div>
-  <div class="role-subtitle">Qui êtes-vous aujourd'hui ?</div>
-  <div class="role-cards">
-    <div class="role-card vendor" onclick="selectRole('vendor')">
-      <div class="role-icon">🛒</div>
-      <div class="role-name">Vendeur</div>
-      <div class="role-desc">Gestion<br>du rayon</div>
+<div class="role-screen gone" id="roleScreen">
+  <div class="role-logo-txt">o.m.e.<span>r</span></div>
+  <div class="role-tagline-txt">Outil de Mise En Rayon</div>
+  <div class="role-hello">Bonjour 👋</div>
+  <div class="role-sub">Qui êtes-vous aujourd'hui ?</div>
+  <div class="role-cards-wrap">
+    <div class="role-card-item v" onclick="selectRole('vendor')">
+      <div class="role-card-icon">🛒</div>
+      <div class="role-card-name">Vendeur</div>
+      <div class="role-card-desc">Gestion<br>du rayon</div>
     </div>
-    <div class="role-card admin" onclick="openPwd()">
-      <div class="role-icon">🔐</div>
-      <div class="role-name">Admin</div>
-      <div class="role-desc">Accès<br>complet</div>
+    <div class="role-card-item a" onclick="openPwd()">
+      <div class="role-card-icon">🔐</div>
+      <div class="role-card-name">Admin</div>
+      <div class="role-card-desc">Accès<br>complet</div>
     </div>
   </div>
 </div>
 
 <!-- MOT DE PASSE ADMIN -->
-<div class="pwd-overlay hidden" id="pwdOverlay">
+<div class="pwd-overlay gone" id="pwdOverlay">
   <div class="pwd-box">
-    <h3>🔐 Accès administrateur</h3>
+    <h3>🔐 Mode administrateur</h3>
     <p>Entrez le mot de passe pour continuer</p>
     <input class="pwd-input" id="pwdInput" type="password" placeholder="••••••••"
       onkeydown="if(event.key==='Enter')checkPwd()" />
@@ -1608,19 +1709,20 @@ function getToday4hStr() {
 function initRole() {
   const lastRoleDate = localStorage.getItem("role_date");
   const today = getToday4hStr();
-
-  // Afficher splash 1.2s puis enchaîner
   const splash = document.getElementById("splashScreen");
   const roleScreen = document.getElementById("roleScreen");
 
+  // Splash 1.2s puis transition
   setTimeout(() => {
-    splash.classList.add("fade-out");
+    splash.classList.add("fade");
     setTimeout(() => {
-      splash.classList.add("hidden");
+      splash.classList.add("gone");
       if (lastRoleDate === today) {
+        // Déjà choisi aujourd'hui
         applyRole(localStorage.getItem("role") || "vendor");
       } else {
-        roleScreen.classList.remove("hidden");
+        // Premier lancement : afficher écran choix
+        roleScreen.classList.remove("gone");
       }
     }, 400);
   }, 1200);
@@ -1630,7 +1732,7 @@ function selectRole(role) {
   localStorage.setItem("role", role);
   localStorage.setItem("role_date", getToday4hStr());
   applyRole(role);
-  document.getElementById("roleScreen").classList.add("hidden");
+  document.getElementById("roleScreen").classList.add("gone");
   toast(role === "admin" ? "🔐 Mode admin activé" : "🛒 Mode vendeur activé");
 }
 
@@ -1661,13 +1763,13 @@ function switchRole() {
 }
 
 function openPwd() {
-  document.getElementById("pwdOverlay").classList.remove("hidden");
+  document.getElementById("pwdOverlay").classList.remove("gone");
   document.getElementById("pwdInput").value = "";
   setTimeout(() => document.getElementById("pwdInput").focus(), 100);
 }
 
 function closePwd() {
-  document.getElementById("pwdOverlay").classList.add("hidden");
+  document.getElementById("pwdOverlay").classList.add("gone");
 }
 
 function checkPwd() {
