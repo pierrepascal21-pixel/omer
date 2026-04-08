@@ -1307,9 +1307,9 @@ function render() {
       header.innerHTML=`
         <span class="subcategory-name">${sc.name}</span>
         ${activeCount>0?`<span class="subcategory-count">${activeCount} à prendre</span>`:''}
-        ${isEditing&&!sc.archived?`<button class="subcategory-archive-btn" onclick="event.stopPropagation();archiveSubcat(${sc.id})">🗂️</button>`:''}
-        ${isEditing&&!sc.archived?`<button class="subcategory-delete-btn" onclick="event.stopPropagation();deleteSubcat(${sc.id})">✕</button>`:''}
-        ${isArchiving&&sc.archived?`<button class="subcategory-unarchive-btn" onclick="event.stopPropagation();unarchiveSubcat(${sc.id})">📥 Restaurer</button>`:''}
+        <button class="subcategory-archive-btn" onclick="event.stopPropagation();archiveSubcat(${sc.id})">🗂️</button>
+        <button class="subcategory-delete-btn" onclick="event.stopPropagation();deleteSubcat(${sc.id})">✕</button>
+        ${sc.archived?`<button class="subcategory-unarchive-btn" onclick="event.stopPropagation();unarchiveSubcat(${sc.id})">📥 Restaurer</button>`:''}
         <span class="subcategory-drag-handle">⠿</span>
       `;
       const prodsDiv=document.createElement('div'); prodsDiv.className='subcategory-products';
