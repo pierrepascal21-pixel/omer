@@ -1309,27 +1309,66 @@ function render() {
       const isCollapsed = localStorage.getItem('subcat_collapsed_' + sc.id) === '1';
       if (isCollapsed) scDiv.classList.add('collapsed');
 
-      header.onclick=(e)=>{
-        if (isRenaming) { startRenameSubcat(sc.id); return; }
-        if (e.target.closest('button')) return; // ignore clicks on buttons
-        scDiv.classList.toggle('collapsed');
-        const nowCollapsed = scDiv.classList.contains('collapsed');
-        localStorage.setItem('subcat_collapsed_' + sc.id, nowCollapsed ? '1' : '0');
-      };
       const scProds=catProducts.filter(p=>p.subcategory_id===sc.id);
       const activeCount=scProds.filter(p=>getState(p.id).checked&&!p.rupture&&!p.archived).length;
-      header.innerHTML=`
-        <span class="subcategory-toggle">▾</span>
-        <span class="subcategory-name">${sc.name}</span>
-        ${activeCount>0?`<span class="subcategory-count">${activeCount} à prendre</span>`:''}
-        <button class="subcategory-archive-btn" onclick="event.stopPropagation();archiveSubcat(${sc.id})">🗂️</button>
-        <button class="subcategory-delete-btn" onclick="event.stopPropagation();deleteSubcat(${sc.id})">✕</button>
-        ${sc.archived?`<button class="subcategory-unarchive-btn" onclick="event.stopPropagation();unarchiveSubcat(${sc.id})">📥 Restaurer</button>`:''}
-        <span class="subcategory-drag-handle">⠿</span>
-      `;
+
+      // Toggle arrow span
+      const toggleSpan = document.createElement('span');
+      toggleSpan.className = 'subcategory-toggle';
+      toggleSpan.textContent = '▾';
+
+      // Name span
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'subcategory-name';
+      nameSpan.textContent = sc.name;
+
+      // Count span
+      const countSpan = document.createElement('span');
+      countSpan.className = 'subcategory-count';
+      countSpan.textContent = activeCount > 0 ? `${activeCount} à prendre` : '';
+
+      // Archive btn
+      const archiveBtn = document.createElement('button');
+      archiveBtn.className = 'subcategory-archive-btn';
+      archiveBtn.textContent = '🗂️';
+      archiveBtn.onclick = (e) => { e.stopPropagation(); archiveSubcat(sc.id); };
+
+      // Delete btn
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'subcategory-delete-btn';
+      deleteBtn.textContent = '✕';
+      deleteBtn.onclick = (e) => { e.stopPropagation(); deleteSubcat(sc.id); };
+
+      // Drag handle
+      const dragHandle = document.createElement('span');
+      dragHandle.className = 'subcategory-drag-handle';
+      dragHandle.textContent = '⠿';
+
+      header.appendChild(toggleSpan);
+      header.appendChild(nameSpan);
+      header.appendChild(countSpan);
+      header.appendChild(archiveBtn);
+      header.appendChild(deleteBtn);
+      if (sc.archived) {
+        const unarchiveBtn = document.createElement('button');
+        unarchiveBtn.className = 'subcategory-unarchive-btn';
+        unarchiveBtn.textContent = '📥 Restaurer';
+        unarchiveBtn.onclick = (e) => { e.stopPropagation(); unarchiveSubcat(sc.id); };
+        header.appendChild(unarchiveBtn);
+      }
+      header.appendChild(dragHandle);
+
+      // Collapse logic — attaché APRÈS le contenu
       const prodsDiv=document.createElement('div');
-      const alreadyCollapsed = localStorage.getItem('subcat_collapsed_' + sc.id) === '1';
-      prodsDiv.className='subcategory-products' + (alreadyCollapsed ? ' collapsed' : '');
+      prodsDiv.className='subcategory-products' + (isCollapsed ? ' collapsed' : '');
+
+      header.onclick=(e)=>{
+        if (e.target.closest('button, .subcategory-drag-handle')) return;
+        if (isRenaming) { startRenameSubcat(sc.id); return; }
+        const nowCollapsed = prodsDiv.classList.toggle('collapsed');
+        scDiv.classList.toggle('collapsed', nowCollapsed);
+        localStorage.setItem('subcat_collapsed_' + sc.id, nowCollapsed ? '1' : '0');
+      };
       scProds.forEach(p=>{ const gi=products.indexOf(p); const card=buildCard(p,gi,isEditing,isArchiving); if(card){prodsDiv.appendChild(card); if(getState(p.id).checked&&!p.rupture&&!p.archived) totalActive++;} });
       scDiv.appendChild(header); scDiv.appendChild(prodsDiv); listEl.appendChild(scDiv);
     });
