@@ -398,7 +398,7 @@ body.editing .edit-bar { display: block; }
 
 .subcategory-header:hover { background: var(--green-light); }
 
-.subcategory-name { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: 0.3px; flex: 1; }
+.subcategory-name { font-size: 15px; font-weight: 700; color: var(--green-dark); letter-spacing: 0.2px; flex: 1; }
 .subcategory-name-input { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; color: var(--text); border: 1.5px solid var(--green); border-radius: 6px; padding: 2px 8px; background: var(--bg); outline: none; flex: 1; }
 .subcategory-count { font-size: 10px; color: var(--muted); font-weight: 700; }
 
@@ -414,7 +414,7 @@ body.editing .subcategory-delete-btn { display: flex; }
 .subcategory-unarchive-btn { display: none; font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-light); border: 1px solid var(--green-border); border-radius: 6px; padding: 2px 8px; cursor: pointer; }
 body.archiving .subcategory-unarchive-btn { display: flex; align-items: center; }
 
-.subcategory-products { padding-left: 8px; border-left: 2px solid var(--border); margin-left: 8px; overflow: hidden; transition: max-height 0.25s ease, opacity 0.2s ease; max-height: 2000px; opacity: 1; }
+.subcategory-products { padding-left: 8px; border-left: 2px solid var(--green-border); margin-left: 14px; margin-top: 4px; overflow: hidden; transition: max-height 0.25s ease, opacity 0.2s ease; max-height: 2000px; opacity: 1; }
 .subcategory-products.collapsed { max-height: 0; opacity: 0; pointer-events: none; }
 
 .subcategory-toggle { font-size: 10px; color: var(--muted); transition: transform 0.2s; display: inline-block; margin-right: 4px; }
@@ -596,24 +596,31 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
 </head>
 <body>
 
+<!-- SPLASH SCREEN -->
+<div class="splash-screen" id="splashScreen">
+  <div class="splash-logo">o.m.e.<span>r</span></div>
+</div>
+
 <!-- ECRAN ROLE -->
 <div class="role-screen hidden" id="roleScreen">
   <div class="role-logo">o.m.e.<span>r</span></div>
   <div class="role-tagline">Outil de Mise En Rayon</div>
-  <div class="role-question">Qui êtes-vous aujourd'hui ?</div>
+  <div class="role-question">Bonjour 👋</div>
+  <div class="role-subtitle">Qui êtes-vous aujourd'hui ?</div>
   <div class="role-cards">
     <div class="role-card vendor" onclick="selectRole('vendor')">
       <div class="role-icon">🛒</div>
       <div class="role-name">Vendeur</div>
-      <div class="role-desc">Consultation<br>et gestion<br>du rayon</div>
+      <div class="role-desc">Gestion<br>du rayon</div>
     </div>
     <div class="role-card admin" onclick="openPwd()">
       <div class="role-icon">🔐</div>
       <div class="role-name">Admin</div>
-      <div class="role-desc">Accès complet<br>à toutes<br>les fonctions</div>
+      <div class="role-desc">Accès<br>complet</div>
     </div>
   </div>
 </div>
+
 <!-- MOT DE PASSE ADMIN -->
 <div class="pwd-overlay hidden" id="pwdOverlay">
   <div class="pwd-box">
@@ -1601,12 +1608,22 @@ function getToday4hStr() {
 function initRole() {
   const lastRoleDate = localStorage.getItem("role_date");
   const today = getToday4hStr();
-  if (lastRoleDate === today) {
-    applyRole(localStorage.getItem("role") || "vendor");
-    return;
-  }
-  // Premier lancement du jour
-  document.getElementById("roleScreen").classList.remove("hidden");
+
+  // Afficher splash 1.2s puis enchaîner
+  const splash = document.getElementById("splashScreen");
+  const roleScreen = document.getElementById("roleScreen");
+
+  setTimeout(() => {
+    splash.classList.add("fade-out");
+    setTimeout(() => {
+      splash.classList.add("hidden");
+      if (lastRoleDate === today) {
+        applyRole(localStorage.getItem("role") || "vendor");
+      } else {
+        roleScreen.classList.remove("hidden");
+      }
+    }, 400);
+  }, 1200);
 }
 
 function selectRole(role) {
