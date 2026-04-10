@@ -2102,15 +2102,22 @@ function applySearch() {
 function updateAdminSettings() {
   const role = localStorage.getItem("role") || "vendor";
   const isAdmin = role === "admin";
-  const adminSections = ["adminSettingsLabel", "vendorProfilesAdmin", "importSettingsLabel", "importProfilesList"];
-  adminSections.forEach(id => {
+
+  // Création profils : admin seulement
+  const adminOnlySections = ["adminSettingsLabel", "vendorProfilesAdmin"];
+  adminOnlySections.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = isAdmin ? "" : "none";
   });
-  if (isAdmin) {
-    renderVendorProfilesAdmin();
-    renderImportProfiles();
-  }
+
+  // Import liste : tout le monde (admin ET vendeur)
+  const importLabel = document.getElementById("importSettingsLabel");
+  const importList = document.getElementById("importProfilesList");
+  if (importLabel) importLabel.style.display = "";
+  if (importList) importList.style.display = "";
+
+  if (isAdmin) renderVendorProfilesAdmin();
+  renderImportProfiles();
 }
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('/service-worker.js');
