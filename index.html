@@ -140,7 +140,9 @@ header {
   display: flex; align-items: center; gap: 10px;
   font-size: 13px; font-weight: 800;
   cursor: pointer; transition: background 0.2s;
-  position: sticky; top: 0; z-index: 95;
+  position: fixed;
+  left: 0; right: 0;
+  z-index: 95;
 }
 
 .counter-bar:hover { background: var(--green-dark); }
@@ -149,6 +151,12 @@ header {
 .counter-bar .arrow { margin-left: auto; font-size: 14px; transition: transform 0.3s; }
 .counter-bar.empty { background: #b0bec5; cursor: default; }
 .counter-bar.empty:hover { background: #b0bec5; }
+
+/* Spacer pour compenser la barre fixed */
+.counter-bar-spacer {
+  height: 41px;
+  flex-shrink: 0;
+}
 
 @keyframes pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 0.3; } }
 
@@ -851,6 +859,7 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
   <span class="tip" id="counterTip"></span>
   <span class="arrow" id="counterArrow" style="display:none">▲</span>
 </div>
+<div class="counter-bar-spacer"></div>
 
 <!-- SETTINGS -->
 <div class="settings-overlay" id="settingsOverlay" onclick="toggleSettings()"></div>
@@ -1675,6 +1684,23 @@ function render() {
 
   if(reservePanelOpen) renderReservePanel();
   applySearch(); applyViewMode(); initSortable();
+  positionCounterBar();
+}
+
+function positionCounterBar() {
+  const header = document.querySelector('header');
+  const bar = document.getElementById('counterBar');
+  if (!bar || !header) return;
+  const headerBottom = header.getBoundingClientRect().bottom + window.scrollY;
+  // Calculer la hauteur des barres de statut visibles
+  let extra = 0;
+  ['rupture-bar','archive-bar','edit-bar'].forEach(cls => {
+    const el = document.querySelector('.' + cls);
+    if (el && el.style.display !== 'none' && getComputedStyle(el).display !== 'none') {
+      extra += el.offsetHeight;
+    }
+  });
+  bar.style.top = (header.offsetHeight + extra) + 'px';
 }
 
 function buildCard(p, idx, isEditing, isArchiving) {
@@ -2134,6 +2160,7 @@ function updateAdminSettings() {
 }
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('/service-worker.js');
+window.addEventListener('resize', positionCounterBar);
 
 loadData();
 </script>
