@@ -140,6 +140,7 @@ header {
   display: flex; align-items: center; gap: 10px;
   font-size: 13px; font-weight: 800;
   cursor: pointer; transition: background 0.2s;
+  position: sticky; top: 0; z-index: 95;
 }
 
 .counter-bar:hover { background: var(--green-dark); }
@@ -692,12 +693,9 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
 
   body.vendor #editBtn { display: none !important; }
   body.vendor #archiveBtn { display: none !important; }
+  /* Empêcher showPage de les réafficher */
+  body.vendor #editBtn, body.vendor #archiveBtn { display: none !important; }
   /* ══ FIN SPLASH + ROLE ══════════════════════════════════════════ */
-
-  /* ── BARRE RÉSERVE STICKY ── */
-  .counter-bar {
-    position: sticky; top: 0; z-index: 90;
-  }
 
   /* ── PROFILS VENDEURS ── */
   .vendor-profiles-list { margin-top: 8px; }
@@ -1234,9 +1232,14 @@ function handleEnter(e) { if (e.key === 'Enter') addProduct(); }
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name)?.classList.add('active');
+  const isVendor = document.body.classList.contains('vendor');
   ['ruptureBtn','editBtn','archiveBtn','settingsBtn'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.style.display = name === 'stats' ? 'none' : 'flex';
+    if (!el) return;
+    if (name === 'stats') { el.style.display = 'none'; return; }
+    // Cacher edition et archive pour les vendeurs
+    if (isVendor && (id === 'editBtn' || id === 'archiveBtn')) { el.style.display = 'none'; return; }
+    el.style.display = 'flex';
   });
   const sbw = document.getElementById('searchBarWrap');
   if (sbw) sbw.style.display = name === 'stats' ? 'none' : 'block';
@@ -1848,6 +1851,11 @@ function applyRole(role) {
   if (role === "vendor") {
     document.body.classList.add("vendor");
     document.body.classList.remove("admin");
+    // Forcer masquage immédiat des boutons admin
+    ['editBtn','archiveBtn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
     // Restaurer profil vendeur mémorisé
     const savedId = localStorage.getItem("vendor_id");
     const savedName = localStorage.getItem("vendor_name");
@@ -1858,6 +1866,11 @@ function applyRole(role) {
   } else {
     document.body.classList.remove("vendor");
     document.body.classList.add("admin");
+    // Réafficher les boutons admin
+    ['editBtn','archiveBtn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'flex';
+    });
     currentVendorId = null;
   }
   updateProfileBadge();
