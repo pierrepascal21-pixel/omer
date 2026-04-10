@@ -693,6 +693,85 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
   body.vendor #editBtn { display: none !important; }
   body.vendor #archiveBtn { display: none !important; }
   /* ══ FIN SPLASH + ROLE ══════════════════════════════════════════ */
+
+  /* ── BARRE RÉSERVE STICKY ── */
+  .counter-bar {
+    position: sticky; top: 0; z-index: 90;
+  }
+
+  /* ── PROFILS VENDEURS ── */
+  .vendor-profiles-list { margin-top: 8px; }
+  .vendor-profile-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px; background: var(--bg);
+    border-radius: 10px; margin-bottom: 6px;
+    border: 1.5px solid var(--border);
+  }
+  .vendor-profile-name { flex: 1; font-size: 14px; font-weight: 700; }
+  .vendor-profile-delete {
+    width: 26px; height: 26px; border-radius: 6px;
+    border: 1px solid #ffcdd2; background: var(--rupture-light);
+    color: var(--rupture); font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ── ÉCRAN CHOIX PROFIL VENDEUR ── */
+  .profile-screen {
+    position: fixed; inset: 0; z-index: 9997;
+    background: white;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 28px;
+  }
+  .profile-screen.gone { display: none; }
+  .profile-logo-txt {
+    font-family: 'Nunito', sans-serif;
+    font-size: 38px; font-weight: 900;
+    letter-spacing: 5px; color: var(--green);
+    margin-bottom: 4px;
+  }
+  .profile-logo-txt span { color: var(--orange); }
+  .profile-tagline-txt {
+    font-size: 10px; color: #999; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+  .profile-question { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 24px; }
+  .profile-list { width: 100%; max-width: 340px; margin-bottom: 16px; }
+  .profile-item-btn {
+    display: block; width: 100%; padding: 16px 20px;
+    background: white; border: 2px solid var(--border);
+    border-radius: 14px; margin-bottom: 10px;
+    font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+    color: var(--text); cursor: pointer; text-align: left;
+    transition: all 0.15s;
+  }
+  .profile-item-btn:hover, .profile-item-btn:active { background: var(--green-light); border-color: var(--green); color: var(--green-dark); }
+  .profile-back-btn {
+    background: none; border: none; color: var(--muted);
+    font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+    cursor: pointer; padding: 8px; margin-top: 8px;
+  }
+
+  /* ── IMPORT LISTE ── */
+  .import-list-section { margin-top: 8px; }
+  .import-profile-btn {
+    display: block; width: 100%; padding: 10px 14px;
+    background: var(--green-light); border: 1.5px solid var(--green-border);
+    border-radius: 10px; margin-bottom: 6px;
+    font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+    color: var(--green-dark); cursor: pointer; text-align: left;
+    transition: all 0.15s;
+  }
+  .import-profile-btn:hover { background: var(--green); color: white; }
+
+  /* ── BADGE PROFIL EN COURS ── */
+  .current-profile-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(255,255,255,0.2); border-radius: 6px;
+    padding: 2px 8px; font-size: 11px; font-weight: 800;
+    color: white; margin-left: 8px; cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -706,8 +785,8 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
 <div class="role-screen gone" id="roleScreen">
   <div class="role-logo-txt">o.m.e.<span>r</span></div>
   <div class="role-tagline-txt">Outil de Mise En Rayon</div>
-  <div class="role-hello">Bonjour 👋</div>
-  <div class="role-sub">Qui êtes-vous aujourd'hui ?</div>
+  <div class="role-hello">Bienvenue</div>
+  <div class="role-sub">Choisissez votre mode</div>
   <div class="role-cards-wrap">
     <div class="role-card-item v" onclick="selectRole('vendor')">
       <div class="role-card-icon">🛒</div>
@@ -742,7 +821,10 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
 <header>
   <div class="header-top">
     <div class="header-left" onclick="showPage('main')">
-      <h1>o.m.e.<span>r</span></h1>
+      <div style="display:flex;align-items:center;gap:0">
+        <h1>o.m.e.<span>r</span></h1>
+        <span class="current-profile-badge" id="profileBadge" onclick="event.stopPropagation();switchRoleFromBadge()" title="Changer de profil"></span>
+      </div>
       <p id="headerSub">Outil de Mise En Rayon</p>
     </div>
     <div class="header-actions">
@@ -778,7 +860,18 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
   <button class="settings-item" id="statsItem" onclick="showPage('stats'); toggleSettings()">📊 Statistiques</button>
   <button class="settings-item" id="darkItem" onclick="toggleDark()">🌙 <span id="darkLabel">Thème sombre</span></button>
   <div class="settings-divider"></div>
-  <button class="settings-item" id="switchRoleBtn" onclick="switchRole()">🔄 <span id="switchRoleLabel">Changer de rôle</span></button>
+  <button class="settings-item" id="switchRoleBtn" onclick="switchRole()">🔄 Changer de mode</button>
+  <div class="settings-divider" id="adminSettingsDivider"></div>
+  <div class="settings-label" id="adminSettingsLabel" style="display:none">Profils vendeurs</div>
+  <div id="vendorProfilesAdmin" style="display:none">
+    <div id="vendorProfilesList" class="vendor-profiles-list"></div>
+    <div class="editor-row" style="padding:0 8px 8px">
+      <input id="newProfileName" placeholder="Nom du profil" style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;background:var(--bg);color:var(--text);outline:none" onkeydown="if(event.key==='Enter')addVendorProfile()" />
+      <button onclick="addVendorProfile()" style="background:var(--green);color:white;border:none;border-radius:8px;padding:8px 12px;font-family:Nunito,sans-serif;font-size:13px;font-weight:800;cursor:pointer">+</button>
+    </div>
+  </div>
+  <div class="settings-label" id="importSettingsLabel" style="display:none">Importer une liste</div>
+  <div id="importProfilesList" class="import-list-section" style="display:none"></div>
   <div class="settings-divider"></div>
   <div class="settings-label">Affichage rayon</div>
   <button class="settings-item view-mode-btn" id="viewAll" onclick="setViewMode('all')">🌿 Tout afficher</button>
@@ -806,6 +899,15 @@ body.renaming .subcategory-name { cursor: pointer; text-decoration: underline do
   </select>
   <button class="multiselect-apply-btn" onclick="applyMultiselect()">Appliquer</button>
   <button class="multiselect-cancel-btn" onclick="cancelMultiselect()">✕</button>
+</div>
+
+<!-- ÉCRAN PROFIL VENDEUR -->
+<div class="profile-screen gone" id="profileScreen">
+  <div class="profile-logo-txt">o.m.e.<span>r</span></div>
+  <div class="profile-tagline-txt">Outil de Mise En Rayon</div>
+  <div class="profile-question">Choisissez votre profil</div>
+  <div class="profile-list" id="profileList"></div>
+  <button class="profile-back-btn" onclick="showRoleScreen()">← Retour</button>
 </div>
 
 <!-- POPUP SOUS-CAT -->
@@ -1175,6 +1277,7 @@ function toast(msg) { const el = document.getElementById("toast"); el.textConten
 // ─── LOAD ────────────────────────────────────────────────────────────
 async function loadData() {
   initDark();
+  await loadVendorProfiles();
   initRole();
   await resetAllIfNeeded();
   const [{ data: prods }, { data: subcats }, { data: states }] = await Promise.all([
@@ -1210,8 +1313,7 @@ async function seedDefaultProducts() {
 }
 
 // ─── STATE ───────────────────────────────────────────────────────────
-function getState(id) { if (!stateMap[id]) stateMap[id] = { checked:false, qty:0 }; return stateMap[id]; }
-async function saveState(id, checked, qty) { stateMap[id] = { checked, qty }; render(); await sb.from("state").upsert({ product_id:id, checked, qty }); }
+// getState et saveState définis plus bas avec gestion profils
 
 // ─── ACTIONS ─────────────────────────────────────────────────────────
 async function toggle(id) {
@@ -1315,7 +1417,7 @@ function toggleEdit() {
 function toggleSettings() {
   const panel=document.getElementById("settingsPanel"), overlay=document.getElementById("settingsOverlay"), btn=document.getElementById("settingsBtn");
   const isOpen=panel.classList.toggle("open"); overlay.classList.toggle("open",isOpen); btn.classList.toggle("active-settings",isOpen);
-  if(isOpen){updateDarkLabel();updateViewModeButtons();}
+  if(isOpen){updateDarkLabel();updateViewModeButtons();updateAdminSettings();renderImportProfiles();}
 }
 
 // ─── SOUS-CATÉGORIES ─────────────────────────────────────────────────
@@ -1731,20 +1833,34 @@ function initRole() {
 function selectRole(role) {
   localStorage.setItem("role", role);
   localStorage.setItem("role_date", getToday4hStr());
-  applyRole(role);
   document.getElementById("roleScreen").classList.add("gone");
-  toast(role === "admin" ? "🔐 Mode admin activé" : "🛒 Mode vendeur activé");
+  if (role === "vendor") {
+    // Afficher écran choix profil
+    renderProfileScreen();
+    document.getElementById("profileScreen").classList.remove("gone");
+  } else {
+    applyRole(role);
+    toast("🔐 Mode admin activé");
+  }
 }
 
 function applyRole(role) {
   if (role === "vendor") {
     document.body.classList.add("vendor");
     document.body.classList.remove("admin");
+    // Restaurer profil vendeur mémorisé
+    const savedId = localStorage.getItem("vendor_id");
+    const savedName = localStorage.getItem("vendor_name");
+    if (savedId && vendorProfiles.find(p => p.id === parseInt(savedId))) {
+      currentVendorId = parseInt(savedId);
+      loadVendorState().then(() => render());
+    }
   } else {
     document.body.classList.remove("vendor");
     document.body.classList.add("admin");
+    currentVendorId = null;
   }
-  updateSwitchRoleLabel(role);
+  updateProfileBadge();
 }
 
 function updateSwitchRoleLabel(role) {
@@ -1754,12 +1870,14 @@ function updateSwitchRoleLabel(role) {
 
 function switchRole() {
   toggleSettings();
-  const currentRole = localStorage.getItem("role") || "vendor";
-  if (currentRole === "vendor") {
-    openPwd();
-  } else {
-    selectRole("vendor");
-  }
+  // Remettre la date à null pour forcer le réaffichage
+  localStorage.removeItem("role_date");
+  document.getElementById("roleScreen").classList.remove("gone");
+}
+
+function showRoleScreen() {
+  document.getElementById("profileScreen").classList.add("gone");
+  document.getElementById("roleScreen").classList.remove("gone");
 }
 
 function openPwd() {
@@ -1782,6 +1900,216 @@ function checkPwd() {
     input.value = "";
     setTimeout(() => { input.classList.remove("error"); input.focus(); }, 500);
     toast("Mot de passe incorrect");
+  }
+}
+
+
+// ─── PROFILS VENDEURS ─────────────────────────────────────────────────
+let vendorProfiles = [];
+let currentVendorId = null; // null = admin ou pas de profil
+let vendorStateMap = {}; // product_id -> {checked, qty} pour le profil courant
+
+async function loadVendorProfiles() {
+  const { data } = await sb.from("vendor_profiles").select("*").order("name");
+  vendorProfiles = data || [];
+}
+
+async function addVendorProfile() {
+  const name = document.getElementById("newProfileName").value.trim();
+  if (!name) return;
+  const { data, error } = await sb.from("vendor_profiles").insert({ name }).select().single();
+  if (error) { toast("Erreur"); return; }
+  vendorProfiles.push(data);
+  document.getElementById("newProfileName").value = "";
+  renderVendorProfilesAdmin();
+  renderProfileScreen();
+  toast(`Profil "${name}" créé !`);
+}
+
+async function deleteVendorProfile(id) {
+  const p = vendorProfiles.find(p => p.id === id);
+  if (!confirm(`Supprimer le profil "${p.name}" ?`)) return;
+  await sb.from("vendor_profiles").delete().eq("id", id);
+  vendorProfiles = vendorProfiles.filter(p => p.id !== id);
+  renderVendorProfilesAdmin();
+  renderProfileScreen();
+  toast(`Profil supprimé`);
+}
+
+function renderVendorProfilesAdmin() {
+  const list = document.getElementById("vendorProfilesList");
+  if (!list) return;
+  if (vendorProfiles.length === 0) {
+    list.innerHTML = '<div style="padding:8px 14px;font-size:12px;color:var(--muted);font-weight:600">Aucun profil créé</div>';
+    return;
+  }
+  list.innerHTML = vendorProfiles.map(p => `
+    <div class="vendor-profile-item">
+      <span class="vendor-profile-name">${p.name}</span>
+      <button class="vendor-profile-delete" onclick="deleteVendorProfile(${p.id})">✕</button>
+    </div>
+  `).join('');
+}
+
+function renderProfileScreen() {
+  const list = document.getElementById("profileList");
+  if (!list) return;
+  if (vendorProfiles.length === 0) {
+    list.innerHTML = '<div style="font-size:14px;color:var(--muted);text-align:center;font-weight:600">Aucun profil vendeur disponible.<br>Contactez un administrateur.</div>';
+    return;
+  }
+  list.innerHTML = vendorProfiles.map(p =>
+    `<button class="profile-item-btn" onclick="selectVendorProfile(${p.id}, '${p.name.replace(/'/g,"\'")}')">🛒 ${p.name}</button>`
+  ).join('');
+}
+
+function renderImportProfiles() {
+  const list = document.getElementById("importProfilesList");
+  if (!list) return;
+  const others = vendorProfiles.filter(p => p.id !== currentVendorId);
+  if (others.length === 0) {
+    list.innerHTML = '<div style="padding:4px 14px 8px;font-size:12px;color:var(--muted);font-weight:600">Aucun autre profil disponible</div>';
+    return;
+  }
+  list.innerHTML = others.map(p =>
+    `<button class="import-profile-btn" onclick="importFromProfile(${p.id},'${p.name.replace(/'/g,"\'")}');toggleSettings()">📥 Importer depuis ${p.name}</button>`
+  ).join('');
+}
+
+async function selectVendorProfile(id, name) {
+  currentVendorId = id;
+  localStorage.setItem("vendor_id", id);
+  localStorage.setItem("vendor_name", name);
+  // Charger l'état vendeur
+  await loadVendorState();
+  document.getElementById("profileScreen").classList.add("gone");
+  updateProfileBadge();
+  render();
+  toast(`Profil ${name} activé`);
+}
+
+async function loadVendorState() {
+  if (!currentVendorId) return;
+  const { data } = await sb.from("vendor_state").select("*").eq("vendor_id", currentVendorId);
+  vendorStateMap = {};
+  (data || []).forEach(s => { vendorStateMap[s.product_id] = { checked: s.checked, qty: s.qty }; });
+}
+
+async function importFromProfile(fromId, fromName) {
+  if (!currentVendorId) return;
+  if (!confirm(`Copier la liste de ${fromName} vers votre profil ?`)) return;
+  const { data } = await sb.from("vendor_state").select("*").eq("vendor_id", fromId).eq("checked", true);
+  if (!data || !data.length) { toast("Aucun produit à importer"); return; }
+  for (const s of data) {
+    vendorStateMap[s.product_id] = { checked: true, qty: s.qty };
+    await sb.from("vendor_state").upsert({ vendor_id: currentVendorId, product_id: s.product_id, checked: true, qty: s.qty });
+  }
+  toast(`${data.length} produit(s) importés depuis ${fromName}`);
+  render();
+}
+
+function updateProfileBadge() {
+  const badge = document.getElementById("profileBadge");
+  if (!badge) return;
+  const name = localStorage.getItem("vendor_name");
+  const role = localStorage.getItem("role") || "vendor";
+  if (role === "admin") {
+    badge.textContent = "Admin";
+    badge.style.display = "inline-flex";
+    badge.style.background = "rgba(255,107,43,0.3)";
+  } else if (name) {
+    badge.textContent = name;
+    badge.style.display = "inline-flex";
+    badge.style.background = "rgba(255,255,255,0.2)";
+  } else {
+    badge.style.display = "none";
+  }
+}
+
+function switchRoleFromBadge() {
+  switchRole();
+}
+
+// ─── SURCHARGE getState / saveState POUR PROFILS ──────────────────────
+function getState(id) {
+  const role = localStorage.getItem("role") || "vendor";
+  if (role === "admin") {
+    if (!stateMap[id]) stateMap[id] = { checked: false, qty: 0 };
+    return stateMap[id];
+  }
+  if (!vendorStateMap[id]) vendorStateMap[id] = { checked: false, qty: 0 };
+  return vendorStateMap[id];
+}
+
+async function saveState(id, checked, qty) {
+  const role = localStorage.getItem("role") || "vendor";
+  if (role === "admin") {
+    stateMap[id] = { checked, qty };
+    render();
+    await sb.from("state").upsert({ product_id: id, checked, qty });
+  } else {
+    if (!currentVendorId) return;
+    vendorStateMap[id] = { checked, qty };
+    render();
+    await sb.from("vendor_state").upsert({ vendor_id: currentVendorId, product_id: id, checked, qty });
+  }
+}
+
+// ─── RECHERCHE INTELLIGENTE AVEC DÉPLIAGE ─────────────────────────────
+function applySearch() {
+  const isSearching = searchQuery.length > 0;
+  let anyVisible = false;
+
+  document.querySelectorAll(".product").forEach(div => {
+    const nameEl = div.querySelector(".product-name, .product-name-input");
+    const name = nameEl?.textContent || nameEl?.value || "";
+    const visible = matchSearch(name, searchQuery);
+    div.classList.toggle("hidden", !visible);
+    if (visible) anyVisible = true;
+  });
+
+  // Sections
+  CATEGORIES.forEach(cat => {
+    const list = document.getElementById("list-" + cat);
+    const section = list?.closest(".section");
+    const hasVisible = [...(list?.querySelectorAll(".product") || [])].some(d => !d.classList.contains("hidden"));
+    if (section) section.style.display = hasVisible ? "" : "none";
+  });
+
+  const coupeVisible = ["coupe_fruits","coupe_legumes"].some(cat => {
+    const list = document.getElementById("list-" + cat);
+    return [...(list?.querySelectorAll(".product")||[])].some(d => !d.classList.contains("hidden"));
+  });
+  const ct = document.getElementById("coupeTitleEl");
+  if (ct) ct.style.display = coupeVisible ? "" : "none";
+
+  // Dépliage auto des sous-catégories qui ont des résultats
+  document.querySelectorAll('.subcategory-group').forEach(group => {
+    const prodsDiv = group.querySelector('.subcategory-products');
+    if (!prodsDiv) return;
+    const hasMatch = [...prodsDiv.querySelectorAll('.product')].some(d => !d.classList.contains('hidden'));
+    if (isSearching && hasMatch) {
+      // Déplier si résultat trouvé dedans
+      prodsDiv.classList.remove('collapsed');
+      group.classList.remove('collapsed');
+    }
+  });
+
+  document.getElementById("searchEmpty").style.display = (searchQuery && !anyVisible) ? "block" : "none";
+}
+
+// ─── ADMIN SETTINGS VISIBILITY ────────────────────────────────────────
+function updateAdminSettings() {
+  const role = localStorage.getItem("role") || "vendor";
+  const isAdmin = role === "admin";
+  const adminSections = ["adminSettingsLabel", "vendorProfilesAdmin", "importSettingsLabel", "importProfilesList"];
+  adminSections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = isAdmin ? "" : "none";
+  });
+  if (isAdmin) {
+    renderVendorProfilesAdmin();
+    renderImportProfiles();
   }
 }
 
