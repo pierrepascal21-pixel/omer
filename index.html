@@ -1415,8 +1415,18 @@ async function unarchiveSubcat(id) {
 }
 
 // ─── MODES ───────────────────────────────────────────────────────────
-function toggleArchive() { const v=document.body.classList.toggle("archiving"); document.getElementById("archiveBtn").classList.toggle("active-archive",v); if(v){if(document.body.classList.contains("editing"))toggleEdit();if(document.body.classList.contains("rupture"))toggleRupture();} }
-function toggleRupture() { const v=document.body.classList.toggle("rupture"); document.getElementById("ruptureBtn").classList.toggle("active-rupture",v); if(v){if(document.body.classList.contains("editing"))toggleEdit();if(document.body.classList.contains("archiving"))toggleArchive();} }
+function toggleArchive() {
+  const v=document.body.classList.toggle("archiving");
+  document.getElementById("archiveBtn").classList.toggle("active-archive",v);
+  if(v){if(document.body.classList.contains("editing"))toggleEdit();if(document.body.classList.contains("rupture"))toggleRupture();}
+  setTimeout(positionCounterBar, 10);
+}
+function toggleRupture() {
+  const v=document.body.classList.toggle("rupture");
+  document.getElementById("ruptureBtn").classList.toggle("active-rupture",v);
+  if(v){if(document.body.classList.contains("editing"))toggleEdit();if(document.body.classList.contains("archiving"))toggleArchive();}
+  setTimeout(positionCounterBar, 10);
+}
 function toggleEdit() {
   const v=document.body.classList.toggle("editing");
   document.getElementById("editBtn").classList.toggle("active-edit",v);
@@ -1424,6 +1434,7 @@ function toggleEdit() {
   if(!v){cancelMultiselect();if(isRenaming)toggleRenameMode();}
   if(v){if(document.body.classList.contains("rupture"))toggleRupture();if(document.body.classList.contains("archiving"))toggleArchive();}
   updateSortable(v);
+  setTimeout(positionCounterBar, 10);
 }
 
 function toggleSettings() {
@@ -2099,6 +2110,7 @@ function applySearch() {
   const isSearching = searchQuery.length > 0;
   let anyVisible = false;
 
+  // Filtrer les produits
   document.querySelectorAll(".product").forEach(div => {
     const nameEl = div.querySelector(".product-name, .product-name-input");
     const name = nameEl?.textContent || nameEl?.value || "";
@@ -2107,7 +2119,30 @@ function applySearch() {
     if (visible) anyVisible = true;
   });
 
-  // Sections
+  // Sous-catégories : masquer celles sans résultat, déplier celles avec
+  document.querySelectorAll('.subcategory-group').forEach(group => {
+    const prodsDiv = group.querySelector('.subcategory-products');
+    if (!prodsDiv) return;
+    const hasMatch = [...prodsDiv.querySelectorAll('.product')].some(d => !d.classList.contains('hidden'));
+    if (isSearching) {
+      group.style.display = hasMatch ? '' : 'none';
+      if (hasMatch) {
+        prodsDiv.classList.remove('collapsed');
+        group.classList.remove('collapsed');
+      }
+    } else {
+      group.style.display = '';
+      // Restaurer état replié mémorisé
+      const header = group.querySelector('.subcategory-header');
+      const id = header?.dataset?.id;
+      if (id && localStorage.getItem('subcat_collapsed_' + id) === '1') {
+        prodsDiv.classList.add('collapsed');
+        group.classList.add('collapsed');
+      }
+    }
+  });
+
+  // Sections principales
   CATEGORIES.forEach(cat => {
     const list = document.getElementById("list-" + cat);
     const section = list?.closest(".section");
@@ -2121,18 +2156,6 @@ function applySearch() {
   });
   const ct = document.getElementById("coupeTitleEl");
   if (ct) ct.style.display = coupeVisible ? "" : "none";
-
-  // Dépliage auto des sous-catégories qui ont des résultats
-  document.querySelectorAll('.subcategory-group').forEach(group => {
-    const prodsDiv = group.querySelector('.subcategory-products');
-    if (!prodsDiv) return;
-    const hasMatch = [...prodsDiv.querySelectorAll('.product')].some(d => !d.classList.contains('hidden'));
-    if (isSearching && hasMatch) {
-      // Déplier si résultat trouvé dedans
-      prodsDiv.classList.remove('collapsed');
-      group.classList.remove('collapsed');
-    }
-  });
 
   document.getElementById("searchEmpty").style.display = (searchQuery && !anyVisible) ? "block" : "none";
 }
