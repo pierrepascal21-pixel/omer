@@ -1109,11 +1109,17 @@ function renderReservePanel() {
 
 async function clearReserve() {
   if (!confirm("Vider toute la liste réserve ?")) return;
+  const role = localStorage.getItem("role") || "vendor";
   const active = products.filter(p => !p.rupture && !p.archived && getState(p.id).checked);
   for (const p of active) {
     await sb.from("historique").insert({ product_id: p.id, product_name: p.name, action: "pris" });
-    stateMap[p.id] = { checked: false, qty: 0 };
-    await sb.from("state").upsert({ product_id: p.id, checked: false, qty: 0 });
+    if (role === "admin") {
+      stateMap[p.id] = { checked: false, qty: 0 };
+      await sb.from("state").upsert({ product_id: p.id, checked: false, qty: 0 });
+    } else if (currentVendorId) {
+      vendorStateMap[p.id] = { checked: false, qty: 0 };
+      await sb.from("vendor_state").upsert({ vendor_id: currentVendorId, product_id: p.id, checked: false, qty: 0 });
+    }
   }
   closeReservePanel(); toast("🧺 Liste réserve vidée"); render();
 }
